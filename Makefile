@@ -15,7 +15,7 @@ WORKERS ?= 1
 
 .PHONY: help all \
         bench-all bench-pipeline bench-latex bench-publish bench-research sync-all check-all \
-        latex reports book report ic monolith proposal poster \
+        latex build-latex release-map reports book report ic monolith proposal poster \
         apps impl exp generate dimacs \
         bench bench-ic bench-book bench-smoke bench-tables bench-plots bench-artifacts \
         format clang-format prettier format-cpp format-md test setup clean clear distclean clean-results sync-code
@@ -150,6 +150,18 @@ setup:
 ### ================================
 latex:
 	(cd "LaTeX" && $(MAKE) all)
+
+build-latex: sync-code latex
+	mkdir -p dist
+	cp LaTeX/*.pdf dist/
+
+release-map:
+	printf "LaTeX/book.tex\tbook.pdf\n"
+	printf "LaTeX/ic.tex\tic.pdf\n"
+	printf "LaTeX/monolith.tex\tmonolith.pdf\n"
+	printf "LaTeX/poster.tex\tposter.pdf\n"
+	printf "LaTeX/proposal.tex\tproposal.pdf\n"
+	printf "LaTeX/report.tex\treport.pdf\n"
 
 reports:
 	(cd "LaTeX" && $(MAKE) reports)

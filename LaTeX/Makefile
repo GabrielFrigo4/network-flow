@@ -110,14 +110,14 @@ monolith.tex: report.tex report/cover.tex common/header.tex $(SECTIONS) $(APPEND
 	mkdir -p build
 	printf "%s" "-> Compilando $@... "
 	if command -v $(LATEXMK) > "/dev/null" 2>&1; then \
-		$(LATEXMK) -pdf -silent -interaction=nonstopmode -outdir=build $< > "/dev/null" 2>&1; \
+		$(LATEXMK) -pdf -silent -interaction=nonstopmode -outdir=build $< > "/dev/null" 2>&1 || true; \
 	else \
 		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 		$(BIBTEX) build/$*.aux > "/dev/null" 2>&1 || true; \
 		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 	fi
-	cp build/$@ $@ 2> "/dev/null" || true
+	cp build/$@ $@
 	printf "%s\n" "[OK]"
 
 ### ================================
