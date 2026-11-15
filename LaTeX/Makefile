@@ -117,6 +117,11 @@ monolith.tex: report.tex report/cover.tex common/header.tex $(SECTIONS) $(APPEND
 		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 	fi
+	if [ ! -f "build/$@" ]; then \
+		printf "%s\n" "[FAIL]"; \
+		grep -A 4 -B 1 '^!' "build/$*.log" >&2 || tail -n 25 "build/$*.log" >&2 || true; \
+		exit 1; \
+	fi
 	cp build/$@ $@
 	printf "%s\n" "[OK]"
 
