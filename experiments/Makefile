@@ -4,7 +4,7 @@ MAKEFLAGS += --no-print-directory -s
 
 CXX         = c++
 STACK_FLAG != case "$$(uname -s 2> "/dev/null")" in *Windows*|*MINGW*|*MSYS*|*CYGWIN*) echo "-Wl,--stack,268435456" ;; *) echo "-Wl,-z,stack-size=268435456" ;; esac
-CXXFLAGS    = $(STACK_FLAG) -std=c++23 -O2 -Wall -Wextra -Wpedantic
+CXXFLAGS    = $(STACK_FLAG) -std=c++23 -O2 -Wall -Wextra -Wpedantic -pthread
 
 PYTHON      = python3
 REPEATS    ?= 2

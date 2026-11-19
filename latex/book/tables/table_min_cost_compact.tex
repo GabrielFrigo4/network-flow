@@ -2,23 +2,23 @@
 \centering
 \small
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{lrrrrrrrr}
+\begin{tabular}{lrrrrrrrrrr}
 \toprule
-\textbf{Instância} & $|V|$ & $|A|$ & $f^*$ & $z^*$ & \textbf{CC} & \textbf{SSP-SPFA} & \textbf{SSP-Dijk} & \textbf{Simplex} \\
+\textbf{Instância} & $|V|$ & $|A|$ & $f^*$ & $z^*$ & \textbf{CC} & \textbf{MMCC} & \textbf{C\&T} & \textbf{SSP-SPFA} & \textbf{SSP-Dijk} & \textbf{Simplex} \\
 \midrule
-\texttt{netgen\_01} & 202 & 1.508 & 100.000 & 196.587.626 & 216 & 5,27 & 9,06 & \textbf{3,42} \\
-\texttt{netgen\_04} & 202 & 2.400 & 100.000 & 138.936.551 & 456 & 7,15 & 10,2 & \textbf{3,66} \\
-\texttt{netgen\_08} & 302 & 5.469 & 150.000 & 177.575.586 & 3.306 & 26,5 & 30,3 & \textbf{10,9} \\
-\texttt{netgen\_11} & 402 & 1.500 & 0 & 0 & 0,53 & \textbf{0,18} & 0,23 & 0,31 \\
-\texttt{netgen\_15} & 402 & 4.500 & 0 & 0 & 1,71 & 0,47 & \textbf{0,44} & 0,47 \\
-\texttt{netgen\_16} & 402 & 1.374 & 400.000 & 6.815.524.469 & 75,2 & 3,91 & 5,70 & \textbf{2,49} \\
-\texttt{netgen\_22} & 402 & 1.484 & 400.000 & 6.621.515.104 & 111 & \textbf{2,42} & 4,49 & 2,47 \\
-\texttt{netgen\_26} & 402 & 1.398 & 400.000 & 5.297.702.923 & 19,8 & \textbf{0,69} & 1,36 & 1,94 \\
-\texttt{netgen\_28} & 1.002 & 3.000 & 1.000.000 & 11.599.233.408 & 1.103 & \textbf{13,0} & 16,5 & 16,8 \\
-\texttt{netgen\_32} & 1.502 & 4.492 & 1.500.000 & 17.996.365.110 & 5.639 & \textbf{37,2} & 41,7 & 40,7 \\
-\texttt{netgen\_35} & 1.502 & 5.880 & 1.500.000 & 14.350.903.861 & 8.420 & 62,7 & 59,5 & \textbf{53,3} \\
-\texttt{netgen\_38} & 3.002 & 35.625 & 2.000.000 & 7.265.734.372 & TLE & 1.774 & 1.105 & \textbf{757} \\
-\texttt{netgen\_40} & 3.002 & 23.400 & 2.000.000 & 11.068.572.024 & TLE & 763 & 550 & \textbf{475} \\
+\texttt{netgen\_01} & 202 & 1.508 & 100.000 & 196.587.626 & 763 & 567 & 27,8 & 16,1 & 27,3 & \textbf{8,16} \\
+\texttt{netgen\_04} & 202 & 2.400 & 100.000 & 138.936.551 & 1.627 & 873 & 35,1 & 23,1 & 31,3 & \textbf{14,5} \\
+\texttt{netgen\_08} & 302 & 5.469 & 150.000 & 177.575.586 & 10.935 & 5.076 & 124 & 88,1 & 101 & \textbf{48,1} \\
+\texttt{netgen\_11} & 402 & 1.500 & 0 & 0 & 2,08 & 0,54 & \textbf{0,49} & 0,51 & 0,54 & 0,57 \\
+\texttt{netgen\_15} & 402 & 4.500 & 0 & 0 & 3,82 & 1,06 & 1,02 & 1,01 & \textbf{0,76} & 0,88 \\
+\texttt{netgen\_16} & 402 & 1.374 & 400.000 & 6.815.524.469 & 250 & 342 & 39,8 & 8,28 & 12,6 & \textbf{7,03} \\
+\texttt{netgen\_22} & 402 & 1.484 & 400.000 & 6.621.515.104 & 343 & 429 & 50,6 & \textbf{6,49} & 11,5 & 8,76 \\
+\texttt{netgen\_26} & 402 & 1.398 & 400.000 & 5.297.702.923 & 70,8 & 64,0 & 18,5 & \textbf{1,62} & 4,52 & 5,09 \\
+\texttt{netgen\_28} & 1.002 & 3.000 & 1.000.000 & 11.599.233.408 & 3.230 & 5.713 & 308 & \textbf{39,5} & 51,0 & 65,5 \\
+\texttt{netgen\_32} & 1.502 & 4.492 & 1.500.000 & 17.996.365.110 & 13.514 & TLE & 990 & \textbf{117} & 127 & 227 \\
+\texttt{netgen\_35} & 1.502 & 5.880 & 1.500.000 & 14.350.903.861 & TLE & TLE & 1.295 & 195 & \textbf{185} & 264 \\
+\texttt{netgen\_38} & 3.002 & 35.625 & 2.000.000 & 7.265.734.372 & TLE & TLE & 14.534 & 6.103 & \textbf{3.456} & 4.680 \\
+\texttt{netgen\_40} & 3.002 & 23.400 & 2.000.000 & 11.068.572.024 & TLE & TLE & 11.624 & 2.527 & \textbf{1.736} & 2.971 \\
 \bottomrule
 \end{tabular}
 \caption{Comparação experimental dos motores de fluxo de custo mínimo em instâncias Netgen representativas.}

@@ -5,7 +5,8 @@ Supports strict separation between:
   - IC suite (`latex/tables`, `latex/figures`):
       5 Max-Flow algorithms and 4 Min-Cost Flow algorithms.
   - Book / Pós-IC suite (`latex/book/tables`, `latex/book/figures`):
-      6 Max-Flow algorithms (including MPM), 4 Min-Cost Flow algorithms,
+      6 Max-Flow algorithms (including MPM), 6 Min-Cost Flow algorithms
+      (including MinimumMeanCycleCanceling and CancelAndTighten),
       plus Bipartite Matching (Kuhn, Hopcroft-Karp vs Max-Flow) and
       Bipartite Assignment (Kuhn-Munkres vs Min-Cost Flow).
 """
@@ -82,8 +83,17 @@ MF_ALGO_SHORT = {
     "PushRelabelImproved": "PR-Gap",
 }
 
-MC_ALGO_ORDER = [
+MC_ALGO_ORDER_IC = [
     "CycleCanceling",
+    "SuccessiveShortest",
+    "SuccessiveShortestDijkstra",
+    "NetworkSimplex",
+]
+
+MC_ALGO_ORDER_BOOK = [
+    "CycleCanceling",
+    "MinimumMeanCycleCanceling",
+    "CancelAndTighten",
     "SuccessiveShortest",
     "SuccessiveShortestDijkstra",
     "NetworkSimplex",
@@ -91,6 +101,8 @@ MC_ALGO_ORDER = [
 
 MC_ALGO_SHORT = {
     "CycleCanceling": "CC",
+    "MinimumMeanCycleCanceling": "MMCC",
+    "CancelAndTighten": "C\\&T",
     "SuccessiveShortest": "SSP-SPFA",
     "SuccessiveShortestDijkstra": "SSP-Dijk",
     "NetworkSimplex": "Simplex",
@@ -402,14 +414,14 @@ def generate_compact_maxflow(rows, algo_order, output_path):
     print(f"  Gerado: {output_path}")
 
 
-def generate_compact_mincost(rows, output_path):
+def generate_compact_mincost(rows, algo_order, output_path):
     groups = group_by_instance(rows)
     selected = [inst for inst in COMPACT_MC_INSTANCES if inst in groups]
 
     with open(output_path, "w", encoding="utf-8") as f:
-        ncols = 5 + len(MC_ALGO_ORDER)
+        ncols = 5 + len(algo_order)
         col_spec = "l" + "r" * (ncols - 1)
-        algo_headers = " & ".join(f"\\textbf{{{MC_ALGO_SHORT[a]}}}" for a in MC_ALGO_ORDER)
+        algo_headers = " & ".join(f"\\textbf{{{MC_ALGO_SHORT[a]}}}" for a in algo_order)
 
         f.write("\\begin{table}[!ht]\n")
         f.write("\\centering\n")
@@ -443,7 +455,7 @@ def generate_compact_mincost(rows, output_path):
 
             ok_times = [
                 float(by_algo[algo]["mean_ms"])
-                for algo in MC_ALGO_ORDER
+                for algo in algo_order
                 if algo in by_algo
                 and by_algo[algo]["status"] == "OK"
                 and by_algo[algo].get("mean_ms")
@@ -454,7 +466,7 @@ def generate_compact_mincost(rows, output_path):
             inst_tex = "\\texttt{" + inst_short.replace("_", "\\_") + "}"
 
             time_cells = []
-            for algo in MC_ALGO_ORDER:
+            for algo in algo_order:
                 r = by_algo.get(algo)
                 if not r or r["status"] != "OK" or not r.get("mean_ms"):
                     time_cells.append("TLE")
@@ -665,7 +677,7 @@ def generate_exhaustive_maxflow(rows, algo_order, output_path):
     print(f"  Gerado: {output_path}")
 
 
-def generate_exhaustive_mincost(rows, output_path):
+def generate_exhaustive_mincost(rows, algo_order, output_path):
     groups = group_by_instance(rows)
     active_groups = []
     for title, instances in EXHAUSTIVE_MC_GROUPS:
@@ -674,9 +686,9 @@ def generate_exhaustive_mincost(rows, output_path):
             active_groups.append((title, present))
 
     with open(output_path, "w", encoding="utf-8") as f:
-        ncols = 5 + len(MC_ALGO_ORDER)
+        ncols = 5 + len(algo_order)
         col_spec = "l" + "r" * (ncols - 1)
-        algo_headers = " & ".join(f"\\textbf{{{MC_ALGO_SHORT[a]}}}" for a in MC_ALGO_ORDER)
+        algo_headers = " & ".join(f"\\textbf{{{MC_ALGO_SHORT[a]}}}" for a in algo_order)
 
         f.write("\\begingroup\n")
         f.write("\\small\n")
@@ -729,7 +741,7 @@ def generate_exhaustive_mincost(rows, output_path):
 
                 ok_times = [
                     float(by_algo[algo]["mean_ms"])
-                    for algo in MC_ALGO_ORDER
+                    for algo in algo_order
                     if algo in by_algo
                     and by_algo[algo]["status"] == "OK"
                     and by_algo[algo].get("mean_ms")
@@ -740,7 +752,7 @@ def generate_exhaustive_mincost(rows, output_path):
                 inst_tex = "\\texttt{" + inst_short.replace("_", "\\_") + "}"
 
                 time_cells = []
-                for algo in MC_ALGO_ORDER:
+                for algo in algo_order:
                     r = by_algo.get(algo)
                     if not r or r["status"] != "OK" or not r.get("mean_ms"):
                         time_cells.append("TLE")
@@ -831,6 +843,8 @@ ALGO_COLORS = {
     "HopcroftKarp": "#17becf",
     "Kuhn": "#bcbd22",
     "CycleCanceling": "#d62728",
+    "MinimumMeanCycleCanceling": "#8c564b",
+    "CancelAndTighten": "#9467bd",
     "SuccessiveShortest": "#ff7f0e",
     "SuccessiveShortestDijkstra": "#2ca02c",
     "NetworkSimplex": "#1f77b4",
@@ -847,6 +861,8 @@ ALGO_MARKERS = {
     "HopcroftKarp": "*",
     "Kuhn": "X",
     "CycleCanceling": "s",
+    "MinimumMeanCycleCanceling": "v",
+    "CancelAndTighten": "P",
     "SuccessiveShortest": "^",
     "SuccessiveShortestDijkstra": "o",
     "NetworkSimplex": "D",
@@ -863,6 +879,8 @@ ALGO_LABELS = {
     "HopcroftKarp": "Hopcroft-Karp",
     "Kuhn": "Kuhn",
     "CycleCanceling": "Cycle Canceling",
+    "MinimumMeanCycleCanceling": "MMCC",
+    "CancelAndTighten": "Cancel & Tighten",
     "SuccessiveShortest": "SSP (SPFA)",
     "SuccessiveShortestDijkstra": "SSP (Dijkstra)",
     "NetworkSimplex": "Network Simplex",
@@ -1014,19 +1032,26 @@ def process_suite(suite):
     mf_rows = load_csv(mf_csv)
     mc_rows = load_csv(mc_csv)
     mf_order = MF_ALGO_ORDER_IC if suite == "ic" else MF_ALGO_ORDER_BOOK
+    mc_order = MC_ALGO_ORDER_IC if suite == "ic" else MC_ALGO_ORDER_BOOK
 
     generate_full_table_maxflow(mf_rows, os.path.join(tab_dir, "table_max_flow.tex"))
     generate_full_table_mincost(mc_rows, os.path.join(tab_dir, "table_min_cost.tex"))
     generate_compact_maxflow(
         mf_rows, mf_order, os.path.join(tab_dir, "table_max_flow_compact.tex")
     )
-    generate_compact_mincost(mc_rows, os.path.join(tab_dir, "table_min_cost_compact.tex"))
+    generate_compact_mincost(
+        mc_rows, mc_order, os.path.join(tab_dir, "table_min_cost_compact.tex")
+    )
     generate_exhaustive_maxflow(
         mf_rows,
         mf_order,
         os.path.join(tab_dir, "table_max_flow_exhaustive.tex"),
     )
-    generate_exhaustive_mincost(mc_rows, os.path.join(tab_dir, "table_min_cost_exhaustive.tex"))
+    generate_exhaustive_mincost(
+        mc_rows,
+        mc_order,
+        os.path.join(tab_dir, "table_min_cost_exhaustive.tex"),
+    )
 
     if HAS_MATPLOTLIB:
         plot_scalability(
@@ -1044,14 +1069,14 @@ def process_suite(suite):
         )
         plot_scalability(
             mc_rows,
-            MC_ALGO_ORDER,
+            mc_order,
             os.path.join(fig_dir, "scalability_mincost.pdf"),
             xlabel="Vértices $|V|$",
             ylabel="Tempo médio (ms)",
         )
         plot_bars(
             mc_rows,
-            MC_ALGO_ORDER,
+            mc_order,
             os.path.join(fig_dir, "bars_mincost.pdf"),
             select=COMPACT_MC_INSTANCES,
         )

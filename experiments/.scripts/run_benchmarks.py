@@ -297,7 +297,7 @@ def run_bipartite(title, binary, directory, ext, csv_path, mode, kind):
     return total, {}
 
 
-def banner(args, counts, mf_algos):
+def banner(args, counts, mf_algos, mc_algos):
     sequential = args.workers <= 1
     workers = (
         "1 (sequencial, melhor rigor de medição)"
@@ -311,7 +311,7 @@ def banner(args, counts, mf_algos):
         ("Workers", workers),
         ("Isolamento", "1 processo por algoritmo"),
         ("Max-flow", f"{counts[0]} instâncias: " + ", ".join(mf_algos)),
-        ("Min-cost", f"{counts[1]} instâncias: " + ", ".join(MC_ALGOS)),
+        ("Min-cost", f"{counts[1]} instâncias: " + ", ".join(mc_algos)),
         (
             "Bipartido",
             f"{counts[2]} instâncias, sem timeout"
@@ -346,11 +346,16 @@ def count(directory, ext):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--suite", choices=["ic", "book"], default="book")
-    parser.add_argument("--mf-bin", required=True)
-    parser.add_argument("--mc-bin", required=True)
+    parser.add_argument(
+        "--only",
+        choices=["all", "maxflow", "mincost", "bipartite"],
+        default="all",
+    )
+    parser.add_argument("--mf-bin", default="./max_flow_runner")
+    parser.add_argument("--mc-bin", default="./min_cost_runner")
     parser.add_argument("--bp-bin", default="./bipartite_runner")
-    parser.add_argument("--mf-dir", required=True)
-    parser.add_argument("--mc-dir", required=True)
+    parser.add_argument("--mf-dir", default="instances/dimacs-maxflow")
+    parser.add_argument("--mc-dir", default="instances/dimacs-mincost")
     parser.add_argument("--bp-dir", default="instances/bipartite")
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--repeats", type=int, default=2)
@@ -362,25 +367,40 @@ def main():
     mf_csv = os.path.join(args.out_dir, "data_max_flow.csv")
     mc_csv = os.path.join(args.out_dir, "data_min_cost.csv")
     mf_algos = MF_ALGOS + (["MPM"] if args.suite == "book" else [])
-    with_bipartite = args.suite == "book" and os.path.exists(args.bp_dir)
-    counts = (
-        count(args.mf_dir, "max"),
-        count(args.mc_dir, "min"),
-        count(args.bp_dir, "max") + count(args.bp_dir, "min") if with_bipartite else 0,
+    mc_algos = MC_ALGOS + (
+        ["CancelAndTighten", "MinimumMeanCycleCanceling"]
+        if args.suite == "book"
+        else []
     )
-    banner(args, counts, mf_algos)
+    run_mf = args.only in ("all", "maxflow")
+    run_mc = args.only in ("all", "mincost")
+    with_bipartite = (
+        args.only in ("all", "bipartite")
+        and args.suite == "book"
+        and os.path.exists(args.bp_dir)
+    )
+    counts = (
+        count(args.mf_dir, "max") if run_mf else 0,
+        count(args.mc_dir, "min") if run_mc else 0,
+        (count(args.bp_dir, "max") + count(args.bp_dir, "min")) if with_bipartite else 0,
+    )
+    banner(args, counts, mf_algos, mc_algos)
 
     stats = {}
-    csvs = [mf_csv, mc_csv]
+    csvs = []
     try:
-        stats["Max-flow"] = run_suite(
-            "Max-flow", args.mf_bin, args.mf_dir, "max", mf_csv, mf_algos,
-            ["--suite", args.suite], "flow", "fluxo", args,
-        )
-        stats["Min-cost"] = run_suite(
-            "Min-cost", args.mc_bin, args.mc_dir, "min", mc_csv, MC_ALGOS,
-            [], "cost", "custo", args,
-        )
+        if run_mf:
+            stats["Max-flow"] = run_suite(
+                "Max-flow", args.mf_bin, args.mf_dir, "max", mf_csv, mf_algos,
+                ["--suite", args.suite], "flow", "fluxo", args,
+            )
+            csvs.append(mf_csv)
+        if run_mc:
+            stats["Min-cost"] = run_suite(
+                "Min-cost", args.mc_bin, args.mc_dir, "min", mc_csv, mc_algos,
+                [], "cost", "custo", args,
+            )
+            csvs.append(mc_csv)
         if with_bipartite:
             matching_csv = os.path.join(args.out_dir, "data_bipartite_matching.csv")
             assignment_csv = os.path.join(args.out_dir, "data_bipartite_assignment.csv")
