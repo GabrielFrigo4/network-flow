@@ -1,4 +1,6 @@
+#include "../../implementations/cost-network/CancelAndTighten.hpp"
 #include "../../implementations/cost-network/CycleCanceling.hpp"
+#include "../../implementations/cost-network/MinimumMeanCycleCanceling.hpp"
 #include "../../implementations/cost-network/NetworkSimplex.hpp"
 #include "../../implementations/cost-network/SuccessiveShortest.hpp"
 #include "../../implementations/cost-network/SuccessiveShortestDijkstra.hpp"
@@ -187,6 +189,16 @@ int main(int argc, char **argv)
 	tasks.push_back({
 	    "CycleCanceling",
 	    [&data]() { return run_cost_solver_instance<CycleCanceling>(data); },
+	});
+	tasks.push_back({
+	    "MinimumMeanCycleCanceling",
+	    [&data]() {
+		    return run_cost_solver_instance<MinimumMeanCycleCanceling>(data);
+	    },
+	});
+	tasks.push_back({
+	    "CancelAndTighten",
+	    [&data]() { return run_cost_solver_instance<CancelAndTighten>(data); },
 	});
 
 	if (!only_algo.empty())

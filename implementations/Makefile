@@ -7,10 +7,12 @@ MAKEFLAGS += --no-print-directory -s
 # Makefile: Network Flow Implementations
 # ----------------------------------------------------------------
 
-CXX      = c++
-CXXFLAGS = -std=c++23 -fsyntax-only -Wall -Wextra
+CXX             = c++
+CXXFLAGS        = -std=c++23 -fsyntax-only -Wall -Wextra
+STRESS_CXXFLAGS = -std=c++23 -O2 -Wall -Wextra -Wpedantic
+STRESS_BIN      = tests/min_cost_stress.out
 
-.PHONY: default help all check impl test verify format format-cpp format-md clean clear
+.PHONY: default help all check impl test stress-test verify format format-cpp format-md clean clear
 
 default: help
 all: check
@@ -29,6 +31,7 @@ help:
 	cmd "check"               "Verifica a sintaxe C++23 de todos os headers (FlowNetwork e CostNetwork)"; \
 	cmd "impl"                "Sinônimo para check (valida sintaxe C++23 dos headers)"; \
 	cmd "test"                "Executa os problemas de Fluxo Máximo e Fluxo de Custo Mínimo"; \
+	cmd "stress-test"         "Compila e executa a suíte de estresse de Custo Mínimo"; \
 	sec "Qualidade & Formatação:"; \
 	cmd "format"              "Formata códigos C++ (clang-format) e documentação (prettier)"; \
 	sec "Limpeza:"; \
@@ -81,9 +84,16 @@ test:
 			(cd "$$dir" && $(MAKE) all > "/dev/null") || exit 1; \
 		fi \
 	done
+	$(MAKE) stress-test
 	printf "%s\n" "Todos os problemas foram executados com sucesso!"
 
+stress-test:
+	printf "%s\n" "Compilando e executando suíte de estresse (cost-network)..."
+	$(CXX) $(STRESS_CXXFLAGS) tests/min_cost_stress.cpp -o "$(STRESS_BIN)"
+	"./$(STRESS_BIN)"
+
 clean:
+	rm -f "$(STRESS_BIN)"
 	for dir in problems/max-flow/*/ problems/min-cost-flow/*/; do \
 		if [ -f "$${dir}Makefile" ]; then \
 			(cd "$$dir" && $(MAKE) clean); \
