@@ -20,13 +20,15 @@ Biblioteca de algoritmos de fluxo em redes implementados em C++. O projeto está
 
 ## 🧮 Algoritmos de Custo Mínimo e Atribuição (`CostNetwork`)
 
-| Algoritmo                      | Header                                                                            | Complexidade                                       | Descrição                                                                |
-| :----------------------------- | :-------------------------------------------------------------------------------- | :------------------------------------------------- | :----------------------------------------------------------------------- |
-| Cycle Canceling                | [`CycleCanceling.hpp`](./cost-network/CycleCanceling.hpp)                         | $\mathcal{O}(\|V\| \cdot \|A\|^2 \cdot C \cdot W)$ | Cancelamento iterativo de ciclos de custo negativo.                      |
-| Successive Shortest (SPFA)     | [`SuccessiveShortest.hpp`](./cost-network/SuccessiveShortest.hpp)                 | $\mathcal{O}(\|V\| \cdot \|A\| \cdot F)$           | Caminhos mais curtos via SPFA com aumentações sucessivas.                |
-| Successive Shortest (Dijkstra) | [`SuccessiveShortestDijkstra.hpp`](./cost-network/SuccessiveShortestDijkstra.hpp) | $\mathcal{O}(F \cdot \|A\| \log \|V\|)$            | Caminhos mais curtos via Dijkstra com Potenciais Nodais ($\pi$).         |
-| Network Simplex                | [`NetworkSimplex.hpp`](./cost-network/NetworkSimplex.hpp)                         | Polinomial amortizado                              | Árvore geradora enraizada com pivoteamento por blocos.                   |
-| Kuhn-Munkres (Húngaro)         | [`KuhnMunkres.hpp`](./cost-network/KuhnMunkres.hpp)                               | $\mathcal{O}(V^3)$                                 | Algoritmo Húngaro primal-dual dedicado para atribuição bipartida mínima. |
+| Algoritmo                      | Header                                                                            | Complexidade                                       | Descrição                                                                            |
+| :----------------------------- | :-------------------------------------------------------------------------------- | :------------------------------------------------- | :----------------------------------------------------------------------------------- |
+| Cycle Canceling                | [`CycleCanceling.hpp`](./cost-network/CycleCanceling.hpp)                         | $\mathcal{O}(\|V\| \cdot \|A\|^2 \cdot C \cdot W)$ | Cancelamento iterativo de ciclos de custo negativo.                                  |
+| Minimum-Mean Cycle Canceling   | [`MinimumMeanCycleCanceling.hpp`](./cost-network/MinimumMeanCycleCanceling.hpp)   | $\mathcal{O}(\|V\|^2 \cdot \|A\|^3 \log \|V\|)$    | Cancelamento fortemente polinomial de ciclos de custo médio mínimo via Karp.         |
+| Cancel-and-Tighten             | [`CancelAndTighten.hpp`](./cost-network/CancelAndTighten.hpp)                     | $\mathcal{O}(\|V\|^2 \cdot \|A\|^2 \log \|V\|)$    | Escalonamento $\varepsilon$-ótimo com cancelamento de ciclos e aperto de potenciais. |
+| Successive Shortest (SPFA)     | [`SuccessiveShortest.hpp`](./cost-network/SuccessiveShortest.hpp)                 | $\mathcal{O}(\|V\| \cdot \|A\| \cdot F)$           | Caminhos mais curtos via SPFA com aumentações sucessivas.                            |
+| Successive Shortest (Dijkstra) | [`SuccessiveShortestDijkstra.hpp`](./cost-network/SuccessiveShortestDijkstra.hpp) | $\mathcal{O}(F \cdot \|A\| \log \|V\|)$            | Caminhos mais curtos via Dijkstra com Potenciais Nodais ($\pi$).                     |
+| Network Simplex                | [`NetworkSimplex.hpp`](./cost-network/NetworkSimplex.hpp)                         | Polinomial amortizado                              | Árvore geradora enraizada com pivoteamento por blocos.                               |
+| Kuhn-Munkres (Húngaro)         | [`KuhnMunkres.hpp`](./cost-network/KuhnMunkres.hpp)                               | $\mathcal{O}(V^3)$                                 | Algoritmo Húngaro primal-dual dedicado para atribuição bipartida mínima.             |
 
 ## 📐 Arquitetura
 
@@ -80,6 +82,14 @@ int main() {
 
 > [!TIP]
 > Confira os códigos completos e estruturados nos nossos templates ([Fluxo Máximo](./problems/max-flow/template/main.cpp) e [Fluxo de Custo Mínimo](./problems/min-cost-flow/template/main.cpp)) para iniciar rapidamente a resolução de novos problemas.
+
+## 🧪 Testes e Suíte de Estresse
+
+O [`Makefile`](./Makefile) deste módulo provê alvos automatizados para validação sintática dos headers, execução dos problemas de juízes online e validação cruzada de corretude em custo mínimo:
+
+- **`make check`:** Verifica a sintaxe C++23 de todos os headers em [`flow-network/`](./flow-network/) e [`cost-network/`](./cost-network/).
+- **`make stress-test`:** Compila e executa a suíte de estresse [`implementations/tests/min_cost_stress.cpp`](./tests/min_cost_stress.cpp), confrontando todos os motores de `CostNetwork` (incluindo `MinimumMeanCycleCanceling` e `CancelAndTighten`) em grafos aleatórios e casos patológicos.
+- **`make test`:** Executa os casos de teste de todos os problemas resolvidos e aciona automaticamente o `make stress-test`.
 
 ## 🔗 Problemas Resolvidos
 

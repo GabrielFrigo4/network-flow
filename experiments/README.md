@@ -28,7 +28,7 @@ experiments/
 │   └── bipartite/            # 18 instâncias bipartidas de Emparelhamento e Atribuição
 ├── results/                  # Dados coletados separados por escopo
 │   ├── ic/                   # Medições da Iniciação Científica (5 MF + 4 MCF)
-│   └── book/                 # Medições do Livro / Pós-IC (6 MF com MPM + 4 MCF + Suíte Bipartida)
+│   └── book/                 # Medições do Livro / Pós-IC (6 MF com MPM + 6 MCF + Suíte Bipartida)
 └── .scripts/                 # Automação de testes e processamento estatístico
     ├── fetch_dimacs.py       # Download e compilação dos geradores oficiais DIMACS
     ├── run_benchmarks.py     # Orquestrador com separação entre --suite ic e --suite book
@@ -49,7 +49,7 @@ Para garantir que os relatórios entregues na Iniciação Científica (`ic.pdf`,
 
 2. **Suíte do Livro / Pós-IC (`make bench-book` / `(cd experiments && make book)`):**
     - **Fluxo Máximo (6 motores):** Inclui o algoritmo **MPM (Malhotra-Kumar-Maheshwari)** em $\mathcal{O}(\|V\|^3)$ nas 40 instâncias DIMACS.
-    - **Custo Mínimo (4 motores):** Avaliados nas 40 instâncias DIMACS Netgen.
+    - **Custo Mínimo (6 motores):** Inclui os algoritmos fortemente polinomiais **`MinimumMeanCycleCanceling`** ($\mathcal{O}(\|V\|^2 \cdot \|A\|^3 \log \|V\|)$) e **`CancelAndTighten`** ($\mathcal{O}(\|V\|^2 \cdot \|A\|^2 \log \|V\|)$) avaliados nas 40 instâncias DIMACS Netgen via `--suite book` (preservando os 4 motores originais congelados em `--suite ic`).
     - **Emparelhamento Bipartido (8 motores):** Compara os algoritmos dedicados **`Kuhn`** e **`HopcroftKarp`** contra os 6 motores gerais de fluxo máximo.
     - **Atribuição Bipartida (5 motores):** Compara o algoritmo Húngaro dedicado (**`KuhnMunkres`**) contra os 4 motores gerais de fluxo de custo mínimo.
     - **Saídas:** `latex/book/tables/` e `latex/book/figures/`.

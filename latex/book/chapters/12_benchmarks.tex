@@ -64,9 +64,10 @@ Além do tempo de execução, a instrumentação computacional coleta métricas 
     \end{itemize}
 
     \item \textbf{Verificação Automática da Otimalidade e Consistência (Validação Cruzada):} O programa de testes verifica se todos os algoritmos produzem o mesmo valor ótimo:
-    \begin{equation}
-        |f^*_{\text{Edmonds-Karp}}| = |f^*_{\text{Dinic}}| = |f^*_{\text{Push-Relabel}}|, \quad \text{e} \quad z^*_{\text{CycleCanceling}} = z^*_{\text{SSP}} = z^*_{\text{NetworkSimplex}}
-    \end{equation}
+    \begin{gather}
+        |f^*_{\text{Edmonds-Karp}}| = |f^*_{\text{Dinic}}| = |f^*_{\text{Push-Relabel}}|, \\
+        z^*_{\text{CycleCanceling}} = z^*_{\text{MMCC}} = z^*_{\text{CancelAndTighten}} = z^*_{\text{SSP}} = z^*_{\text{NetworkSimplex}}
+    \end{gather}
     Essa checagem cruzada previne discrepâncias de implementação ou instabilidades numéricas.
 \end{enumerate}
 
@@ -79,7 +80,7 @@ A Tabela~\ref{tab:benchmarks} sintetiza o comportamento operacional esperado de 
 \centering
 \small
 \setlength{\tabcolsep}{4.5pt}
-\begin{tabular}{p{3.8cm} p{5.8cm} p{6.1cm}}
+\begin{tabular}{p{3.6cm} p{5.4cm} p{5.7cm}}
 \toprule
 \multicolumn{1}{c}{\textbf{Motor Algorítmico (C++)}} & \multicolumn{1}{c}{\textbf{Família de Melhor Desempenho}} & \multicolumn{1}{c}{\textbf{Cenário Crítico e Gargalo Empírico}} \\
 \midrule
@@ -96,6 +97,8 @@ A Tabela~\ref{tab:benchmarks} sintetiza o comportamento operacional esperado de 
 \multicolumn{3}{c}{\bannertext{\hyperref[sec:bench_instancias]{Motores de Fluxo de Custo Mínimo (Coleção DIMACS Netgen)}}} \\
 \midrule
 \hyperref[ap:cycle_canceling]{Cycle Canceling} & Redes pequenas com poucos ciclos de custo negativo & Custos residuais elevados com múltiplos ciclos de $-1$ \\
+\hyperref[ap:minimum_mean_cycle_canceling]{Minimum-Mean CC} & Redes esparsas de pequeno porte e fluxo nulo & Recálculo de Karp $\mathcal{O}(|V||A|)$ a cada fase em instâncias com $|V| \ge 1.500$ \\
+\hyperref[ap:cancel_and_tighten]{Cancel-and-Tighten} & Redes médias e densas com múltiplos ciclos negativos & Redes esparsas de grande porte ($|V| \ge 5.000$) sob limite de 16 s \\
 \hyperref[ap:successive_shortest_dijkstra]{SSP (Dijkstra + $\pi$)} & Redes de transbordo com fluxo total moderado & Redes com fluxos massivos e capacidades unitárias \\
 \hyperref[ap:network_simplex]{Network Simplex} & Grafos em grade, instâncias Netgen e redes logísticas & Degenerescência cíclica severa (controlada por Cunningham) \\
 \hyperref[ap:kuhn_munkres]{Kuhn-Munkres (Húngaro)} & Atribuição bipartida densa ($|L| = |R|$) & Matrizes densas $\mathcal{O}(|V|^3)$ frente a grafos muito esparsos \\
@@ -136,7 +139,7 @@ A Tabela~\ref{tab:results_maxflow} apresenta os tempos médios de execução ($\
 
 \section{Resultados Experimentais: Fluxo de Custo Mínimo}\label{sec:bench_resultados_mincost}
 
-A Tabela~\ref{tab:results_mincost} apresenta os resultados para os algoritmos de fluxo de custo mínimo nas 40 instâncias de referência Netgen da suíte DIMACS, reportando o custo ótimo $z^*$ e o menor tempo por instância em \textbf{negrito}.
+A Tabela~\ref{tab:results_mincost} apresenta os resultados detalhados dos seis algoritmos de fluxo de custo mínimo (\lstinline{NetworkSimplex}, \lstinline{SuccessiveShortestDijkstra}, \lstinline{SuccessiveShortest}, \lstinline{CancelAndTighten}, \lstinline{MinimumMeanCycleCanceling} e \lstinline{CycleCanceling}) nas 40 instâncias de referência Netgen da suíte DIMACS sob limite de tempo (\textit{timeout}) de 16 segundos, reportando o custo ótimo $z^*$ e destacando o menor tempo por instância em \textbf{negrito}.
 
 \IfFileExists{book/tables/table_min_cost.tex}{
 \input{book/tables/table_min_cost}
@@ -159,6 +162,36 @@ A Tabela~\ref{tab:results_mincost} apresenta os resultados para os algoritmos de
     \label{fig:bars_mincost}
 \end{figure}
 }{}
+
+A Tabela~\ref{tab:summary_mincost} consolida a taxa de conclusão e as estatísticas globais de tempo de execução (média e mediana sobre as instâncias concluídas com sucesso dentro do limite de 16 segundos) para os seis motores avaliados.
+
+\begin{table}[!ht]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lrrrrl}
+\toprule
+\textbf{Algoritmo} & \textbf{OK} & \textbf{TLE} & \textbf{Média (ms)} & \textbf{Mediana (ms)} & \textbf{Instâncias com TLE} \\
+\midrule
+\lstinline{NetworkSimplex} & 40/40 & 0 & 788,9 & \textbf{14,8} & --- \\
+\lstinline{SuccessiveShortestDijkstra} & 40/40 & 0 & \textbf{578,3} & 30,2 & --- \\
+\lstinline{SuccessiveShortest} & 40/40 & 0 & 840,6 & 25,6 & --- \\
+\lstinline{CancelAndTighten} & 37/40 & 3 & 898,1 & 63,4 & \texttt{netgen\_36, 37, 39} \\
+\lstinline{MinimumMeanCycleCanceling} & 31/40 & 9 & 1976,6 & 716,9 & \texttt{netgen\_32--40} \\
+\lstinline{CycleCanceling} & 33/40 & 7 & 3413,0 & 836,9 & \texttt{netgen\_09, 35--40} \\
+\bottomrule
+\end{tabular}
+\caption{Desempenho agregado dos seis motores de fluxo de custo mínimo nas 40 instâncias DIMACS Netgen (\textit{timeout} de 16 s; média e mediana calculadas sobre as instâncias com status \texttt{OK}).}
+\label{tab:summary_mincost}
+\end{table}
+
+Os dados das Tabelas~\ref{tab:results_mincost} e~\ref{tab:summary_mincost} e das Figuras~\ref{fig:scalability_mincost} e~\ref{fig:bars_mincost} evidenciam três comportamentos estruturais principais:
+
+\begin{enumerate}
+    \item \textbf{Vantagem empírica de \lstinline{CancelAndTighten} dentro da família de cancelamento de ciclos:} \lstinline{CancelAndTighten} atinge mediana de $63{,}4$~ms contra $716{,}9$~ms de \lstinline{MinimumMeanCycleCanceling} (aceleração superior a $11\times$ na mediana) e $836{,}9$~ms de \lstinline{CycleCanceling} (aceleração superior a $13\times$ na mediana), além de completar 37/40 instâncias contra 31/40 e 33/40 dos outros dois métodos. Esse ganho decorre diretamente do cancelamento em lote no grafo admissível $D_f^{\text{adm}}$ via DFS com \lstinline{current_arc}, seguido pelo aperto linear de potenciais em $\mathcal{O}(|V| + |A|)$ por ordenação topológica: enquanto \lstinline{MinimumMeanCycleCanceling} executa a tabela $\mathcal{O}(|V| \cdot |A|)$ de Karp a cada fase e excede 16 s em todas as nove instâncias com $|V| \ge 1.502$ (\texttt{netgen\_32} a \texttt{netgen\_40}), \lstinline{CancelAndTighten} amortiza o custo de Karp executando-o apenas a cada $\min(|V|, 64)$ iterações.
+    \item \textbf{Superação da sensibilidade pseudopolinomial de Klein:} Em \texttt{netgen\_09} ($|V|=302, |A|=6.375$), \lstinline{CycleCanceling} atinge o limite de 16 s devido à seleção arbitrária de ciclos de ganho reduzido, enquanto \lstinline{CancelAndTighten} resolve a instância em $105{,}7$~ms. Em grande escala, \lstinline{CancelAndTighten} conclui inclusive instâncias densas de $3.002$ vértices como \texttt{netgen\_38} ($|A|=35.625$, $14.533{,}6$~ms) e \texttt{netgen\_40} ($|A|=23.400$, $11.624{,}3$~ms), sofrendo TLE apenas quando $|V| \ge 5.002$ (\texttt{netgen\_36}, \texttt{netgen\_37} e \texttt{netgen\_39}). Nas instâncias degeneradas com fluxo ótimo nulo (\texttt{netgen\_11} a \texttt{netgen\_15}), todos os seis motores encerram em $0{,}5\text{--}4{,}0$~ms após a verificação inicial de viabilidade.
+    \item \textbf{Desempenho global de \lstinline{NetworkSimplex} e \lstinline{SuccessiveShortest}:} Apesar dos limitantes fortemente polinomiais de \lstinline{MMCC} e \lstinline{CancelAndTighten}, os paradigmas baseados em árvore e em caminhos aumentantes mais curtos resolvem todas as 40 instâncias sem nenhum TLE. \lstinline{NetworkSimplex} apresenta a menor mediana global ($14{,}8$~ms) graças à atualização de fluxos e potenciais em $\mathcal{O}(|V|)$ por pivô na árvore geradora, ao passo que \lstinline{SuccessiveShortestDijkstra} obtém a menor média global ($578{,}3$~ms) e \lstinline{SuccessiveShortest} (SPFA) atinge mediana de $25{,}6$~ms, beneficiando-se da ausência de uma Fase 1 cega aos custos para saturar o fluxo máximo inicial.
+\end{enumerate}
 
 
 \section{Resultados Experimentais: Emparelhamento e Atribuição Bipartida}\label{sec:bench_resultados_bipartite}

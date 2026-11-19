@@ -8,14 +8,14 @@ Este diretório contém os códigos-fonte da documentação oficial da pesquisa,
 
 Aqui você encontra os arquivos `.tex` que geram os PDFs oficiais do repositório:
 
-| Arquivo                                 | Escopo             | Descrição do Documento                                                                                                                                                                                                                                |
-| :-------------------------------------- | :----------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📗 **[`book.tex`](./book.tex)**         | **Livro / Pós-IC** | **Livro / Monografia Independente** sobre Fluxos em Redes. Possui 100% do conteúdo teórico e de código (incluindo os 13 motores algorítmicos com MPM, Kuhn, Hopcroft-Karp e Kuhn-Munkres e os benchmarks Pós-IC em `book/tables/` e `book/figures/`). |
-| 🖼️ **[`poster.tex`](./poster.tex)**     | **IC (UFABC)**     | **Pôster Científico do Simpósio de IC da UFABC (90×120 cm).** Contém os fundamentos teóricos, arquitetura C++23, galeria visual da **Segmentação Interativa de Imagens via Corte Mínimo** e os resultados experimentais DIMACS da IC.                 |
-| 📘 **[`proposal.tex`](./proposal.tex)** | **IC (UFABC)**     | Proposta e plano de trabalho inicial do projeto de pesquisa, submetido para a avaliação do edital.                                                                                                                                                    |
-| 📙 **[`report.tex`](./report.tex)**     | **IC (UFABC)**     | Relatório oficial de acompanhamento da pesquisa. Contém a capa formal da universidade (UFABC) com os dados do edital, folha de assinaturas e os resultados dos 9 algoritmos da IC (`tables/`, `figures/`).                                            |
-| 📕 **[`ic.tex`](./ic.tex)**             | **IC (UFABC)**     | Documento completo da Iniciação Científica. **Possui exatamente o mesmo conteúdo textual do `report.tex`**, diferindo apenas pela capa: usa uma capa limpa para leitura, sem a folha de assinaturas.                                                  |
-| 📄 **[`monolith.tex`](./monolith.tex)** | **IC (UFABC)**     | **Monólito Autocontido para Overleaf**. Gerado automaticamente a partir do `report.tex` (mesmo PDF), contendo preâmbulo, texto, tabelas, diagramas TikZ e os apêndices de código C++23 em um único `.tex`.                                            |
+| Arquivo                                 | Escopo             | Descrição do Documento                                                                                                                                                                                                                                                                                                                                                       |
+| :-------------------------------------- | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 📗 **[`book.tex`](./book.tex)**         | **Livro / Pós-IC** | **Livro / Monografia Independente** sobre Fluxos em Redes. Possui 100% do conteúdo teórico e de código (incluindo os 15 motores algorítmicos com MPM, Kuhn, Hopcroft-Karp, Kuhn-Munkres, Minimum-Mean Cycle Canceling e Cancel-and-Tighten e os benchmarks Pós-IC via `--suite book` com 6 motores de Fluxo Máximo e 6 de Custo Mínimo em `book/tables/` e `book/figures/`). |
+| 🖼️ **[`poster.tex`](./poster.tex)**     | **IC (UFABC)**     | **Pôster Científico do Simpósio de IC da UFABC (90×120 cm).** Contém os fundamentos teóricos, arquitetura C++23, galeria visual da **Segmentação Interativa de Imagens via Corte Mínimo** e os resultados experimentais DIMACS da IC.                                                                                                                                        |
+| 📘 **[`proposal.tex`](./proposal.tex)** | **IC (UFABC)**     | Proposta e plano de trabalho inicial do projeto de pesquisa, submetido para a avaliação do edital.                                                                                                                                                                                                                                                                           |
+| 📙 **[`report.tex`](./report.tex)**     | **IC (UFABC)**     | Relatório oficial de acompanhamento da pesquisa. Contém a capa formal da universidade (UFABC) com os dados do edital, folha de assinaturas e os resultados dos 9 algoritmos da IC (`tables/`, `figures/`).                                                                                                                                                                   |
+| 📕 **[`ic.tex`](./ic.tex)**             | **IC (UFABC)**     | Documento completo da Iniciação Científica. **Possui exatamente o mesmo conteúdo textual do `report.tex`**, diferindo apenas pela capa: usa uma capa limpa para leitura, sem a folha de assinaturas.                                                                                                                                                                         |
+| 📄 **[`monolith.tex`](./monolith.tex)** | **IC (UFABC)**     | **Monólito Autocontido para Overleaf**. Gerado automaticamente a partir do `report.tex` (mesmo PDF), contendo preâmbulo, texto, tabelas, diagramas TikZ e os apêndices de código C++23 em um único `.tex`.                                                                                                                                                                   |
 
 ---
 
@@ -41,14 +41,14 @@ latex/
 
 ### Pastas Locais (exclusivas de um documento)
 
-| Pasta     | Documento      | Conteúdo                                                                                                                                         |
-| :-------- | :------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `book/`   | `book.tex`     | `cover.tex`, `epilogue.tex`, `chapters/` (`01_fundamentals.tex` a `12_benchmarks.tex`), `tables/` e `figures/` dos benchmarks do Livro / Pós-IC. |
-| `ic/`     | `ic.tex`       | `cover.tex`: capa limpa para leitura.                                                                                                            |
-| `report/` | `report.tex`   | `cover.tex`: capa formal UFABC com folha de assinaturas.                                                                                         |
-| `poster/` | `poster.tex`   | `logos/` institucionais e `images/` da segmentação de imagens por corte mínimo.                                                                  |
-| —         | `monolith.tex` | Sem pasta: arquivo gerado por `make sync-code` a partir do `report.tex`.                                                                         |
-| —         | `proposal.tex` | Sem pasta: documento autocontido.                                                                                                                |
+| Pasta     | Documento      | Conteúdo                                                                                                                                                                                                                          |
+| :-------- | :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `book/`   | `book.tex`     | `cover.tex`, `epilogue.tex`, `chapters/` (`01_fundamentals.tex` a `12_benchmarks.tex`), `tables/` e `figures/` dos benchmarks do Livro / Pós-IC (`--suite book`: 6 motores de Fluxo Máximo, 6 de Custo Mínimo e Suíte Bipartida). |
+| `ic/`     | `ic.tex`       | `cover.tex`: capa limpa para leitura.                                                                                                                                                                                             |
+| `report/` | `report.tex`   | `cover.tex`: capa formal UFABC com folha de assinaturas.                                                                                                                                                                          |
+| `poster/` | `poster.tex`   | `logos/` institucionais e `images/` da segmentação de imagens por corte mínimo.                                                                                                                                                   |
+| —         | `monolith.tex` | Sem pasta: arquivo gerado por `make sync-code` a partir do `report.tex`.                                                                                                                                                          |
+| —         | `proposal.tex` | Sem pasta: documento autocontido.                                                                                                                                                                                                 |
 
 ### Pastas Globais (compartilhadas)
 
@@ -58,7 +58,7 @@ latex/
 | `sections/`   | `ic`, `report`, `monolith`           | Corpo do relatório da IC (`body.tex`, `abstract.tex`, `introduction.tex`, `background.tex`, `results.tex`, `conclusions.tex`, …). |
 | `diagrams/`   | `book`, `ic`, `report`, `monolith`   | Diagramas TikZ (`min_cut.tex`, `level_graph.tex`, `simplex_pivoting.tex`, …).                                                     |
 | `appendices/` | `book`, `ic`, `report`, `monolith`   | Códigos-fonte C++23 (`00_architecture.tex` a `16_github.tex`), sincronizados automaticamente com `implementations/`.              |
-| `tables/`     | `ic`, `report`, `monolith`           | Tabelas e CSVs dos benchmarks da IC (5 algoritmos de Fluxo Máximo e 4 de Custo Mínimo).                                           |
+| `tables/`     | `ic`, `report`, `monolith`           | Tabelas e CSVs dos benchmarks da IC (`--suite ic`: 5 algoritmos de Fluxo Máximo e 4 originais de Custo Mínimo congelados).        |
 | `figures/`    | `ic`, `report`, `monolith`, `poster` | Gráficos PDF dos benchmarks da IC.                                                                                                |
 
 ---

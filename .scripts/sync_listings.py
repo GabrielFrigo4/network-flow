@@ -124,6 +124,22 @@ LISTING_DEFINITIONS = [
         "caption": "Implementação em C++ do algoritmo Húngaro (Kuhn-Munkres) para atribuição bipartida de custo mínimo.",
         "label_listing": "lst:kuhn_munkres",
     },
+    {
+        "source": "implementations/cost-network/MinimumMeanCycleCanceling.hpp",
+        "output": "latex/appendices/17_minimum_mean_cycle_canceling.tex",
+        "title": "Implementação da Classe ``Minimum-Mean Cycle Canceling''",
+        "label_appendix": "ap:minimum_mean_cycle_canceling",
+        "caption": "Implementação em C++ do algoritmo \\textit{Minimum-Mean Cycle Canceling} com aritmética inteira de 128 bits.",
+        "label_listing": "lst:minimum_mean_cycle_canceling",
+    },
+    {
+        "source": "implementations/cost-network/CancelAndTighten.hpp",
+        "output": "latex/appendices/18_cancel_and_tighten.tex",
+        "title": "Implementação da Classe ``Cancel-and-Tighten''",
+        "label_appendix": "ap:cancel_and_tighten",
+        "caption": "Implementação em C++ do algoritmo \\textit{Cancel-and-Tighten} com ordenação topológica em DAG admissível e aperto via algoritmo de Karp.",
+        "label_listing": "lst:cancel_and_tighten",
+    },
 ]
 
 

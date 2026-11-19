@@ -19,14 +19,14 @@
 
 A documentação oficial da pesquisa é gerada a partir dos códigos-fonte em LaTeX disponíveis na pasta [`latex/`](./latex/), separando estritamente os artefatos entregues na **Iniciação Científica (UFABC)** da **Monografia / Livro Pós-IC**:
 
-| PDF Gerado                                        | Escopo             | Arquivo Fonte                                  | Descrição e Diferenças                                                                                                                                                                                                                     |
-| :------------------------------------------------ | :----------------- | :--------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [📗&nbsp;**`book.pdf`**][baixar_pdf_livro]        | **Livro / Pós-IC** | [🖋️&nbsp;`book.tex`](./latex/book.tex)         | **Livro e Monografia Independente.** Obra completa estruturada em Partes e Capítulos, incluindo os 13 motores algorítmicos (com MPM, Kuhn, Hopcroft-Karp e Kuhn-Munkres) e a suíte de benchmarks Pós-IC (`book/tables/`, `book/figures/`). |
-| [🖼️&nbsp;**`poster.pdf`**][baixar_pdf_poster]     | **IC (UFABC)**     | [🖋️&nbsp;`poster.tex`](./latex/poster.tex)     | **Pôster Científico do Simpósio de IC da UFABC (90×120 cm).** Apresenta a síntese teórica, arquitetura C++23, galeria visual da **Segmentação Interativa de Imagens via Corte Mínimo** e os resultados experimentais DIMACS da IC.         |
-| [📘&nbsp;**`proposal.pdf`**][baixar_pdf_projeto]  | **IC (UFABC)**     | [🖋️&nbsp;`proposal.tex`](./latex/proposal.tex) | Proposta e plano de trabalho inicial do projeto de pesquisa, submetido para a avaliação do edital.                                                                                                                                         |
-| [📙&nbsp;**`report.pdf`**][baixar_pdf_relatorio]  | **IC (UFABC)**     | [🖋️&nbsp;`report.tex`](./latex/report.tex)     | Relatório formal de acompanhamento da pesquisa com capa institucional e folha de assinaturas da UFABC, contendo o corpo textual e os 9 motores da IC (`tables/`, `figures/`).                                                              |
-| [📕&nbsp;**`ic.pdf`**][baixar_pdf_ic]             | **IC (UFABC)**     | [🖋️&nbsp;`ic.tex`](./latex/ic.tex)             | Documento principal da IC com formatação limpa para leitura (sem a folha de assinaturas), contendo o relatório completo acompanhado dos apêndices computacionais da IC.                                                                    |
-| [📄&nbsp;**`monolith.pdf`**][baixar_pdf_monolito] | **IC (UFABC)**     | [🖋️&nbsp;`monolith.tex`](./latex/monolith.tex) | Versão em arquivo único compilável autossuficiente (sem `\input`), idêntica ao relatório formal da IC, ideal para edição direta e compartilhamento na plataforma Overleaf.                                                                 |
+| PDF Gerado                                        | Escopo             | Arquivo Fonte                                  | Descrição e Diferenças                                                                                                                                                                                                                                                                       |
+| :------------------------------------------------ | :----------------- | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [📗&nbsp;**`book.pdf`**][baixar_pdf_livro]        | **Livro / Pós-IC** | [🖋️&nbsp;`book.tex`](./latex/book.tex)         | **Livro e Monografia Independente.** Obra completa estruturada em Partes e Capítulos, incluindo os 15 motores algorítmicos (com MPM, Kuhn, Hopcroft-Karp, Kuhn-Munkres, Minimum-Mean Cycle Canceling e Cancel-and-Tighten) e a suíte de benchmarks Pós-IC (`book/tables/`, `book/figures/`). |
+| [🖼️&nbsp;**`poster.pdf`**][baixar_pdf_poster]     | **IC (UFABC)**     | [🖋️&nbsp;`poster.tex`](./latex/poster.tex)     | **Pôster Científico do Simpósio de IC da UFABC (90×120 cm).** Apresenta a síntese teórica, arquitetura C++23, galeria visual da **Segmentação Interativa de Imagens via Corte Mínimo** e os resultados experimentais DIMACS da IC.                                                           |
+| [📘&nbsp;**`proposal.pdf`**][baixar_pdf_projeto]  | **IC (UFABC)**     | [🖋️&nbsp;`proposal.tex`](./latex/proposal.tex) | Proposta e plano de trabalho inicial do projeto de pesquisa, submetido para a avaliação do edital.                                                                                                                                                                                           |
+| [📙&nbsp;**`report.pdf`**][baixar_pdf_relatorio]  | **IC (UFABC)**     | [🖋️&nbsp;`report.tex`](./latex/report.tex)     | Relatório formal de acompanhamento da pesquisa com capa institucional e folha de assinaturas da UFABC, contendo o corpo textual e os 9 motores da IC (`tables/`, `figures/`).                                                                                                                |
+| [📕&nbsp;**`ic.pdf`**][baixar_pdf_ic]             | **IC (UFABC)**     | [🖋️&nbsp;`ic.tex`](./latex/ic.tex)             | Documento principal da IC com formatação limpa para leitura (sem a folha de assinaturas), contendo o relatório completo acompanhado dos apêndices computacionais da IC.                                                                                                                      |
+| [📄&nbsp;**`monolith.pdf`**][baixar_pdf_monolito] | **IC (UFABC)**     | [🖋️&nbsp;`monolith.tex`](./latex/monolith.tex) | Versão em arquivo único compilável autossuficiente (sem `\input`), idêntica ao relatório formal da IC, ideal para edição direta e compartilhamento na plataforma Overleaf.                                                                                                                   |
 
 ---
 
@@ -100,6 +100,8 @@ Introduzida por Goldberg e Tarjan, esta família quebra o paradigma dos caminhos
 #### 🧮 Algoritmos de Fluxo de Custo Mínimo e Atribuição (`CostNetwork`)
 
 - 🔄 **[Cycle Canceling][cycle_canceling]**
+- 🔁 **[Minimum-Mean Cycle Canceling][min_mean_cycle_canceling]** _(Pós-IC / Livro)_
+- 🗜️ **[Cancel-and-Tighten][cancel_and_tighten]** _(Pós-IC / Livro)_
 - 📉 **[Successive Shortest Path (SPFA)][successive_shortest]**
 - ⚡ **[Successive Shortest Path (Dijkstra + Potenciais)][successive_shortest_dijkstra]**
 - 🌲 **[Network Simplex][network_simplex]**
@@ -269,6 +271,8 @@ make clean
 [kuhn_algorithm]: ./implementations/flow-network/Kuhn.hpp
 [hopcroft_karp]: ./implementations/flow-network/HopcroftKarp.hpp
 [cycle_canceling]: ./implementations/cost-network/CycleCanceling.hpp
+[min_mean_cycle_canceling]: ./implementations/cost-network/MinimumMeanCycleCanceling.hpp
+[cancel_and_tighten]: ./implementations/cost-network/CancelAndTighten.hpp
 [successive_shortest]: ./implementations/cost-network/SuccessiveShortest.hpp
 [successive_shortest_dijkstra]: ./implementations/cost-network/SuccessiveShortestDijkstra.hpp
 [network_simplex]: ./implementations/cost-network/NetworkSimplex.hpp

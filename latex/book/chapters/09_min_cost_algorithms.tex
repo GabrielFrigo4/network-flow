@@ -72,6 +72,356 @@ Cada iteração preserva a viabilidade do fluxo e o valor $|f|$, reduzindo o cus
 Para capacidades inteiras limitadas por $C$ e custos por $W$, o custo total é no máximo $|A| \cdot C \cdot W$. Como cada cancelamento reduz o custo em pelo menos 1 unidade inteira, ocorrem no máximo $\mathcal{O}(|A| \cdot C \cdot W)$ iterações. Com custo $\mathcal{O}(|V| \cdot |A|)$ por iteração de Bellman-Ford, a complexidade total no pior caso é $\mathcal{O}(|V| \cdot |A|^2 \cdot C \cdot W)$~\cite{ahuja1993network}.
 
 
+\section{Cancelamento de Ciclos de Custo Médio Mínimo (Minimum-Mean Cycle Canceling)}\label{sec:mmcc}
+
+O método de Klein~\cite{klein1967primal} seleciona ciclos negativos arbitrários em $D_f$, expondo a execução ao limitante pseudopolinomial $\mathcal{O}(|V| \cdot |A|^2 \cdot C \cdot W)$. Goldberg e Tarjan~\cite{goldberg1989finding} demonstraram que selecionar a cada passo um ciclo de \textbf{custo médio mínimo} torna o algoritmo \textbf{fortemente polinomial}, com quantidade de iterações independente das magnitudes de capacidades e custos.
+
+Como na versão clássica, a Fase 1 calcula um fluxo máximo viável de $s$ a $t$ na rede (nas classes \lstinline{MinimumMeanCycleCanceling} e \lstinline{CancelAndTighten}, executada pelo método de Dinic em $\mathcal{O}(|V|^2 |A|)$ via \lstinline{saturate_max_flow}, evitando a barreira pseudopolinomial também na etapa de viabilidade). A Fase 2 opera exclusivamente sobre o digrafo residual $D_f = (V, A_f)$ de custo unitário $w_f$, com $|V|$ vértices e $|A_f| \le 2|A|$ arcos residuais.
+
+\begin{definicao}[Custo Médio de Ciclo][def:media_ciclo]
+Dado um fluxo viável $f$ e um ciclo direcionado $C$ no digrafo residual $D_f = (V, A_f)$ com $|C| \ge 1$ arcos, o \textbf{custo médio} de $C$ é definido por:
+\begin{equation}
+    \mu(C) \coloneqq \frac{w_f(C)}{|C|} = \frac{1}{|C|} \sum_{a \in C} w_f(a).
+\end{equation}
+O \textbf{custo médio mínimo de ciclo} em $D_f$ é:
+\begin{equation}
+    \mu^*(D_f) \coloneqq \min_{C \subseteq D_f} \mu(C),
+\end{equation}
+convencionando-se $\mu^*(D_f) = +\infty$ caso $D_f$ seja acíclico. Pelo Teorema~\ref{teo:ciclos_negativos}, $f$ é ótimo se, e somente se, $\mu^*(D_f) \ge 0$.
+\end{definicao}
+
+
+\subsection{Caracterização de Karp para o Ciclo Médio Mínimo}
+
+Seja $n = |V|$. Como o digrafo residual $D_f$ não é necessariamente fortemente conexo, define-se $d_0(v) = 0$ para todo $v \in V$ (o que equivale a introduzir um vértice auxiliar $s_0$ conectado a todo $v \in V$ por arcos de custo nulo) e, para $k = 1, \dots, n$:
+\begin{equation}
+    d_k(v) \coloneqq \min_{(u,v) \in A_f} \bigl(d_{k-1}(u) + w_f(u,v)\bigr),
+\end{equation}
+que representa o menor custo de um passeio direcionado em $D_f$ composto por exatamente $k$ arcos e terminado em $v$ (com $d_k(v) = +\infty$ caso nenhum passeio de comprimento $k$ termine em $v$).
+
+\begin{teorema}[Caracterização do Ciclo Médio Mínimo --- Karp, 1978][teo:karp]
+Se $D_f$ contém ao menos um ciclo direcionado, então o conjunto $\{v \in V \mid d_n(v) < +\infty\}$ é não vazio e o custo médio mínimo satisfaz~\cite{karp1978characterization}:
+\begin{equation}\label{eq:karp}
+    \mu^*(D_f) = \min_{\substack{v \in V \\ d_n(v) < +\infty}} \; \max_{\substack{0 \le k < n \\ d_k(v) < +\infty}} \frac{d_n(v) - d_k(v)}{n - k}.
+\end{equation}
+Caso $D_f$ seja acíclico, todo passeio possui no máximo $n - 1$ arcos e $d_n(v) = +\infty$ para todo $v \in V$.
+\end{teorema}
+
+\begin{demonstracao}
+Considere a translação uniforme dos custos por uma constante $\lambda \in \mathbb{R}$, definindo $w'(a) = w_f(a) - \lambda$ para todo $a \in A_f$. Todo ciclo $C$ tem média deslocada para $\mu'(C) = \mu(C) - \lambda$, logo $\mu'^*(D_f) = \mu^*(D_f) - \lambda$. Da mesma forma, todo passeio de $k$ arcos sofre redução de $k\lambda$, resultando em $d'_k(v) = d_k(v) - k\lambda$ para todo $k \ge 0$ e $v \in V$. Para qualquer $v$ com $d_n(v) < +\infty$ e qualquer $0 \le k < n$ com $d_k(v) < +\infty$, vale:
+\begin{equation*}
+    \frac{d'_n(v) - d'_k(v)}{n - k} = \frac{(d_n(v) - n\lambda) - (d_k(v) - k\lambda)}{n - k} = \frac{d_n(v) - d_k(v)}{n - k} - \lambda.
+\end{equation*}
+A identidade~\eqref{eq:karp} é, portanto, invariante sob translação de custos. Tomando $\lambda = \mu^*(D_f)$, reduz-se a demonstração ao caso $\mu'^*(D_f) = 0$, no qual todo ciclo $C \subseteq D_f$ satisfaz $w'(C) \ge 0$ e existe ao menos um ciclo $C^* \subseteq D_f$ com $w'(C^*) = 0$. Basta provar que o lado direito de~\eqref{eq:karp} sob $w'$ vale zero.
+
+\medskip
+\noindent \textit{(i) Limitante inferior ($\ge 0$ para todo $v$ com $d'_n(v) < +\infty$):}
+Seja $W$ um passeio de $n$ arcos terminado em $v$ tal que $w'(W) = d'_n(v)$. Como $W$ visita $n + 1$ vértices, pelo Princípio da Casa dos Pombos algum vértice repete-se, de modo que $W$ contém um ciclo direcionado simples $C$ de comprimento $\ell = |C| \in \{1, \dots, n\}$. A remoção de $C$ deixa um passeio $W'$ de comprimento $k = n - \ell \in \{0, \dots, n-1\}$ ainda terminado em $v$ (sendo $W'$ o passeio trivial de custo $d'_0(v) = 0$ se $\ell = n$). Como $w'(C) \ge 0$ e $d'_k(v) \le w'(W')$, segue:
+\begin{equation*}
+    d'_n(v) = w'(W') + w'(C) \ge d'_k(v) \implies \frac{d'_n(v) - d'_k(v)}{n - k} \ge 0,
+\end{equation*}
+logo o máximo sobre $0 \le k < n$ (com $d'_k(v) < +\infty$) é no mínimo $0$ para todo $v$ alcançável em $n$ passos.
+
+\medskip
+\noindent \textit{(ii) Limitante superior ($\le 0$ para algum $v^*$ com $d'_n(v^*) < +\infty$):}
+Como $D_f$ não contém ciclos de custo negativo sob $w'$, a remoção de ciclos não diminui o custo mínimo de passeios até cada vértice; assim, para todo $x \in V$:
+\begin{equation*}
+    \pi'(x) \coloneqq \inf_{k \ge 0} d'_k(x) = \min_{0 \le k \le n-1} d'_k(x) \in (-\infty, 0],
+\end{equation*}
+finito pois $d'_0(x) = 0$. Para todo arco $(x,y) \in A_f$ e todo $k \ge 0$, vale $d'_{k+1}(y) \le d'_k(x) + w'(x,y)$; tomando o mínimo em $k \ge 0$, obtém-se $\pi'(y) \le \pi'(x) + w'(x,y)$, isto é, $w'(x,y) + \pi'(x) - \pi'(y) \ge 0$. Somando essa desigualdade ao longo do ciclo $C^*$ de custo $w'(C^*) = 0$, cada parcela deve anular-se, implicando:
+\begin{equation*}
+    \pi'(y) = \pi'(x) + w'(x,y), \quad \forall\, (x,y) \in C^*.
+\end{equation*}
+Escolha um vértice arbitrário $v_0 \in V(C^*)$ e seja $P_0$ um passeio de comprimento $m_0 \in \{0, \dots, n-1\}$ terminado em $v_0$ com $w'(P_0) = \pi'(v_0)$. Estendendo $P_0$ adiante ao longo de $n - m_0 \ge 1$ arcos consecutivos de $C^*$, obtém-se um passeio $W^*$ de comprimento exato $n$ terminado em algum vértice $v^* \in V(C^*)$ cujo custo soma telescopicamente:
+\begin{equation*}
+    w'(W^*) = w'(P_0) + \sum_{a \in W^* \setminus P_0} w'(a) = \pi'(v_0) + \bigl(\pi'(v^*) - \pi'(v_0)\bigr) = \pi'(v^*).
+\end{equation*}
+Logo $d'_n(v^*) \le w'(W^*) = \pi'(v^*) < +\infty$. Como $\pi'(v^*) \le d'_k(v^*)$ para todo $k \ge 0$, resulta $d'_n(v^*) = \pi'(v^*) \le d'_k(v^*)$ para todo $0 \le k < n$, donde $\max_{0 \le k < n,\, d'_k(v^*) < +\infty} \frac{d'_n(v^*) - d'_k(v^*)}{n - k} \le 0$. Combinando (i) e (ii), conclui-se a igualdade.
+\end{demonstracao}
+
+A tabela de programação dinâmica $d_0, \dots, d_n$ e a avaliação da Equação~\eqref{eq:karp} operam em tempo $\mathcal{O}(|V| \cdot |A|)$ e espaço $\mathcal{O}(|V|^2)$.
+
+
+\subsection{Extração Exata pelo Subgrafo de Arcos Justos e Aritmética de 128 Bits}
+
+Diferentemente do algoritmo de Klein (\lstinline{CycleCanceling}), retroceder um vetor unidimensional de predecessores \lstinline{parent} após o cálculo de Karp não é suficiente em digrafos gerais por dois motivos estruturais:
+\begin{enumerate}
+    \item \textbf{Mistura de camadas de comprimento $k$:} Em Karp, cada entrada $d_k(v)$ corresponde a passeios de comprimento \emph{exato} $k$. Sobrescrever um único vetor \lstinline{parent[v]} ao longo das iterações $k = 1, \dots, n$ mistura predecessores de camadas distintas, podendo falhar na reconstrução do passeio ótimo $W$ de $n$ arcos ou extrair um ciclo cuja média supera estritamente $\mu^*(D_f)$.
+    \item \textbf{Vértice minimizante externo ao ciclo:} O vértice $v^*$ que atinge o mínimo externo em~\eqref{eq:karp} não pertence necessariamente a um ciclo de média mínima (pode apenas ser alcançável a partir dele por um caminho de comprimento menor que $n$). Mesmo armazenando uma matriz bidimensional \lstinline{parent[k][v]} de tamanho $\Theta(|V|^2)$, a reconstrução extrairia no máximo um único ciclo por execução de Karp.
+\end{enumerate}
+
+Para evitar tabelas bidimensionais de predecessores e garantir exatidão numérica, a classe \lstinline{MinimumMeanCycleCanceling} determina $\mu^*(D_f) = p / q < 0$ em forma racional irredutível ($p \in \mathbb{Z}_{<0}$, $q \in \{1, \dots, n\}$, $\gcd(|p|, q) = 1$) e define custos inteiros deslocados e potenciais inteiros exatos:
+\begin{equation}
+    w'(a) \coloneqq q \cdot w_f(a) - p, \qquad
+    \pi'(v) \coloneqq \min_{\substack{0 \le k \le n \\ d_k(v) < +\infty}} \bigl(q \cdot d_k(v) - k \cdot p\bigr).
+\end{equation}
+Observe que $\pi'(v)$ é sempre finito ($\le 0$), pois $d_0(v) = 0$. Define-se então o \textbf{subgrafo de arcos justos} (\textit{tight arcs}):
+\begin{equation}
+    A'_= \coloneqq \bigl\{ (u,v) \in A_f \mid w'(u,v) + \pi'(u) - \pi'(v) = 0 \bigr\}.
+\end{equation}
+
+\begin{prop}[Caracterização do Subgrafo de Arcos Justos]\label{prop:arcos_justos}
+Para todo arco $(u,v) \in A_f$, vale $w'(u,v) + \pi'(u) - \pi'(v) \ge 0$. Além disso, um ciclo direcionado simples $C \subseteq D_f$ possui custo médio mínimo $\mu(C) = \mu^*(D_f) = p/q$ se, e somente se, todos os seus arcos pertencem a $A'_=$.
+\end{prop}
+
+\begin{demonstracao}
+Pelo item (i) da demonstração do Teorema~\ref{teo:karp} aplicado aos custos $w'$, tem-se $q d_n(u) - np \ge \min_{0 \le k < n} (q d_k(u) - kp)$, logo $\pi'(u) = \min_{0 \le k \le n-1}(q d_k(u) - kp)$ é atingido por algum índice $k^* < n$. Como $d_{k^*+1}(v) \le d_{k^*}(u) + w_f(u,v)$, segue:
+\begin{equation*}
+    \pi'(v) \le q d_{k^*+1}(v) - (k^* + 1)p \le \bigl(q d_{k^*}(u) - k^* p\bigr) + \bigl(q w_f(u,v) - p\bigr) = \pi'(u) + w'(u,v),
+\end{equation*}
+provando $w'(u,v) + \pi'(u) - \pi'(v) \ge 0$ para todo $(u,v) \in A_f$. Somando ao longo de um ciclo $C \subseteq D_f$, os potenciais anulam-se:
+\begin{equation*}
+    w'(C) = q w_f(C) - |C|p = \sum_{(u,v) \in C} \bigl(w'(u,v) + \pi'(u) - \pi'(v)\bigr).
+\end{equation*}
+Como cada parcela da soma é não negativa, tem-se $\mu(C) = p/q \iff w'(C) = 0 \iff w'(u,v) + \pi'(u) - \pi'(v) = 0$ para todo $(u,v) \in C$, isto é, $C \subseteq A'_=$.
+\end{demonstracao}
+
+Como existe ao menos um ciclo de média $\mu^*(D_f)$, a Proposição~\ref{prop:arcos_justos} assegura que $A'_=$ contém ao menos um ciclo direcionado e que \emph{todo} ciclo em $A'_=$ possui média exatamente $\mu^*(D_f)$. O método \lstinline{cancel_tight_cycles} executa uma busca em profundidade (DFS) com ponteiro de arco atual (\lstinline{current_arc}) sobre $A'_=$, cancelando em $\mathcal{O}(|V| \cdot |A|)$ todos os ciclos justos disjuntos em arcos encontrados na passagem.
+
+\paragraph{Aritmética Inteira Exata de 128 Bits.}
+Como $\mu^*(D_f) = p/q$ tem denominador $q \le n$, dois ciclos distintos podem diferir em média por apenas $\frac{1}{n(n-1)}$. Se o quociente e o teste de igualdade $w_f(u,v) - \mu^* + \pi(u) - \pi(v) = 0$ fossem avaliados em ponto flutuante IEEE-754 (\lstinline{double}), erros de arredondamento poderiam omitir arcos justos (impedindo a detecção do ciclo) ou admitir falsos arcos justos (cancelando ciclos de média maior que $\mu^*$ ou até não negativa). Em \lstinline{MinimumMeanCycleCanceling}, todas as comparações racionais utilizam multiplicação cruzada inteira em \lstinline{__int128} ($p_1 q_2 < p_2 q_1$ com $q_1, q_2 > 0$), simplificação exata via \lstinline{gcd_u128} e verificação exata em inteiros de 128 bits (com valores limitados por $\mathcal{O}(|V|^2 W)$, bem abaixo de $2^{120}$).
+
+
+\subsection{Dualidade $\varepsilon$-Ótima e Relação $\varepsilon(f) = -\mu^*(D_f)$}
+
+Seguindo a convenção de potenciais de Goldberg e Tarjan~\cite{goldberg1989finding} adotada nas implementações em C++23, denota-se o custo reduzido residual de $(u,v) \in A_f$ por $w_\pi(u,v) \coloneqq w_f(u,v) + \pi(u) - \pi(v)$ (equivalente à convenção $\bar{w}_{-\pi}(u,v)$ do Capítulo~\ref{sec:mcf_teoria}).
+
+\begin{definicao}[$\varepsilon$-Otimalidade][def:eps_otimalidade]
+Seja $\varepsilon \ge 0$ um escalar real. Um par $(f, \pi)$ composto por um fluxo viável $f$ e um vetor de potenciais $\pi: V \to \mathbb{R}$ é \textbf{$\varepsilon$-ótimo} se:
+\begin{equation}
+    w_\pi(a) \ge -\varepsilon, \quad \forall\, a \in A_f.
+\end{equation}
+Diz-se que o fluxo $f$ é \textbf{$\varepsilon$-ótimo} se existe algum vetor $\pi$ tal que $(f, \pi)$ é $\varepsilon$-ótimo. O parâmetro de otimalidade exata de $f$ é definido por:
+\begin{equation}
+    \varepsilon(f) \coloneqq \inf\bigl\{ \varepsilon \ge 0 \mid f \text{ é } \varepsilon\text{-ótimo} \bigr\}.
+\end{equation}
+\end{definicao}
+
+Para $\varepsilon = 0$, a definição reduz-se à condição de otimalidade global $w_\pi(a) \ge 0$ para todo $a \in A_f$ (Teorema~\ref{teo:custos_reduzidos}).
+
+\begin{teorema}[Identidade entre $\varepsilon$-Otimalidade e Ciclo Médio Mínimo --- Goldberg e Tarjan, 1989][teo:eps_mu]
+Para todo fluxo viável $f$, vale:
+\begin{equation}
+    \varepsilon(f) = \max\bigl\{0,\, -\mu^*(D_f)\bigr\}.
+\end{equation}
+Em particular, se $f$ não é de custo mínimo, então $\varepsilon(f) = -\mu^*(D_f) > 0$.
+\end{teorema}
+
+\begin{demonstracao}
+$(\ge)$ Suponha que $f$ seja $\varepsilon$-ótimo para algum $\varepsilon \ge 0$, com testemunha $\pi$. Para qualquer ciclo direcionado $C \subseteq D_f$, a soma telescópica dos potenciais anula-se:
+\begin{equation*}
+    w_f(C) = \sum_{a \in C} w_\pi(a) \ge -|C| \cdot \varepsilon \implies \mu(C) = \frac{w_f(C)}{|C|} \ge -\varepsilon.
+\end{equation*}
+Tomando o mínimo sobre todos os ciclos $C \subseteq D_f$, segue $\mu^*(D_f) \ge -\varepsilon$, donde $\varepsilon \ge -\mu^*(D_f)$. Como $\varepsilon \ge 0$ por definição, resulta $\varepsilon(f) \ge \max\{0, -\mu^*(D_f)\}$.
+
+\medskip
+\noindent $(\le)$ Seja $\varepsilon_0 \coloneqq \max\{0, -\mu^*(D_f)\}$ e considere os custos deslocados $w^{\varepsilon_0}(a) \coloneqq w_f(a) + \varepsilon_0$ em $A_f$. Todo ciclo $C \subseteq D_f$ satisfaz $w^{\varepsilon_0}(C) = |C|\cdot(\mu(C) + \varepsilon_0) \ge |C|\cdot(\mu^*(D_f) - \mu^*(D_f)) = 0$ (e se $D_f$ for acíclico, inexistem ciclos negativos). Introduzindo um vértice auxiliar $s_0$ com arcos de custo nulo para todo $v \in V$, as distâncias mínimas $\pi(v) \coloneqq \dist_{w^{\varepsilon_0}}(s_0, v)$ em $D_f$ sob $w^{\varepsilon_0}$ são finitas e satisfazem a desigualdade triangular:
+\begin{equation*}
+    \pi(v) \le \pi(u) + w^{\varepsilon_0}(u,v) = \pi(u) + w_f(u,v) + \varepsilon_0, \quad \forall\, (u,v) \in A_f.
+\end{equation*}
+Reordenando os termos, obtém-se $w_\pi(u,v) = w_f(u,v) + \pi(u) - \pi(v) \ge -\varepsilon_0$ para todo $(u,v) \in A_f$. Logo $(f, \pi)$ é $\varepsilon_0$-ótimo, implicando $\varepsilon(f) \le \varepsilon_0$.
+\end{demonstracao}
+
+
+\subsection{Análise Fortemente Polinomial}
+
+\begin{prop}[Não-Aumento de $\varepsilon(f)$]\label{prop:mmcc_monotonicidade}
+Se $f'$ é obtido a partir de $f$ pelo cancelamento de um ciclo $C \subseteq D_f$ de custo médio mínimo $\mu^*(D_f)$ (ou de um conjunto de ciclos justos disjuntos em arcos com média $\mu^*(D_f)$), então $\varepsilon(f') \le \varepsilon(f)$.
+\end{prop}
+
+\begin{demonstracao}
+Se $f$ já é ótimo, não há ciclo negativo a cancelar. Caso contrário, $\varepsilon = \varepsilon(f) = -\mu^*(D_f) > 0$. Pelo Teorema~\ref{teo:eps_mu}, existe um potencial $\pi$ tal que $(f, \pi)$ é $\varepsilon$-ótimo, isto é, $w_\pi(a) \ge -\varepsilon$ para todo $a \in A_f$. Para todo ciclo $C$ cancelado com $\mu(C) = -\varepsilon$, tem-se:
+\begin{equation*}
+    \sum_{a \in C} w_\pi(a) = w_f(C) = -|C|\varepsilon.
+\end{equation*}
+Como cada parcela é no mínimo $-\varepsilon$, todo arco $a \in C$ satisfaz necessariamente $w_\pi(a) = -\varepsilon$. Ao enviar o gargalo $\delta > 0$ ao longo de $C$, todo novo arco residual $\bar{a} \in A_{f'} \setminus A_f$ é o reverso de algum $a \in C$, possuindo portanto $w_\pi(\bar{a}) = -w_\pi(a) = +\varepsilon \ge -\varepsilon$. Os demais arcos de $A_{f'} \cap A_f$ preservam $w_\pi(a) \ge -\varepsilon$. Assim, $(f', \pi)$ é $\varepsilon$-ótimo e $\varepsilon(f') \le \varepsilon = \varepsilon(f)$.
+\end{demonstracao}
+
+\begin{prop}[Decaimento de $\varepsilon(f)$ a cada $|A|$ Cancelamentos]\label{prop:mmcc_reducao}
+Sejam $f$ um fluxo com $\varepsilon(f) > 0$ e $f'$ o fluxo obtido após no máximo $|A|$ cancelamentos consecutivos de ciclos de custo médio mínimo (ou antes, caso atinja a otimalidade). Então:
+\begin{equation}
+    \varepsilon(f') \le \left(1 - \frac{1}{|V|}\right)\varepsilon(f).
+\end{equation}
+\end{prop}
+
+\begin{demonstracao}
+Seja $\varepsilon = \varepsilon(f) > 0$ e seja $\pi$ um potencial tal que $(f, \pi)$ é $\varepsilon$-ótimo. Defina o conjunto de arcos residuais de custo reduzido negativo:
+\begin{equation*}
+    A^- \coloneqq \bigl\{ a \in A_f \mid w_\pi(a) < 0 \bigr\}.
+\end{equation*}
+Como $w_\pi(u,v) + w_\pi(v,u) = 0$ para todo par de arcos complementares $(u,v)$ e $(v,u)$, para cada arco original de $A$ no máximo uma de suas duas orientações residuais pode pertencer a $A^-$, donde $|A^-| \le |A|$. Seja $f_0 = f, f_1, f_2, \dots$ a sequência de fluxos produzida ao cancelar ciclos simples de média mínima $C_0, C_1, C_2, \dots$.
+
+Enquanto $C_j \subseteq A^-$, cancelar $C_j$ satura ao menos um arco de $A^-$ (removendo-o de $A^-$), ao passo que todo arco reverso criado $\bar{a}$ possui $w_\pi(\bar{a}) = -w_\pi(a) > 0$, não ingressando em $A^-$ e preservando a $\varepsilon$-otimalidade de $(f_{j+1}, \pi)$. Logo $|A^-|$ decresce em pelo menos $1$ unidade por iteração enquanto os ciclos permanecerem contidos em $A^-$. Se $A^-$ esvaziar-se em algum passo $t \le |A|$, tem-se $w_\pi(a) \ge 0$ para todo $a \in A_{f_t}$, logo $\varepsilon(f_t) = 0$.
+
+Caso contrário, existe uma primeira iteração $t \le |A|$ na qual o ciclo simples de média mínima $C_t$ contém ao menos um arco $a^* \in C_t$ com $w_\pi(a^*) \ge 0$. Como $(f_t, \pi)$ ainda é $\varepsilon$-ótimo e $|C_t| \le |V|$, tem-se:
+\begin{equation*}
+    w_{f_t}(C_t) = w_\pi(a^*) + \sum_{a \in C_t \setminus \{a^*\}} w_\pi(a) \ge 0 - (|C_t| - 1)\varepsilon.
+\end{equation*}
+Dividindo por $|C_t| \le |V|$:
+\begin{equation*}
+    \mu^*(D_{f_t}) = \frac{w_{f_t}(C_t)}{|C_t|} \ge -\left(1 - \frac{1}{|C_t|}\right)\varepsilon \ge -\left(1 - \frac{1}{|V|}\right)\varepsilon.
+\end{equation*}
+Pelo Teorema~\ref{teo:eps_mu}, $\varepsilon(f_t) = -\mu^*(D_{f_t}) \le (1 - 1/|V|)\varepsilon$. Pela Proposição~\ref{prop:mmcc_monotonicidade}, na iteração $|A|$ vale $\varepsilon(f_{|A|}) \le \varepsilon(f_t) \le (1 - 1/|V|)\varepsilon(f)$.
+\end{demonstracao}
+
+\begin{prop}[Arcos $\varepsilon$-Fixos]\label{prop:arcos_fixos}
+Seja $(f, \pi)$ um par $\varepsilon$-ótimo com $\varepsilon > 0$. Se um arco residual $a_0 \in A_f$ satisfaz $w_\pi(a_0) \ge 2|V|\varepsilon$, então para todo fluxo viável $f'$ com $\varepsilon(f') \le \varepsilon$ (e, em particular, para todo fluxo ótimo $f^*$), o fluxo no arco original associado a $a_0$ coincide com o fluxo em $f$.
+\end{prop}
+
+\begin{demonstracao}
+Suponha que o arco complementar $\overline{a_0}$ também pertencesse a $A_f$. Então $w_\pi(\overline{a_0}) = -w_\pi(a_0) \le -2|V|\varepsilon < -\varepsilon$ (para $|V| \ge 1$), contradizendo a $\varepsilon$-otimalidade de $(f, \pi)$. Logo $\overline{a_0} \notin A_f$, o que significa que o fluxo em $f$ no arco original correspondente já está no seu extremo ($0$ se $a_0$ é direto, ou na capacidade total se $a_0$ é reverso).
+
+Suponha por absurdo que exista um fluxo viável $f'$ com $\varepsilon(f') \le \varepsilon$ cujo valor no arco original difira do de $f$. Então a circulação residual $g = f' - f$ envia fluxo estritamente positivo na direção de $a_0$ em $D_f$. Pelo Teorema da Decomposição de Fluxo (Teorema~\ref{teo:decomposicao}), $g$ decompõe-se em ciclos simples positivos em $D_f$, e ao menos um ciclo simples $C \subseteq D_f$ contém $a_0$. Consequentemente, o ciclo reverso $\overline{C}$ (obtido invertendo todos os arcos de $C$) é um ciclo simples contido em $D_{f'}$. Como $|C| \le |V|$, $w_\pi(a_0) \ge 2|V|\varepsilon$ e $w_\pi(a) \ge -\varepsilon$ para todo $a \in C \setminus \{a_0\}$, resulta:
+\begin{equation*}
+    w_f(C) = w_\pi(a_0) + \sum_{a \in C \setminus \{a_0\}} w_\pi(a) \ge 2|V|\varepsilon - (|C| - 1)\varepsilon = (2|V| - |C| + 1)\varepsilon > |C|\varepsilon,
+\end{equation*}
+pois $2|V| - |C| + 1 > |C|$ para todo $1 \le |C| \le |V|$. Portanto, o ciclo reverso $\overline{C}$ em $D_{f'}$ possui custo médio:
+\begin{equation*}
+    \mu_{f'}(\overline{C}) = \frac{w_{f'}(\overline{C})}{|\overline{C}|} = \frac{-w_f(C)}{|C|} < -\varepsilon,
+\end{equation*}
+donde $\varepsilon(f') \ge -\mu^*(D_{f'}) > \varepsilon$ pelo Teorema~\ref{teo:eps_mu}, contradizendo $\varepsilon(f') \le \varepsilon$.
+\end{demonstracao}
+
+\begin{teorema}[Complexidade Fortemente Polinomial de MMCC --- Goldberg e Tarjan, 1989][teo:mmcc_complexidade]
+O algoritmo \textit{Minimum-Mean Cycle Canceling} executa no máximo $\mathcal{O}(|V| \cdot |A|^2 \log |V|)$ cancelamentos e resolve o Problema do Fluxo de Custo Mínimo em tempo de pior caso $\mathcal{O}(|V|^2 \cdot |A|^3 \log |V|)$ (independentemente das capacidades e custos). Para custos inteiros limitados por $W$, o número de iterações também é limitado por $\mathcal{O}(|V| \cdot |A| \log(|V|W))$.
+\end{teorema}
+
+\begin{demonstracao}
+Considere uma época iniciada em um fluxo não ótimo $f_0$ com $\varepsilon_0 = \varepsilon(f_0) > 0$, na qual cancela-se o ciclo de média mínima $C_0 \subseteq D_{f_0}$ ($\mu_{f_0}(C_0) = -\varepsilon_0$). Seja $t = |V|\lceil \ln(2|V|) \rceil = \mathcal{O}(|V| \log |V|)$. Aplicando $t$ blocos de $|A|$ iterações (totalizando $\mathcal{O}(|V| \cdot |A| \log |V|)$ cancelamentos), a Proposição~\ref{prop:mmcc_reducao} e a desigualdade $1 - x \le e^{-x}$ implicam que o fluxo resultante $f_1$ satisfaz (caso não tenha encerrado antes):
+\begin{equation*}
+    \varepsilon_1 = \varepsilon(f_1) \le \left(1 - \frac{1}{|V|}\right)^t \varepsilon_0 \le e^{-t/|V|}\varepsilon_0 \le \frac{\varepsilon_0}{2|V|}.
+\end{equation*}
+Seja $\pi_1$ um potencial que testemunha a $\varepsilon_1$-otimalidade de $f_1$. Como a soma telescópica de potenciais sobre o ciclo $C_0$ se anula, vale:
+\begin{equation*}
+    \sum_{(u,v) \in C_0} \bigl(w_{f_0}(u,v) + \pi_1(u) - \pi_1(v)\bigr) = w_{f_0}(C_0) = -|C_0|\varepsilon_0.
+\end{equation*}
+Logo, existe ao menos um arco $a^* = (u,v) \in C_0$ com $w_{f_0}(u,v) + \pi_1(u) - \pi_1(v) \le -\varepsilon_0 < -\varepsilon_1$. Se $a^*$ ainda pertencesse a $A_{f_1}$, violaria a $\varepsilon_1$-otimalidade de $(f_1, \pi_1)$; portanto $a^* \notin A_{f_1}$, o que força seu arco complementar $\overline{a^*}$ a pertencer a $A_{f_1}$ com:
+\begin{equation*}
+    w_{\pi_1}(\overline{a^*}) \ge \varepsilon_0 \ge 2|V|\varepsilon_1.
+\end{equation*}
+Pela Proposição~\ref{prop:arcos_fixos} e pela monotonicidade $\varepsilon(f') \le \varepsilon_1$ em todas as iterações subsequentes (Proposição~\ref{prop:mmcc_monotonicidade}), o fluxo no arco original de $a^*$ permanece permanentemente fixo a partir de $f_1$. Como $a^* \in C_0$ teve seu fluxo alterado em $f_0$, esse arco não estava fixo antes de $f_0$. Assim, cada época fixa permanentemente pelo menos um novo arco de $A$. Como há $|A|$ arcos originais, ocorrem no máximo $|A|$ épocas, totalizando $\mathcal{O}(|V| \cdot |A|^2 \log |V|)$ iterações (e quando todos os $|A|$ arcos se tornam fixos, nenhum ciclo residual negativo pode existir). Como cada iteração executa o algoritmo de Karp e a extração de ciclos justos em $\mathcal{O}(|V| \cdot |A|)$, o tempo total é $\mathcal{O}(|V|^2 \cdot |A|^3 \log |V|)$.
+
+Para custos inteiros limitados por $W$, o fluxo inicial satisfaz $\varepsilon(f_{\text{init}}) \le W$, e qualquer fluxo com $\varepsilon(f) < 1/|V|$ implica $w_f(C) > -1$, logo $w_f(C) \ge 0$ por integralidade; portanto, bastam $\mathcal{O}(|V| \log(|V|W))$ blocos de $|A|$ cancelamentos.
+\end{demonstracao}
+
+A implementação completa encontra-se na classe \lstinline{MinimumMeanCycleCanceling} (Código~\ref{lst:minimum_mean_cycle_canceling}, Apêndice~\ref{ap:minimum_mean_cycle_canceling}).
+
+
+\section{O Algoritmo Cancel-and-Tighten}\label{sec:cancel_and_tighten}
+
+Em \textit{Minimum-Mean Cycle Canceling}, reduzir o parâmetro $\varepsilon(f)$ por um fator $(1 - 1/|V|)$ pode exigir até $|A|$ execuções completas do algoritmo de Karp, incorrendo em $\mathcal{O}(|V| \cdot |A|^2)$ operações para cada passo de redução. O algoritmo \textit{Cancel-and-Tighten}~\cite{goldberg1989finding} elimina essa repetição mantendo explícitos o fluxo $f$, um vetor de potenciais $\pi$ e um limitante $\varepsilon$ tais que $(f, \pi)$ é $\varepsilon$-ótimo, alternando fases de cancelamento em lote sobre o \textbf{grafo admissível} com ajustes lineares de potenciais.
+
+\begin{definicao}[Grafo Admissível][def:grafo_admissivel]
+Dado um par $\varepsilon$-ótimo $(f, \pi)$, o \textbf{grafo admissível} é o subgrafo residual composto pelos arcos de custo reduzido estritamente negativo:
+\begin{equation}
+    D_f^{\text{adm}} \coloneqq \bigl(V,\, A_f^{\text{adm}}\bigr), \qquad
+    A_f^{\text{adm}} \coloneqq \bigl\{ a \in A_f \mid w_\pi(a) < 0 \bigr\}.
+\end{equation}
+\end{definicao}
+
+
+\subsection{Passo Cancel: Remoção de Ciclos no Grafo Admissível}
+
+Na etapa \textbf{Cancel} (método \lstinline{cancel_admissible_cycles}), o algoritmo executa uma busca em profundidade (DFS) sobre $D_f^{\text{adm}}$ mantendo um ponteiro de arco atual (\lstinline{current_arc}) por vértice, uma pilha ativa e três estados de visitação ($0$: não visitado; $1$: ativo na pilha; $2$: finalizado sem alcance a ciclos admissíveis). Sempre que um arco $(u,v) \in A_f^{\text{adm}}$ atinge um vértice $v$ no estado $1$, extrai-se o ciclo simples $C \subseteq D_f^{\text{adm}}$ fechado na pilha, envia-se o gargalo $\delta = \min_{a \in C} c_f(a) > 0$ ao longo de $C$ e desfaz-se a pilha até o arco saturado mais raso (\lstinline{unwind_to}), restaurando o estado dos vértices desempilhados para $0$.
+
+Como todo arco $a \in C$ pertence a $A_f^{\text{adm}}$ ($-\varepsilon \le w_\pi(a) < 0$), todo arco reverso $\bar{a}$ criado pelo envio de fluxo satisfaz:
+\begin{equation}
+    w_\pi(\bar{a}) = -w_\pi(a) > 0 \ge -\varepsilon.
+\end{equation}
+Disso decorrem três consequências imediatas:
+\begin{enumerate}
+    \item \textbf{Preservação da $\varepsilon$-otimalidade:} $(f, \pi)$ permanece $\varepsilon$-ótimo após cada cancelamento sem alterar $\pi$.
+    \item \textbf{Monotonicidade de $A_f^{\text{adm}}$:} Nenhum arco reverso gerado ingressa em $A_f^{\text{adm}}$, e vértices já marcados com estado $2$ jamais voltam a alcançar ciclos em $D_f^{\text{adm}}$ (dispensando reiniciar \lstinline{current_arc} ao desfazer a pilha).
+    \item \textbf{Complexidade e aciclicidade:} Cada ciclo cancelado satura ao menos um arco de $A_f^{\text{adm}}$ (logo há no máximo $|A_f^{\text{adm}}| \le |A|$ cancelamentos na fase, cada um custando $\mathcal{O}(|V|)$ para atualizar o fluxo e desempilhar), enquanto a varredura de \lstinline{current_arc} custa $\mathcal{O}(|V| + |A|)$. A etapa termina em tempo total $\mathcal{O}(|V| \cdot |A|)$ com $D_f^{\text{adm}}$ acíclico (um DAG).
+\end{enumerate}
+
+
+\subsection{Passo Tighten: Ordenação Topológica e Preservação da $\varepsilon'$-Otimalidade}
+
+Quando $D_f^{\text{adm}}$ é um DAG, a etapa \textbf{Tighten} (método \lstinline{tighten_by_dag}) aplica o algoritmo de Kahn para obter uma ordenação topológica de $D_f^{\text{adm}}$ e computar, em tempo $\mathcal{O}(|V| + |A|)$, o comprimento máximo de caminho $h(v)$ (em número de arcos) terminado em cada vértice $v \in V$:
+\begin{equation}
+    h(v) = \begin{cases}
+        0, & \text{se } \deg_{\text{in}}^{\text{adm}}(v) = 0, \\
+        \max_{(u,v) \in A_f^{\text{adm}}} \bigl(h(u) + 1\bigr), & \text{caso contrário.}
+    \end{cases}
+\end{equation}
+Seja $L \coloneqq \max_{v \in V} h(v) \le |V| - 1$. Se $L = 0$, então $A_f^{\text{adm}} = \emptyset$ e $(f, \pi)$ já é $0$-ótimo. Para $L \ge 1$, definindo o passo $\Delta \coloneqq \frac{\varepsilon}{L + 1} \ge \frac{\varepsilon}{|V|}$, atualizam-se os potenciais por:
+\begin{equation}\label{eq:tighten_update}
+    \pi'(v) \coloneqq \pi(v) - \Delta \cdot h(v), \quad \forall\, v \in V.
+\end{equation}
+
+\begin{prop}[Preservação da $\varepsilon'$-Otimalidade no Passo Tighten]\label{prop:tighten_eps}
+Após a atualização~\eqref{eq:tighten_update} com $\Delta = \frac{\varepsilon}{L + 1}$, o par $(f, \pi')$ é $\varepsilon'$-ótimo para:
+\begin{equation}
+    \varepsilon' \coloneqq \left(1 - \frac{1}{L + 1}\right)\varepsilon \le \left(1 - \frac{1}{|V|}\right)\varepsilon.
+\end{equation}
+\end{prop}
+
+\begin{demonstracao}
+Para qualquer arco residual $(u,v) \in A_f$, o novo custo reduzido é $w_{\pi'}(u,v) = w_\pi(u,v) + \Delta\bigl(h(v) - h(u)\bigr)$. Analisam-se dois casos:
+\begin{enumerate}
+    \item Se $(u,v) \in A_f^{\text{adm}}$, então pela definição de $h$ no DAG vale $h(v) \ge h(u) + 1$, logo $h(v) - h(u) \ge 1$. Como $w_\pi(u,v) \ge -\varepsilon$:
+    \begin{equation*}
+        w_{\pi'}(u,v) \ge -\varepsilon + \Delta = -\varepsilon + \frac{\varepsilon}{L + 1} = -\left(1 - \frac{1}{L + 1}\right)\varepsilon = -\varepsilon'.
+    \end{equation*}
+    \item Se $(u,v) \in A_f \setminus A_f^{\text{adm}}$, então $w_\pi(u,v) \ge 0$. Como $0 \le h(u), h(v) \le L$, vale $h(v) - h(u) \ge -L$, donde:
+    \begin{equation*}
+        w_{\pi'}(u,v) \ge 0 - \Delta \cdot L = -\frac{L}{L + 1}\varepsilon = -\left(1 - \frac{1}{L + 1}\right)\varepsilon = -\varepsilon'.
+    \end{equation*}
+\end{enumerate}
+Como $L \le |V| - 1$, tem-se $1 - \frac{1}{L+1} \le 1 - \frac{1}{|V|}$, concluindo que $(f, \pi')$ é $\varepsilon'$-ótimo.
+\end{demonstracao}
+
+
+\subsection{Formulação Inteira Escalada e Término Exato por Integralidade}
+
+Para eliminar erros de ponto flutuante em redes com custos inteiros $w(e) \in \mathbb{Z}$, a classe \lstinline{CancelAndTighten} escala todos os custos pelo fator $S \coloneqq |V|(|V| + 1)$ em aritmética inteira de 128 bits (\lstinline{__int128}), mantendo potenciais inteiros $\pi(v) \in \mathbb{Z}$, custos reduzidos escalados $W_\pi(u,v) \coloneqq S \cdot w_f(u,v) + \pi(u) - \pi(v)$ e o parâmetro inteiro:
+\begin{equation}
+    \varepsilon_{\text{esc}} \coloneqq \max\Bigl\{0,\; \max_{a \in A_f} \bigl(-W_\pi(a)\bigr)\Bigr\} = S \cdot \varepsilon.
+\end{equation}
+
+\begin{prop}[Critério Exato por Integralidade]\label{prop:cat_integralidade}
+Para custos originais inteiros e fator de escala $S = |V|(|V| + 1)$:
+\begin{enumerate}
+    \item Se $\varepsilon_{\text{esc}} \le |V|$, então o fluxo $f$ é exatamente de custo mínimo.
+    \item Enquanto $\varepsilon_{\text{esc}} > |V|$, o passo inteiro $\Delta_{\text{esc}} \coloneqq \lfloor \varepsilon_{\text{esc}} / (L + 1) \rfloor \ge 1$ é estritamente positivo e reduz $\varepsilon_{\text{esc}}$ para no máximo $\varepsilon_{\text{esc}} - \Delta_{\text{esc}} \le \varepsilon_{\text{esc}} - 1$.
+\end{enumerate}
+\end{prop}
+
+\begin{demonstracao}
+(1) Quando $\varepsilon_{\text{esc}} \le |V|$, o parâmetro não escalado satisfaz:
+\begin{equation*}
+    \varepsilon = \frac{\varepsilon_{\text{esc}}}{|V|(|V| + 1)} \le \frac{|V|}{|V|(|V| + 1)} = \frac{1}{|V| + 1} < \frac{1}{|V|}.
+\end{equation*}
+Para todo ciclo direcionado simples $C \subseteq D_f$ ($|C| \le |V|$), vale $w_f(C) \ge -|C|\varepsilon > -|V| \cdot \frac{1}{|V|} = -1$. Como $w_f(C) \in \mathbb{Z}$, segue $w_f(C) \ge 0$, certificando a otimalidade exata de $f$ pelo Teorema~\ref{teo:ciclos_negativos}.
+
+\medskip
+\noindent (2) Se $\varepsilon_{\text{esc}} > |V|$, como $L + 1 \le |V|$, a divisão inteira garante $\Delta_{\text{esc}} = \lfloor \varepsilon_{\text{esc}} / (L+1) \rfloor \ge 1$. Escrevendo $\varepsilon_{\text{esc}} = \Delta_{\text{esc}}(L+1) + r$ com $0 \le r \le L$, tem-se $\varepsilon_{\text{esc}} - \Delta_{\text{esc}} = \Delta_{\text{esc}} L + r \ge \Delta_{\text{esc}} L$. Nos arcos admissíveis, $W_{\pi'}(a) \ge -\varepsilon_{\text{esc}} + \Delta_{\text{esc}}$; nos não admissíveis, $W_{\pi'}(a) \ge -\Delta_{\text{esc}} L \ge -(\varepsilon_{\text{esc}} - \Delta_{\text{esc}})$. Portanto $\varepsilon'_{\text{esc}} \le \varepsilon_{\text{esc}} - \Delta_{\text{esc}} \le \varepsilon_{\text{esc}} - 1$.
+\end{demonstracao}
+
+Após atualizar $\pi$, o código normaliza os potenciais transladando $\pi[v] \leftarrow \pi[v] - \pi[0]$ (preservando todas as diferenças $\pi[u] - \pi[v]$ e evitando crescimento ilimitado das coordenadas).
+
+
+\subsection{Análise Fortemente Polinomial e Otimização com Árvores Dinâmicas}
+
+Executar apenas apertos no DAG via ordenação topológica garante que o limitante corrente $\varepsilon$ decresça por $(1 - 1/|V|)$ a cada iteração, porém $\varepsilon$ pode superestimar o verdadeiro valor ótimo $\varepsilon(f) = -\mu^*(D_f)$ caso o fluxo já tenha eliminado os piores ciclos residuais. Para recuperar a garantia fortemente polinomial via arcos $\varepsilon$-fixos (Proposição~\ref{prop:arcos_fixos}), o algoritmo recalcula periodicamente o potencial ótimo $\pi$ e o parâmetro exato $\varepsilon(f) = -\mu^*(D_f)$ através do algoritmo de Karp (\lstinline{tighten_by_karp}), mantendo na formulação escalada a decomposição inteira exata em \lstinline{__int128} com quociente e resto de $-\mu^* = |p|/q$.
+
+\begin{teorema}[Complexidade de Cancel-and-Tighten --- Goldberg e Tarjan, 1989][teo:cat_complexidade]
+Com recálculo periódico de Karp em período $P \le |V|$, o algoritmo \textit{Cancel-and-Tighten} executa no máximo $\mathcal{O}(|V| \cdot |A| \log |V|)$ iterações externas \textnormal{(Cancel + Tighten)}. Sem árvores dinâmicas (implementação via DFS com \lstinline{current_arc}), o tempo de pior caso é $\mathcal{O}(|V|^2 \cdot |A|^2 \log |V|)$ (e $\mathcal{O}(|V|^2 \cdot |A| \log(|V|W))$ para custos inteiros limitados por $W$), reduzindo um fator $|A|$ em relação a MMCC.
+\end{teorema}
+
+\begin{demonstracao}
+Considere qualquer intervalo iniciado imediatamente após uma sincronização de Karp em um fluxo não ótimo $f_0$, no qual os potenciais atingem $\varepsilon_0 = \varepsilon(f_0) = -\mu^*(D_{f_0}) > 0$. Seja $C_0 \subseteq D_{f_0}$ um ciclo de média mínima ($\mu_{f_0}(C_0) = -\varepsilon_0$). Como o parâmetro $\varepsilon$ da iteração nunca cresce (tanto \textbf{Cancel} quanto \textbf{Tighten} preservam ou reduzem $\varepsilon$, e qualquer recálculo intermediário de Karp produz $\varepsilon(f) \le \varepsilon$ pelo Teorema~\ref{teo:eps_mu}), todo fluxo futuro $f'$ satisfaz $\varepsilon(f') \le \varepsilon_0$. Nenhum arco de $C_0$ podia estar $\varepsilon$-fixado antes de $f_0$: se algum arco $e$ de $C_0$ estivesse fixado desde um fluxo anterior $f_{\text{ant}}$ com $\varepsilon_{\text{ant}} \ge \varepsilon_0$, cancelar $C_0$ em $D_{f_0}$ produziria um fluxo $f''$ com $\varepsilon(f'') \le \varepsilon(f_0) \le \varepsilon_{\text{ant}}$ (Proposição~\ref{prop:mmcc_monotonicidade}) e $f''(e) \neq f_{\text{ant}}(e)$, contradizendo a Proposição~\ref{prop:arcos_fixos}.
+
+Pela Proposição~\ref{prop:tighten_eps}, após $t = |V|\lceil \ln(2|V|) \rceil = \mathcal{O}(|V| \log |V|)$ iterações de \textbf{Cancel} e \textbf{Tighten}, o parâmetro reduz-se a $\varepsilon_1 \le \varepsilon_0 / (2|V|)$. Pelo mesmo argumento telescópico sobre $C_0$ da demonstração do Teorema~\ref{teo:mmcc_complexidade}, ao menos um arco $a^* \in C_0$ torna-se permanentemente $\varepsilon$-fixo no fluxo $f_1$ da época (Proposição~\ref{prop:arcos_fixos}). Como há $|A|$ arcos originais, bastam no máximo $|A|$ épocas, limitando o total de iterações externas a $\mathcal{O}(|V| \cdot |A| \log |V|)$.
+
+Em cada iteração externa, \lstinline{cancel_admissible_cycles} executa em $\mathcal{O}(|V| \cdot |A|)$ e \lstinline{tighten_by_dag} em $\mathcal{O}(|V| + |A|)$, enquanto \lstinline{tighten_by_karp} custa $\mathcal{O}(|V| \cdot |A|)$ mesmo com período $P$ constante (como $P = \min(|V|, 64)$ adotado em \lstinline{CancelAndTighten}). Multiplicando pelo número de iterações externas, obtém-se o tempo total $\mathcal{O}(|V|^2 \cdot |A|^2 \log |V|)$. Para custos inteiros limitados por $W$, parte-se de $\varepsilon_{\text{esc}} \le |V|(|V|+1)W$ e encerra-se com $\varepsilon_{\text{esc}} \le |V|$, exigindo no máximo $\mathcal{O}(|V|\log(|V|W))$ iterações de redução $(1 - 1/|V|)$, logo tempo $\mathcal{O}(|V|^2 \cdot |A| \log(|V|W))$.
+\end{demonstracao}
+
+\paragraph{Observação Técnica (Redução com Árvores Dinâmicas).}
+Na formulação teórica de Goldberg e Tarjan~\cite{goldberg1989finding}, a substituição da reconstrução explícita de ciclos na DFS pela estrutura de \emph{árvores dinâmicas} de Sleator e Tarjan permite localizar gargalos, atualizar fluxos e cortar arcos saturados em $\mathcal{O}(\log |V|)$ amortizado por operação, reduzindo o custo da etapa \textbf{Cancel} de $\mathcal{O}(|V| \cdot |A|)$ para $\mathcal{O}(|A| \log |V|)$. Associada ao recálculo de Karp a cada $\Theta(|V|)$ iterações (cujo custo $\mathcal{O}(|V|\cdot|A|)$ amortiza para $\mathcal{O}(|A|)$ por iteração), a complexidade teórica reduz-se a $\mathcal{O}(|V| \cdot |A|^2 \log^2 |V|)$ no regime fortemente polinomial e a $\mathcal{O}(|V| \cdot |A| \log |V| \log(|V|W))$ para custos inteiros — isto é, $\mathcal{O}\bigl(|V| \cdot |A| \log |V| \min\{\log(|V|W),\, |A|\log |V|\}\bigr)$. A implementação em C++23 sem árvores dinâmicas está apresentada na classe \lstinline{CancelAndTighten} (Código~\ref{lst:cancel_and_tighten}, Apêndice~\ref{ap:cancel_and_tighten}).
+
+
 \section{A Abordagem Dual: Caminhos de Custo Mínimo (Successive Shortest Path)}\label{sec:ssp}
 
 O algoritmo \textit{Successive Shortest Path} (SSP)~\cite{ahuja1993network, schrijver2003combinatorial} adota a estratégia dual: mantém a ausência de ciclos negativos em $D_f$ como invariante contínua e aumenta o fluxo líquido por caminhos de menor custo até atingir a viabilidade.
