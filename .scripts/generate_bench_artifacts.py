@@ -2,9 +2,9 @@
 """Generate benchmark tables (full + compact + exhaustive) and charts from CSVs.
 
 Supports strict separation between:
-  - IC suite (`LaTeX/tables`, `LaTeX/figures`):
+  - IC suite (`latex/tables`, `latex/figures`):
       5 Max-Flow algorithms and 4 Min-Cost Flow algorithms.
-  - Book / Pós-IC suite (`LaTeX/book/tables`, `LaTeX/book/figures`):
+  - Book / Pós-IC suite (`latex/book/tables`, `latex/book/figures`):
       6 Max-Flow algorithms (including MPM), 4 Min-Cost Flow algorithms,
       plus Bipartite Matching (Kuhn, Hopcroft-Karp vs Max-Flow) and
       Bipartite Assignment (Kuhn-Munkres vs Min-Cost Flow).
@@ -18,7 +18,7 @@ from collections import OrderedDict, defaultdict
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-LATEX_DIR = os.path.join(ROOT_DIR, "LaTeX")
+LATEX_DIR = os.path.join(ROOT_DIR, "latex")
 SUITE_DIRS = {
     "ic": LATEX_DIR,
     "book": os.path.join(LATEX_DIR, "book"),

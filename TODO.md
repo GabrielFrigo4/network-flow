@@ -46,29 +46,29 @@ Progresso das etapas finais para conclusão institucional da iniciação cientí
 
 - ✅ **Auditoria e Revisão de Texto:** Leitura final e refinamento do relatório institucional e monografia em conjunto com a orientadora (Profa. Dra. Cristiane Sato).
 - ✅ **Execução de Benchmarks Locais:** Execução final das baterias de testes na máquina de referência e atualização das tabelas no relatório (`make bench-ic`).
-- ✅ **Pôster Científico Institucional (`LaTeX/poster.tex`):** Conversão e editoração completa do pôster 90×120 cm com galeria visual da segmentação de imagens por corte mínimo e resultados experimentais DIMACS da IC.
+- ✅ **Pôster Científico Institucional (`latex/poster.tex`):** Conversão e editoração completa do pôster 90×120 cm com galeria visual da segmentação de imagens por corte mínimo e resultados experimentais DIMACS da IC.
 
 ---
 
 ## 🚀 Futuras Expansões (Pós-IC)
 
-Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e integrados exclusivamente ao livro monográfico ([`LaTeX/book.tex`](./LaTeX/book.tex)), mantendo os artefatos institucionais da Iniciação Científica ([`LaTeX/ic.tex`](./LaTeX/ic.tex), [`LaTeX/report.tex`](./LaTeX/report.tex) e [`LaTeX/poster.tex`](./LaTeX/poster.tex)) congelados no escopo original entregue.
+Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e integrados exclusivamente ao livro monográfico ([`latex/book.tex`](./latex/book.tex)), mantendo os artefatos institucionais da Iniciação Científica ([`latex/ic.tex`](./latex/ic.tex), [`latex/report.tex`](./latex/report.tex) e [`latex/poster.tex`](./latex/poster.tex)) congelados no escopo original entregue.
 
-| Algoritmo / Componente                                                               | Referência Teórica          |           Complexidade            | LaTeX (Livro) | Implementação | Foco e Descrição Técnica                                                                                    |
-| :----------------------------------------------------------------------------------- | :-------------------------- | :-------------------------------: | :-----------: | :-----------: | :---------------------------------------------------------------------------------------------------------- |
-| [**Kuhn**](./Implementações/FlowNetwork/Kuhn.hpp)                                    | Kuhn (1955)                 | $\mathcal{O}(\|V\| \cdot \|E\|)$  |      ✅       |      ✅       | Emparelhamento bipartido clássico via busca em profundidade (DFS) de caminhos alternantes.                  |
-| [**Hopcroft-Karp**](./Implementações/FlowNetwork/HopcroftKarp.hpp)                   | Hopcroft e Karp (1973)      | $\mathcal{O}(\|E\| \sqrt{\|V\|})$ |      ✅       |      ✅       | Emparelhamento máximo bipartido não ponderado (fases de BFS global e DFS bloqueadora).                      |
-| [**Algoritmo Húngaro (Kuhn-Munkres)**](./Implementações/CostNetwork/KuhnMunkres.hpp) | Kuhn (1955), Munkres (1957) |      $\mathcal{O}(\|V\|^3)$       |      ✅       |      ✅       | Atribuição de custo mínimo (emparelhamento com pesos) via potenciais duais e folgas complementares.         |
-| [**MPM (Malhotra, Kumar, Maheshwari)**](./Implementações/FlowNetwork/MPM.hpp)        | Malhotra et al. (1978)      |      $\mathcal{O}(\|V\|^3)$       |      ✅       |      ✅       | Fluxo bloqueador via potenciais nodais de passagem em digrafos densos.                                      |
-| [**Harness de Benchmark Bipartido**](./Experimentos/drivers/bipartite_runner.cpp)    | Suíte Comparativa Dedicada  |        Benchmark Empírico         |      ✅       |      ✅       | Avaliação empírica: reduções genéricas via `FlowNetwork`/`CostNetwork` vs. algoritmos dedicados bipartidos. |
+| Algoritmo / Componente                                                                 | Referência Teórica          |           Complexidade            | LaTeX (Livro) | Implementação | Foco e Descrição Técnica                                                                                    |
+| :------------------------------------------------------------------------------------- | :-------------------------- | :-------------------------------: | :-----------: | :-----------: | :---------------------------------------------------------------------------------------------------------- |
+| [**Kuhn**](./implementations/flow-network/Kuhn.hpp)                                    | Kuhn (1955)                 | $\mathcal{O}(\|V\| \cdot \|E\|)$  |      ✅       |      ✅       | Emparelhamento bipartido clássico via busca em profundidade (DFS) de caminhos alternantes.                  |
+| [**Hopcroft-Karp**](./implementations/flow-network/HopcroftKarp.hpp)                   | Hopcroft e Karp (1973)      | $\mathcal{O}(\|E\| \sqrt{\|V\|})$ |      ✅       |      ✅       | Emparelhamento máximo bipartido não ponderado (fases de BFS global e DFS bloqueadora).                      |
+| [**Algoritmo Húngaro (Kuhn-Munkres)**](./implementations/cost-network/KuhnMunkres.hpp) | Kuhn (1955), Munkres (1957) |      $\mathcal{O}(\|V\|^3)$       |      ✅       |      ✅       | Atribuição de custo mínimo (emparelhamento com pesos) via potenciais duais e folgas complementares.         |
+| [**MPM (Malhotra, Kumar, Maheshwari)**](./implementations/flow-network/MPM.hpp)        | Malhotra et al. (1978)      |      $\mathcal{O}(\|V\|^3)$       |      ✅       |      ✅       | Fluxo bloqueador via potenciais nodais de passagem em digrafos densos.                                      |
+| [**Harness de Benchmark Bipartido**](./experiments/drivers/bipartite_runner.cpp)       | Suíte Comparativa Dedicada  |        Benchmark Empírico         |      ✅       |      ✅       | Avaliação empírica: reduções genéricas via `FlowNetwork`/`CostNetwork` vs. algoritmos dedicados bipartidos. |
 
 ### 📋 Tarefas Concluídas (Pós-IC)
 
-- [x] **Kuhn:** Implementar algoritmo de Kuhn em C++23 ([`Kuhn.hpp`](./Implementações/FlowNetwork/Kuhn.hpp)) herdando de [`FlowNetwork`](./Implementações/FlowNetwork/FlowNetwork.hpp) para emparelhamento bipartido via caminhos alternantes em $\mathcal{O}(\|V\| \cdot \|E\|)$.
-- [x] **Hopcroft-Karp:** Implementar motor dedicado de emparelhamento bipartido máximo em C++23 ([`HopcroftKarp.hpp`](./Implementações/FlowNetwork/HopcroftKarp.hpp)) herdando de [`FlowNetwork`](./Implementações/FlowNetwork/FlowNetwork.hpp) com complexidade $\mathcal{O}(\|E\| \sqrt{\|V\|})$.
-- [x] **Algoritmo Húngaro (Kuhn-Munkres):** Implementar algoritmo Húngaro em C++23 ([`KuhnMunkres.hpp`](./Implementações/CostNetwork/KuhnMunkres.hpp)) herdando de [`CostNetwork`](./Implementações/CostNetwork/CostNetwork.hpp) para problema de atribuição de custo mínimo em $\mathcal{O}(\|V\|^3)$.
-- [x] **MPM (Malhotra, Kumar, Maheshwari):** Implementar classe `MPM` ([`MPM.hpp`](./Implementações/FlowNetwork/MPM.hpp)) herdando de [`FlowNetwork`](./Implementações/FlowNetwork/FlowNetwork.hpp) com fluxo bloqueador em $\mathcal{O}(\|V\|^3)$ e validar nas 40 instâncias DIMACS.
-- [x] **Benchmark Bipartido e Separação IC vs. Livro:** Separar os artefatos experimentais da IC (`LaTeX/tables/`, `LaTeX/figures/`, `make bench-ic`) dos artefatos expandidos do Livro Pós-IC (`LaTeX/book/tables/`, `LaTeX/book/figures/`, `make bench-book`).
+- [x] **Kuhn:** Implementar algoritmo de Kuhn em C++23 ([`Kuhn.hpp`](./implementations/flow-network/Kuhn.hpp)) herdando de [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp) para emparelhamento bipartido via caminhos alternantes em $\mathcal{O}(\|V\| \cdot \|E\|)$.
+- [x] **Hopcroft-Karp:** Implementar motor dedicado de emparelhamento bipartido máximo em C++23 ([`HopcroftKarp.hpp`](./implementations/flow-network/HopcroftKarp.hpp)) herdando de [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp) com complexidade $\mathcal{O}(\|E\| \sqrt{\|V\|})$.
+- [x] **Algoritmo Húngaro (Kuhn-Munkres):** Implementar algoritmo Húngaro em C++23 ([`KuhnMunkres.hpp`](./implementations/cost-network/KuhnMunkres.hpp)) herdando de [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp) para problema de atribuição de custo mínimo em $\mathcal{O}(\|V\|^3)$.
+- [x] **MPM (Malhotra, Kumar, Maheshwari):** Implementar classe `MPM` ([`MPM.hpp`](./implementations/flow-network/MPM.hpp)) herdando de [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp) com fluxo bloqueador em $\mathcal{O}(\|V\|^3)$ e validar nas 40 instâncias DIMACS.
+- [x] **Benchmark Bipartido e Separação IC vs. Livro:** Separar os artefatos experimentais da IC (`latex/tables/`, `latex/figures/`, `make bench-ic`) dos artefatos expandidos do Livro Pós-IC (`latex/book/tables/`, `latex/book/figures/`, `make bench-book`).
 
 ---
 
@@ -76,32 +76,32 @@ Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e i
 
 ## ⚡ Algoritmos de Fluxo Máximo
 
-Progresso dos algoritmos de fluxo máximo implementados em C++ e documentados no [LaTeX](./LaTeX/book.tex). O código-fonte de cada algoritmo pode ser encontrado no diretório de [Implementações](./Implementações/README.md), onde cada algoritmo herda da classe base abstrata [`FlowNetwork`](./Implementações/FlowNetwork/FlowNetwork.hpp).
+Progresso dos algoritmos de fluxo máximo implementados em C++ e documentados no [LaTeX](./latex/book.tex). O código-fonte de cada algoritmo pode ser encontrado no diretório de [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp).
 
-| Nome                                                                          | LaTeX | Implementação | Descrição                                                                                                                            |
-| :---------------------------------------------------------------------------- | :---: | :-----------: | :----------------------------------------------------------------------------------------------------------------------------------- |
-| [Ford-Fulkerson](./Implementações/FlowNetwork/FordFulkerson.hpp)              |  ✅   |      ✅       | Método iterativo genérico baseado em caminhos aumentantes (pseudopolinomial).                                                        |
-| [Edmonds-Karp](./Implementações/FlowNetwork/EdmondsKarp.hpp)                  |  ✅   |      ✅       | Especialização do Ford-Fulkerson com BFS. Complexidade $\mathcal{O}(\|V\| \cdot \|E\|^2)$.                                           |
-| [Dinic Algorithm](./Implementações/FlowNetwork/Dinic.hpp)                     |  ✅   |      ✅       | Digrafo de níveis + fluxo bloqueador via DFS. Complexidade $\mathcal{O}(\|V\|^2 \cdot \|E\|)$.                                       |
-| [MPM (Malhotra, Kumar, Maheshwari)](./Implementações/FlowNetwork/MPM.hpp)     |  ✅   |      ✅       | Fluxo bloqueador via potenciais nodais de passagem em redes niveladas. Complexidade $\mathcal{O}(\|V\|^3)$ estrita (Pós-IC / Livro). |
-| [Push Relabel FIFO](./Implementações/FlowNetwork/PushRelabel.hpp)             |  ✅   |      ✅       | Família de pré-fluxo com fila FIFO. Complexidade $\mathcal{O}(\|V\|^3)$.                                                             |
-| [Push Relabel Improved](./Implementações/FlowNetwork/PushRelabelImproved.hpp) |  ✅   |      ✅       | Push-Relabel com Gap Heuristic para terminação acelerada via descarte de nós inalcançáveis.                                          |
-| [Kuhn](./Implementações/FlowNetwork/Kuhn.hpp)                                 |  ✅   |      ✅       | Emparelhamento máximo bipartido via DFS de caminhos aumentantes em $\mathcal{O}(\|V\| \cdot \|E\|)$ (Pós-IC / Livro).                |
-| [Hopcroft-Karp](./Implementações/FlowNetwork/HopcroftKarp.hpp)                |  ✅   |      ✅       | Emparelhamento máximo bipartido via fases de BFS e DFS disjunta em $\mathcal{O}(\|E\|\sqrt{\|V\|})$ (Pós-IC / Livro).                |
+| Nome                                                                            | LaTeX | Implementação | Descrição                                                                                                                            |
+| :------------------------------------------------------------------------------ | :---: | :-----------: | :----------------------------------------------------------------------------------------------------------------------------------- |
+| [Ford-Fulkerson](./implementations/flow-network/FordFulkerson.hpp)              |  ✅   |      ✅       | Método iterativo genérico baseado em caminhos aumentantes (pseudopolinomial).                                                        |
+| [Edmonds-Karp](./implementations/flow-network/EdmondsKarp.hpp)                  |  ✅   |      ✅       | Especialização do Ford-Fulkerson com BFS. Complexidade $\mathcal{O}(\|V\| \cdot \|E\|^2)$.                                           |
+| [Dinic Algorithm](./implementations/flow-network/Dinic.hpp)                     |  ✅   |      ✅       | Digrafo de níveis + fluxo bloqueador via DFS. Complexidade $\mathcal{O}(\|V\|^2 \cdot \|E\|)$.                                       |
+| [MPM (Malhotra, Kumar, Maheshwari)](./implementations/flow-network/MPM.hpp)     |  ✅   |      ✅       | Fluxo bloqueador via potenciais nodais de passagem em redes niveladas. Complexidade $\mathcal{O}(\|V\|^3)$ estrita (Pós-IC / Livro). |
+| [Push Relabel FIFO](./implementations/flow-network/PushRelabel.hpp)             |  ✅   |      ✅       | Família de pré-fluxo com fila FIFO. Complexidade $\mathcal{O}(\|V\|^3)$.                                                             |
+| [Push Relabel Improved](./implementations/flow-network/PushRelabelImproved.hpp) |  ✅   |      ✅       | Push-Relabel com Gap Heuristic para terminação acelerada via descarte de nós inalcançáveis.                                          |
+| [Kuhn](./implementations/flow-network/Kuhn.hpp)                                 |  ✅   |      ✅       | Emparelhamento máximo bipartido via DFS de caminhos aumentantes em $\mathcal{O}(\|V\| \cdot \|E\|)$ (Pós-IC / Livro).                |
+| [Hopcroft-Karp](./implementations/flow-network/HopcroftKarp.hpp)                |  ✅   |      ✅       | Emparelhamento máximo bipartido via fases de BFS e DFS disjunta em $\mathcal{O}(\|E\|\sqrt{\|V\|})$ (Pós-IC / Livro).                |
 
 ---
 
 ## 🧮 Algoritmos de Fluxo de Custo Mínimo
 
-Progresso dos algoritmos de fluxo de custo mínimo documentados no [LaTeX](./LaTeX/book.tex) e implementados no diretório [Implementações](./Implementações/README.md), onde cada algoritmo herda da classe base abstrata [`CostNetwork`](./Implementações/CostNetwork/CostNetwork.hpp).
+Progresso dos algoritmos de fluxo de custo mínimo documentados no [LaTeX](./latex/book.tex) e implementados no diretório [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp).
 
-| Nome                                                                                          | LaTeX | Implementação | Descrição                                                                                             |
-| :-------------------------------------------------------------------------------------------- | :---: | :-----------: | :---------------------------------------------------------------------------------------------------- |
-| [Cycle Canceling](./Implementações/CostNetwork/CycleCanceling.hpp)                            |  ✅   |      ✅       | Baseia-se em encontrar fluxos viáveis e iterativamente cancelar ciclos de custo negativo no residual. |
-| [Successive Shortest Path (SPFA)](./Implementações/CostNetwork/SuccessiveShortest.hpp)        |  ✅   |      ✅       | Roteamento de fluxo por caminhos mais baratos via aumentações sucessivas com SPFA/Bellman-Ford.       |
-| [Successive Shortest (Dijkstra)](./Implementações/CostNetwork/SuccessiveShortestDijkstra.hpp) |  ✅   |      ✅       | Aumentações sucessivas utilizando Dijkstra com potenciais nodais ($\pi$) para manter $\bar{c} \ge 0$. |
-| [Network Simplex](./Implementações/CostNetwork/NetworkSimplex.hpp)                            |  ✅   |      ✅       | Algoritmo primal baseado em árvores geradoras com pivoteamento eficiente de bases.                    |
-| [Kuhn-Munkres (Algoritmo Húngaro)](./Implementações/CostNetwork/KuhnMunkres.hpp)              |  ✅   |      ✅       | Atribuição bipartida de custo mínimo via potenciais duais em $\mathcal{O}(\|V\|^3)$ (Pós-IC / Livro). |
+| Nome                                                                                            | LaTeX | Implementação | Descrição                                                                                             |
+| :---------------------------------------------------------------------------------------------- | :---: | :-----------: | :---------------------------------------------------------------------------------------------------- |
+| [Cycle Canceling](./implementations/cost-network/CycleCanceling.hpp)                            |  ✅   |      ✅       | Baseia-se em encontrar fluxos viáveis e iterativamente cancelar ciclos de custo negativo no residual. |
+| [Successive Shortest Path (SPFA)](./implementations/cost-network/SuccessiveShortest.hpp)        |  ✅   |      ✅       | Roteamento de fluxo por caminhos mais baratos via aumentações sucessivas com SPFA/Bellman-Ford.       |
+| [Successive Shortest (Dijkstra)](./implementations/cost-network/SuccessiveShortestDijkstra.hpp) |  ✅   |      ✅       | Aumentações sucessivas utilizando Dijkstra com potenciais nodais ($\pi$) para manter $\bar{c} \ge 0$. |
+| [Network Simplex](./implementations/cost-network/NetworkSimplex.hpp)                            |  ✅   |      ✅       | Algoritmo primal baseado em árvores geradoras com pivoteamento eficiente de bases.                    |
+| [Kuhn-Munkres (Algoritmo Húngaro)](./implementations/cost-network/KuhnMunkres.hpp)              |  ✅   |      ✅       | Atribuição bipartida de custo mínimo via potenciais duais em $\mathcal{O}(\|V\|^3)$ (Pós-IC / Livro). |
 
 ---
 
@@ -109,7 +109,7 @@ Progresso dos algoritmos de fluxo de custo mínimo documentados no [LaTeX](./LaT
 
 ## 🛠️ Mecânicas e Técnicas de Redução
 
-Progresso dos conceitos, mecânicas e reduções de rede documentadas no [LaTeX](./LaTeX/ic.tex) e validadas nas soluções em C++.
+Progresso dos conceitos, mecânicas e reduções de rede documentadas no [LaTeX](./latex/ic.tex) e validadas nas soluções em C++.
 
 ### Estruturas e Mecânicas de Busca
 
@@ -165,41 +165,41 @@ Progresso dos conceitos, mecânicas e reduções de rede documentadas no [LaTeX]
 
 ## 🖼️ Aplicação Prática: Segmentação de Imagens
 
-Software e pipeline de visão computacional desenvolvido em C++23 que emprega corte mínimo $s-t$ para segmentação binária de imagens (primeiro plano vs. fundo). O código reside em [`Aplicações/Segmentação de Imagens/`](./Aplicações/Segmentação%20de%20Imagens/).
+Software e pipeline de visão computacional desenvolvido em C++23 que emprega corte mínimo $s-t$ para segmentação binária de imagens (primeiro plano vs. fundo). O código reside em [`applications/image-segmentation/`](./applications/image-segmentation/).
 
-| Módulo / Componente                                                                              | LaTeX | Implementação | Descrição                                                                                                  |
-| :----------------------------------------------------------------------------------------------- | :---: | :-----------: | :--------------------------------------------------------------------------------------------------------- |
-| [Segmentação de Imagens (Max Flow / Min Cut)](./Aplicações/Segmentação%20de%20Imagens/README.md) |  ✅   |      ✅       | Software para separar foreground/background em fotografias utilizando modelagem de corte mínimo em grafos. |
-| [Parser e Manipulador de Imagens PPM](./Aplicações/Segmentação%20de%20Imagens/ppm.cpp)           |  ✅   |      ✅       | Leitor e escritor de imagens em formato Portable Pixmap (`.ppm`) sem dependências externas.                |
-| [Parser de Sementes (_Seeds_)](./Aplicações/Segmentação%20de%20Imagens/seeds.cpp)                |  ✅   |      ✅       | Mapeador de pistas interativas do usuário para nós de super-fonte ($s$) e super-sumidouro ($t$).           |
-| [Pipeline Principal de Segmentação](./Aplicações/Segmentação%20de%20Imagens/main.cpp)            |  ✅   |      ✅       | Construção da rede em grade 2D, resolução via `FlowNetwork` e escrita da máscara de saída.                 |
+| Módulo / Componente                                                                        | LaTeX | Implementação | Descrição                                                                                                  |
+| :----------------------------------------------------------------------------------------- | :---: | :-----------: | :--------------------------------------------------------------------------------------------------------- |
+| [Segmentação de Imagens (Max Flow / Min Cut)](./applications/image-segmentation/README.md) |  ✅   |      ✅       | Software para separar foreground/background em fotografias utilizando modelagem de corte mínimo em grafos. |
+| [Parser e Manipulador de Imagens PPM](./applications/image-segmentation/ppm.cpp)           |  ✅   |      ✅       | Leitor e escritor de imagens em formato Portable Pixmap (`.ppm`) sem dependências externas.                |
+| [Parser de Sementes (_Seeds_)](./applications/image-segmentation/seeds.cpp)                |  ✅   |      ✅       | Mapeador de pistas interativas do usuário para nós de super-fonte ($s$) e super-sumidouro ($t$).           |
+| [Pipeline Principal de Segmentação](./applications/image-segmentation/main.cpp)            |  ✅   |      ✅       | Construção da rede em grade 2D, resolução via `FlowNetwork` e escrita da máscara de saída.                 |
 
 ---
 
 ## 💻 Validação em Juízes Online: Problemas Resolvidos
 
-A suíte de problemas clássicos implementada no repositório valida todas as reduções teóricas implementadas em motores de fluxo. Cada problema possui código autocontido, testes e Makefile dedicado em [`Implementações/Problemas/`](./Implementações/Problemas/).
+A suíte de problemas clássicos implementada no repositório valida todas as reduções teóricas implementadas em motores de fluxo. Cada problema possui código autocontido, testes e Makefile dedicado em [`implementations/problems/`](./implementations/problems/).
 
 ### ⚡ Problemas de Fluxo Máximo
 
-| Problema            | Juiz Online                                                                       | Código Local                                                                                       | Técnica de Fluxo Empregada                                    |
-| :------------------ | :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- | :------------------------------------------------------------ |
-| **Download Speed**  | [CSES 1694](https://cses.fi/problemset/task/1694)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Download%20Speed/main.cpp)             | $s-t$ Fluxo Máximo canônico sobre rede residual.              |
-| **Police Chase**    | [CSES 1695](https://cses.fi/problemset/task/1695)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Police%20Chase/main.cpp)               | Corte Mínimo $s-t$ (Max-Flow Min-Cut) em arcos bidirecionais. |
-| **Time Travel**     | [Beecrowd 2082](https://judge.beecrowd.com/en/problems/view/2082)                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Time%20Travel/main.cpp)                | Corte Mínimo Global via fixação iterativa de fontes.          |
-| **School Dance**    | [CSES 1696](https://cses.fi/problemset/task/1696)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/School%20Dance/main.cpp)               | Emparelhamento Máximo Bipartido via capacidades unitárias.    |
-| **Coin Grid**       | [CSES 1709](https://cses.fi/problemset/task/1709)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Coin%20Grid/main.cpp)                  | Cobertura Mínima de Vértices via Teorema de König.            |
-| **Edição de Rede**  | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Edi%C3%A7%C3%A3o%20de%20Rede/main.cpp) | Redução para Emparelhamento Bipartido Máximo com fórmula.     |
-| **Distinct Routes** | [CSES 1711](https://cses.fi/problemset/task/1711)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Distinct%20Routes/main.cpp)            | Caminhos disjuntos por arestas e decomposição de fluxo.       |
+| Problema            | Juiz Online                                                                       | Código Local                                                               | Técnica de Fluxo Empregada                                    |
+| :------------------ | :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------------------------------------ |
+| **Download Speed**  | [CSES 1694](https://cses.fi/problemset/task/1694)                                 | [`main.cpp`](./implementations/problems/max-flow/download-speed/main.cpp)  | $s-t$ Fluxo Máximo canônico sobre rede residual.              |
+| **Police Chase**    | [CSES 1695](https://cses.fi/problemset/task/1695)                                 | [`main.cpp`](./implementations/problems/max-flow/police-chase/main.cpp)    | Corte Mínimo $s-t$ (Max-Flow Min-Cut) em arcos bidirecionais. |
+| **Time Travel**     | [Beecrowd 2082](https://judge.beecrowd.com/en/problems/view/2082)                 | [`main.cpp`](./implementations/problems/max-flow/time-travel/main.cpp)     | Corte Mínimo Global via fixação iterativa de fontes.          |
+| **School Dance**    | [CSES 1696](https://cses.fi/problemset/task/1696)                                 | [`main.cpp`](./implementations/problems/max-flow/school-dance/main.cpp)    | Emparelhamento Máximo Bipartido via capacidades unitárias.    |
+| **Coin Grid**       | [CSES 1709](https://cses.fi/problemset/task/1709)                                 | [`main.cpp`](./implementations/problems/max-flow/coin-grid/main.cpp)       | Cobertura Mínima de Vértices via Teorema de König.            |
+| **Edição de Rede**  | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./implementations/problems/max-flow/network-editing/main.cpp) | Redução para Emparelhamento Bipartido Máximo com fórmula.     |
+| **Distinct Routes** | [CSES 1711](https://cses.fi/problemset/task/1711)                                 | [`main.cpp`](./implementations/problems/max-flow/distinct-routes/main.cpp) | Caminhos disjuntos por arestas e decomposição de fluxo.       |
 
 ### 🧮 Problemas de Fluxo de Custo Mínimo
 
-| Problema                 | Juiz Online                                                                       | Código Local                                                                                                    | Técnica de Fluxo Empregada                                 |
-| :----------------------- | :-------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------- |
-| **Parcel Delivery**      | [CSES 2121](https://cses.fi/problemset/task/2121)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20de%20Custo%20M%C3%ADnimo/Parcel%20Delivery/main.cpp)            | Fluxo de Custo Mínimo com Demanda Exata $k$.               |
-| **Task Assignment**      | [CSES 2129](https://cses.fi/problemset/task/2129)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20de%20Custo%20M%C3%ADnimo/Task%20Assignment/main.cpp)            | Atribuição Bipartida de Custo Mínimo (Assignment Problem). |
-| **Distinct Routes II**   | [CSES 2130](https://cses.fi/problemset/task/2130)                                 | [`main.cpp`](./Implementações/Problemas/Fluxo%20de%20Custo%20M%C3%ADnimo/Distinct%20Routes%20II/main.cpp)       | Min-Cost $k$-Disjoint Paths e decomposição de caminhos.    |
-| **Edição de Rede (MCF)** | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./Implementações/Problemas/Fluxo%20de%20Custo%20M%C3%ADnimo/Edi%C3%A7%C3%A3o%20de%20Rede/main.cpp) | Otimização de Custos de Topologia com Min Cost Flow.       |
+| Problema                 | Juiz Online                                                                       | Código Local                                                                       | Técnica de Fluxo Empregada                                 |
+| :----------------------- | :-------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :--------------------------------------------------------- |
+| **Parcel Delivery**      | [CSES 2121](https://cses.fi/problemset/task/2121)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/parcel-delivery/main.cpp)    | Fluxo de Custo Mínimo com Demanda Exata $k$.               |
+| **Task Assignment**      | [CSES 2129](https://cses.fi/problemset/task/2129)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/task-assignment/main.cpp)    | Atribuição Bipartida de Custo Mínimo (Assignment Problem). |
+| **Distinct Routes II**   | [CSES 2130](https://cses.fi/problemset/task/2130)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/distinct-routes-ii/main.cpp) | Min-Cost $k$-Disjoint Paths e decomposição de caminhos.    |
+| **Edição de Rede (MCF)** | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./implementations/problems/min-cost-flow/network-editing/main.cpp)    | Otimização de Custos de Topologia com Min Cost Flow.       |
 
 ---
 
@@ -207,19 +207,19 @@ A suíte de problemas clássicos implementada no repositório valida todas as re
 
 Problemas selecionados para validação avançada de técnicas específicas de modelagem de fluxo:
 
-| Problema                                                                | Plataforma / ID                                                      | Código Local                                                                                        | Técnica de Fluxo Alvo                                           |    Status    |
-| :---------------------------------------------------------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :----------: |
-| [Fast Maximum Flow](https://www.spoj.com/problems/FASTFLOW/)            | [SPOJ FASTFLOW](https://www.spoj.com/problems/FASTFLOW/)             | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Fast%20Maximum%20Flow/main.cpp)         | Benchmark extremo de vazão em digrafos densos e esparsos.       | ✅ Resolvido |
-| [Petya and Graph](https://codeforces.com/problemset/problem/1082/G)     | [Codeforces 1082G](https://codeforces.com/problemset/problem/1082/G) | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Petya%20and%20Graph/main.cpp)           | Fechamento de Peso Máximo (_Project Selection_) via Min-Cut.    | ✅ Resolvido |
-| [Array and Operations](https://codeforces.com/problemset/problem/498/C) | [Codeforces 498C](https://codeforces.com/problemset/problem/498/C)   | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Array%20and%20Operations/main.cpp)      | Emparelhamento Bipartido Máximo indexado por fatores primos.    | ✅ Resolvido |
-| [Maximum Flow](https://codeforces.com/problemset/problem/843/E)         | [Codeforces 843E](https://codeforces.com/problemset/problem/843/E)   | [`main.cpp`](./Implementações/Problemas/Fluxo%20M%C3%A1ximo/Maximum%20Flow/main.cpp)                | Reconstrução de capacidades compatíveis a partir de corte.      | ✅ Resolvido |
-| [Red-Blue Graph](https://codeforces.com/contest/1288/problem/f)         | [Codeforces 1288F](https://codeforces.com/contest/1288/problem/f)    | [`main.cpp`](./Implementações/Problemas/Fluxo%20de%20Custo%20M%C3%ADnimo/Red-Blue%20Graph/main.cpp) | Circulação com Demandas e Limites Inferiores ($l \le f \le c$). | ✅ Resolvido |
+| Problema                                                                | Plataforma / ID                                                      | Código Local                                                                    | Técnica de Fluxo Alvo                                           |    Status    |
+| :---------------------------------------------------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------ | :-------------------------------------------------------------- | :----------: |
+| [Fast Maximum Flow](https://www.spoj.com/problems/FASTFLOW/)            | [SPOJ FASTFLOW](https://www.spoj.com/problems/FASTFLOW/)             | [`main.cpp`](./implementations/problems/max-flow/fast-maximum-flow/main.cpp)    | Benchmark extremo de vazão em digrafos densos e esparsos.       | ✅ Resolvido |
+| [Petya and Graph](https://codeforces.com/problemset/problem/1082/G)     | [Codeforces 1082G](https://codeforces.com/problemset/problem/1082/G) | [`main.cpp`](./implementations/problems/max-flow/petya-and-graph/main.cpp)      | Fechamento de Peso Máximo (_Project Selection_) via Min-Cut.    | ✅ Resolvido |
+| [Array and Operations](https://codeforces.com/problemset/problem/498/C) | [Codeforces 498C](https://codeforces.com/problemset/problem/498/C)   | [`main.cpp`](./implementations/problems/max-flow/array-and-operations/main.cpp) | Emparelhamento Bipartido Máximo indexado por fatores primos.    | ✅ Resolvido |
+| [Maximum Flow](https://codeforces.com/problemset/problem/843/E)         | [Codeforces 843E](https://codeforces.com/problemset/problem/843/E)   | [`main.cpp`](./implementations/problems/max-flow/maximum-flow/main.cpp)         | Reconstrução de capacidades compatíveis a partir de corte.      | ✅ Resolvido |
+| [Red-Blue Graph](https://codeforces.com/contest/1288/problem/f)         | [Codeforces 1288F](https://codeforces.com/contest/1288/problem/f)    | [`main.cpp`](./implementations/problems/min-cost-flow/red-blue-graph/main.cpp)  | Circulação com Demandas e Limites Inferiores ($l \le f \le c$). | ✅ Resolvido |
 
 ---
 
 # 📚 Bloco IV: Teoria e Rigor Matemático
 
-Progresso dos teoremas, axiomas e provas formais documentados no [LaTeX](./LaTeX/ic.tex) e no livro monográfico ([`LaTeX/book.tex`](./LaTeX/book.tex)).
+Progresso dos teoremas, axiomas e provas formais documentados no [LaTeX](./latex/ic.tex) e no livro monográfico ([`latex/book.tex`](./latex/book.tex)).
 
 ## ⚖️ Axiomas e Leis Fundamentais
 
@@ -256,7 +256,7 @@ Progresso dos teoremas, axiomas e provas formais documentados no [LaTeX](./LaTeX
 
 ## 🌲 Network Simplex: Estruturas e Mecânicas
 
-Todos os conceitos fundamentais do Network Simplex estão completamente formalizados no LaTeX e implementados no motor [`NetworkSimplex.hpp`](./Implementações/CostNetwork/NetworkSimplex.hpp):
+Todos os conceitos fundamentais do Network Simplex estão completamente formalizados no LaTeX e implementados no motor [`NetworkSimplex.hpp`](./implementations/cost-network/NetworkSimplex.hpp):
 
 | Componente Estrutural / Mecânica                 | LaTeX | Implementação | Descrição                                                                                                    |
 | :----------------------------------------------- | :---: | :-----------: | :----------------------------------------------------------------------------------------------------------- |
@@ -275,26 +275,26 @@ Todos os conceitos fundamentais do Network Simplex estão completamente formaliz
 
 Infraestrutura completa de testes empíricos implementada em C++23 e Python para execução automatizada de benchmarks e coleta de métricas:
 
-| Ferramenta / Componente               | Código-Fonte                                                        | Status | Descrição                                                                                            |
-| :------------------------------------ | :------------------------------------------------------------------ | :----: | :--------------------------------------------------------------------------------------------------- |
-| Parser DIMACS (Max Flow)              | [`dimacs_max.hpp`](./Experimentos/parsers/dimacs_max.hpp)           |   ✅   | Leitor em C++ otimizado para o formato padronizado DIMACS (`.max`).                                  |
-| Parser DIMACS (Min Cost Flow)         | [`dimacs_min.hpp`](./Experimentos/parsers/dimacs_min.hpp)           |   ✅   | Leitor em C++ otimizado para o formato padronizado DIMACS (`.min`).                                  |
-| Driver C++ de Medição (Max Flow)      | [`max_flow_runner.cpp`](./Experimentos/drivers/max_flow_runner.cpp) |   ✅   | Executável para rodar motores de fluxo máximo com `std::chrono::high_resolution_clock`.              |
-| Driver C++ de Medição (Min Cost Flow) | [`min_cost_runner.cpp`](./Experimentos/drivers/min_cost_runner.cpp) |   ✅   | Executável para rodar motores de custo mínimo com medição de tempo e validação.                      |
-| Script Orquestrador de Execuções      | [`run_benchmarks.py`](./Experimentos/.scripts/run_benchmarks.py)    |   ✅   | Automação em Python para varrer instâncias, aplicar timeouts e coletar médias e desvio padrão.       |
-| Pipeline de Tabelas LaTeX             | [`generate_tables.py`](./Experimentos/.scripts/generate_tables.py)  |   ✅   | Script para processar CSVs de resultados e compilar tabelas LaTeX formatadas em `booktabs`.          |
-| Pipeline de Gráficos e Figuras        | [`plot_charts.py`](./Experimentos/.scripts/plot_charts.py)          |   ✅   | Geração de curvas de complexidade assintótica empírica em escala log-log com `matplotlib`/`seaborn`. |
+| Ferramenta / Componente               | Código-Fonte                                                       | Status | Descrição                                                                                            |
+| :------------------------------------ | :----------------------------------------------------------------- | :----: | :--------------------------------------------------------------------------------------------------- |
+| Parser DIMACS (Max Flow)              | [`dimacs_max.hpp`](./experiments/parsers/dimacs_max.hpp)           |   ✅   | Leitor em C++ otimizado para o formato padronizado DIMACS (`.max`).                                  |
+| Parser DIMACS (Min Cost Flow)         | [`dimacs_min.hpp`](./experiments/parsers/dimacs_min.hpp)           |   ✅   | Leitor em C++ otimizado para o formato padronizado DIMACS (`.min`).                                  |
+| Driver C++ de Medição (Max Flow)      | [`max_flow_runner.cpp`](./experiments/drivers/max_flow_runner.cpp) |   ✅   | Executável para rodar motores de fluxo máximo com `std::chrono::high_resolution_clock`.              |
+| Driver C++ de Medição (Min Cost Flow) | [`min_cost_runner.cpp`](./experiments/drivers/min_cost_runner.cpp) |   ✅   | Executável para rodar motores de custo mínimo com medição de tempo e validação.                      |
+| Script Orquestrador de Execuções      | [`run_benchmarks.py`](./experiments/.scripts/run_benchmarks.py)    |   ✅   | Automação em Python para varrer instâncias, aplicar timeouts e coletar médias e desvio padrão.       |
+| Pipeline de Tabelas LaTeX             | [`generate_tables.py`](./experiments/.scripts/generate_tables.py)  |   ✅   | Script para processar CSVs de resultados e compilar tabelas LaTeX formatadas em `booktabs`.          |
+| Pipeline de Gráficos e Figuras        | [`plot_charts.py`](./experiments/.scripts/plot_charts.py)          |   ✅   | Geração de curvas de complexidade assintótica empírica em escala log-log com `matplotlib`/`seaborn`. |
 
 ## 🏋️ Instâncias e Geradores Sintéticos
 
-| Nome                                    | Código-Fonte                                                   | LaTeX | Implementação | Descrição                                                                                               |
-| :-------------------------------------- | :------------------------------------------------------------- | :---: | :-----------: | :------------------------------------------------------------------------------------------------------ |
-| Coleções DIMACS (Max Flow)              | [`fetch_dimacs.py`](./Experimentos/.scripts/fetch_dimacs.py)   |  ✅   |      ✅       | Download e organização de instâncias clássicas da literatura (Washington, RMF, Genrmf).                 |
-| Coleções DIMACS (Min Cost Flow)         | [`fetch_dimacs.py`](./Experimentos/.scripts/fetch_dimacs.py)   |  ✅   |      ✅       | Download e organização de instâncias de referência de custo mínimo (Netgen, Grid).                      |
-| Gerador: Grafos Aleatórios Esparsos     | [`random_graph.py`](./Experimentos/generators/random_graph.py) |  ✅   |      ✅       | Geração controlada de grafos com $\|A\| \approx 4\|V\|$ variando $\|V\|$ em escala logarítmica.         |
-| Gerador: Grafos Aleatórios Densos       | [`random_graph.py`](./Experimentos/generators/random_graph.py) |  ✅   |      ✅       | Geração controlada de grafos com $\|A\| \approx \|V\|^2 / 10$ para testar limites de algoritmos densos. |
-| Gerador: Redes em Grade (Grid 2D/3D)    | [`grid_graph.py`](./Experimentos/generators/grid_graph.py)     |  ✅   |      ✅       | Estrutura em grade simulando problemas de visão computacional / segmentação.                            |
-| Gerador: Casos Patológicos de Pior Caso | [`worst_case.py`](./Experimentos/generators/worst_case.py)     |  ✅   |      ✅       | Redes desenhadas para induzir o pior caso de caminhos aumentantes (ex: Ford-Fulkerson exponencial).     |
+| Nome                                    | Código-Fonte                                                  | LaTeX | Implementação | Descrição                                                                                               |
+| :-------------------------------------- | :------------------------------------------------------------ | :---: | :-----------: | :------------------------------------------------------------------------------------------------------ |
+| Coleções DIMACS (Max Flow)              | [`fetch_dimacs.py`](./experiments/.scripts/fetch_dimacs.py)   |  ✅   |      ✅       | Download e organização de instâncias clássicas da literatura (Washington, RMF, Genrmf).                 |
+| Coleções DIMACS (Min Cost Flow)         | [`fetch_dimacs.py`](./experiments/.scripts/fetch_dimacs.py)   |  ✅   |      ✅       | Download e organização de instâncias de referência de custo mínimo (Netgen, Grid).                      |
+| Gerador: Grafos Aleatórios Esparsos     | [`random_graph.py`](./experiments/generators/random_graph.py) |  ✅   |      ✅       | Geração controlada de grafos com $\|A\| \approx 4\|V\|$ variando $\|V\|$ em escala logarítmica.         |
+| Gerador: Grafos Aleatórios Densos       | [`random_graph.py`](./experiments/generators/random_graph.py) |  ✅   |      ✅       | Geração controlada de grafos com $\|A\| \approx \|V\|^2 / 10$ para testar limites de algoritmos densos. |
+| Gerador: Redes em Grade (Grid 2D/3D)    | [`grid_graph.py`](./experiments/generators/grid_graph.py)     |  ✅   |      ✅       | Estrutura em grade simulando problemas de visão computacional / segmentação.                            |
+| Gerador: Casos Patológicos de Pior Caso | [`worst_case.py`](./experiments/generators/worst_case.py)     |  ✅   |      ✅       | Redes desenhadas para induzir o pior caso de caminhos aumentantes (ex: Ford-Fulkerson exponencial).     |
 
 ## ⚡ Baterias Experimentais e Análise de Desempenho
 
@@ -316,7 +316,7 @@ Infraestrutura completa de testes empíricos implementada em C++23 e Python para
 
 ## 📖 Livro e Monografia Independente (`book.tex`)
 
-Acompanhamento da elaboração e manutenção do livro monográfico independente em LaTeX ([`book.tex`](./LaTeX/book.tex)), projetado com máxima densidade matemática e computacional, 100% voltado para distribuição aberta e leitura fluida, desvinculado dos formulários institucionais de Iniciação Científica da UFABC.
+Acompanhamento da elaboração e manutenção do livro monográfico independente em LaTeX ([`book.tex`](./latex/book.tex)), projetado com máxima densidade matemática e computacional, 100% voltado para distribuição aberta e leitura fluida, desvinculado dos formulários institucionais de Iniciação Científica da UFABC.
 
 | Etapa / Componente                  | Status | Descrição                                                                                         |
 | :---------------------------------- | :----: | :------------------------------------------------------------------------------------------------ |
@@ -325,8 +325,8 @@ Acompanhamento da elaboração e manutenção do livro monográfico independente
 | **Estrutura em Partes e Capítulos** |   ✅   | Promoção dos macro-blocos a 4 partes temáticas e 12 capítulos ordenados logicamente.              |
 | **Pareamento Teórico Integral**     |   ✅   | Inclusão de 100% dos 11 teoremas com suas 4 dimensões (enunciado, intuição, prova, impacto).      |
 | **Pareamento Algorítmico e C++23**  |   ✅   | Inclusão de todas as implementações dos motores de fluxo e reduções nos Apêndices.                |
-| **Automação de Compilação**         |   ✅   | Inclusão de regras `make book` no `LaTeX/Makefile` e no `Makefile` raiz.                          |
-| **Atualização da Documentação**     |   ✅   | Atualização dos `README.md` (raiz e `LaTeX/`) e esteira de CI/CD para release do PDF.             |
+| **Automação de Compilação**         |   ✅   | Inclusão de regras `make book` no `latex/Makefile` e no `Makefile` raiz.                          |
+| **Atualização da Documentação**     |   ✅   | Atualização dos `README.md` (raiz e `latex/`) e esteira de CI/CD para release do PDF.             |
 
 ---
 

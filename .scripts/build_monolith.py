@@ -8,7 +8,7 @@ from pathlib import Path
 def find_repo_root() -> Path:
     current = Path.cwd().resolve()
     for directory in [current, *current.parents]:
-        if (directory / ".git").exists() or (directory / "LaTeX").exists():
+        if (directory / ".git").exists() or (directory / "latex").exists():
             return directory
     return current
 
@@ -59,7 +59,7 @@ def format_monolith_content(text: str) -> str:
 
 def generate_monolith(check_only: bool = False) -> bool:
     repo_root = find_repo_root()
-    latex_dir = repo_root / "LaTeX"
+    latex_dir = repo_root / "latex"
     entry_point = latex_dir / "report.tex"
     output_path = latex_dir / "monolith.tex"
 

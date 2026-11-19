@@ -135,9 +135,9 @@ cmake-build-*/
 *.snm
 *.vrb
 *.pdf
-!Material/**
-!LaTeX/figures/*.pdf
-!LaTeX/figures/**/*.pdf
+!materials/**
+!latex/figures/*.pdf
+!latex/figures/**/*.pdf
 !**/figures/*.pdf
 !**/figures/**/*.pdf
 segment
