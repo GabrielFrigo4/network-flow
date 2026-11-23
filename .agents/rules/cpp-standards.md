@@ -1,10 +1,10 @@
 ---
-description: Padrões de engenharia C++23 e Clean Code para Pesquisa Networks Flow.
+description: Padrões de engenharia C++23 e Clean Code para Pesquisa Network Flow.
 globs: "**/*.{hpp,cpp}"
 always_on: true
 ---
 
-# Diretrizes de Código C++23 — Networks Flow
+# Diretrizes de Código C++23 — Network Flow
 
 1. **Padrão & Compilador:** C++23 obrigatório (`-std=c++23`), compilador `CXX = c++`.
 2. **Tipos Canônicos:**

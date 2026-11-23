@@ -1,5 +1,5 @@
 ---
-description: Padrões de documentação LaTeX e integridade acadêmica para Networks Flow.
+description: Padrões de documentação LaTeX e integridade acadêmica para Network Flow.
 globs: "latex/**/*.tex"
 always_on: true
 ---

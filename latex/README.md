@@ -116,4 +116,4 @@ figures/scalability_mincost.pdf
 O `references.bib` permanece separado para permitir a edição das referências no Overleaf e a integração com gerenciadores bibliográficos (Zotero, Mendeley).
 
 > [!NOTE]
-> Os documentos gerados (PDFs) não são versionados neste diretório para evitar inchaço do repositório, mas estão disponíveis para download direto através das [Releases do GitHub](https://github.com/GabrielFrigo4/IC_Networks_Flow/releases) (conforme linkado no README principal do projeto).
+> Os documentos gerados (PDFs) não são versionados neste diretório para evitar inchaço do repositório, mas estão disponíveis para download direto através das [Releases do GitHub](https://github.com/GabrielFrigo4/network-flow/releases) (conforme linkado no README principal do projeto).

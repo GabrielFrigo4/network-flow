@@ -233,7 +233,7 @@ Caso prefira realizar a configuração manualmente via terminal:
 ## 📄 Como Compilar o Código-Fonte (LaTeX)
 
 > [!NOTE]
-> Este repositório conta com integração contínua (CI) através do **GitHub Actions** (`.github/workflows/`). A cada _push_, os PDFs são compilados automaticamente na nuvem e disponibilizados nas [Releases do GitHub](https://github.com/GabrielFrigo4/IC_Networks_Flow/releases).
+> Este repositório conta com integração contínua (CI) através do **GitHub Actions** (`.github/workflows/`). A cada _push_, os PDFs são compilados automaticamente na nuvem e disponibilizados nas [Releases do GitHub](https://github.com/GabrielFrigo4/network-flow/releases).
 
 Caso queira gerar qualquer um dos PDFs (`book.pdf`, `ic.pdf`, `report.pdf`, `monolith.pdf` ou `proposal.pdf`) localmente:
 
@@ -277,17 +277,17 @@ make clean
 [successive_shortest_dijkstra]: ./implementations/cost-network/SuccessiveShortestDijkstra.hpp
 [network_simplex]: ./implementations/cost-network/NetworkSimplex.hpp
 [kuhn_munkres]: ./implementations/cost-network/KuhnMunkres.hpp
-[baixar_pdf_projeto]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/proposal.pdf
+[baixar_pdf_projeto]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/proposal.pdf
 [baixar_pdf_projeto_icon]: https://img.shields.io/badge/Projeto-Baixar-0969da?style=for-the-badge&logo=latex&logoColor=white
-[baixar_pdf_livro]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/book.pdf
+[baixar_pdf_livro]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/book.pdf
 [baixar_pdf_livro_icon]: https://img.shields.io/badge/Livro-Baixar-2ea44f?style=for-the-badge&logo=gitbook&logoColor=white
-[baixar_pdf_poster]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/poster.pdf
+[baixar_pdf_poster]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/poster.pdf
 [baixar_pdf_poster_icon]: https://img.shields.io/badge/Pôster_IC-Baixar-006633?style=for-the-badge&logo=latex&logoColor=white
-[baixar_pdf_ic]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/ic.pdf
+[baixar_pdf_ic]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/ic.pdf
 [baixar_pdf_ic_icon]: https://img.shields.io/badge/IC-Baixar-cf222e?style=for-the-badge&logo=googledocs&logoColor=white
-[baixar_pdf_relatorio]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/report.pdf
+[baixar_pdf_relatorio]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/report.pdf
 [baixar_pdf_relatorio_icon]: https://img.shields.io/badge/Relatório-Baixar-d97706?style=for-the-badge&logo=googledocs&logoColor=white
-[baixar_pdf_monolito]: https://github.com/GabrielFrigo4/IC_Networks_Flow/releases/latest/download/monolith.pdf
+[baixar_pdf_monolito]: https://github.com/GabrielFrigo4/network-flow/releases/latest/download/monolith.pdf
 [baixar_pdf_monolito_icon]: https://img.shields.io/badge/Monólito-Baixar-8b5cf6?style=for-the-badge&logo=latex&logoColor=white
 [download_speed]: https://cses.fi/problemset/task/1694
 [school_dance]: https://cses.fi/problemset/task/1696
