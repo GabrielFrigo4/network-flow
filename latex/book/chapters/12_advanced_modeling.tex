@@ -1,0 +1,374 @@
+% =========================================================================
+% MODELAGENS AVANÇADAS E REDUÇÕES EM REDES DE FLUXO
+% =========================================================================
+\chapter{Modelagens Avançadas e Reduções em Redes de Fluxo}\label{sec:modelagens_avancadas}
+
+Diversos problemas de otimização combinatória que não apresentam fluxo explícito em sua formulação original reduzem-se exatamente a instâncias de fluxo máximo, corte mínimo ou fluxo de custo mínimo. Essa transformação torna-se possível quando as restrições do problema exibem estrutura de dependência direcionada, balanço nodal com cotas, multiplicidades capacitadas, ordem parcial acíclica ou custos marginais convexos. Este capítulo formaliza cinco classes gerais de redução e demonstra a equivalência matemática entre as instâncias originais e as redes de fluxo auxiliares correspondentes.
+
+
+\section{Fechamento de Peso Máximo e Seleção de Projetos com Dependências}\label{sec:max_weight_closure}
+
+Considere um conjunto de tarefas ou projetos dotados de lucros líquidos positivos ou custos negativos, ligados por relações de pré-requisito: a seleção de um item obriga a seleção de todas as suas dependências.
+
+\begin{definicao}[Fechamento em Digrafo e Fechamento de Peso Máximo][def:fechamento]
+Seja $D = (V, A)$ um digrafo associado a uma função peso $p: V \to \mathbb{Z}$. Um subconjunto $U \subseteq V$ é um \textbf{fechamento} (\textit{closure}) em $D$ se nenhum arco de $A$ parte de $U$ para $V \setminus U$, isto é:
+\begin{equation}
+    \forall\, (u, v) \in A, \qquad u \in U \implies v \in U.
+\end{equation}
+O \textbf{Problema do Fechamento de Peso Máximo} consiste em determinar um fechamento $U^* \subseteq V$ que maximize $p(U) \coloneqq \sum_{v \in U} p(v)$.
+\end{definicao}
+
+Para reduzir o problema a um corte mínimo $s$-$t$, particiona-se $V$ em vértices de peso positivo $V^+ \coloneqq \{v \in V \mid p(v) > 0\}$, vértices de peso negativo $V^- \coloneqq \{v \in V \mid p(v) < 0\}$ e vértices nulos $V^0 \coloneqq \{v \in V \mid p(v) = 0\}$. Constrói-se a rede auxiliar $D' = (V', A')$ com $V' \coloneqq V \cup \{s, t\}$ e os seguintes arcos capacitados~\cite{picard1976maximal, ahuja1993network}:
+\begin{enumerate}
+    \item Para cada $v \in V^+$, insere-se o arco $(s, v)$ com capacidade $c'(s, v) = p(v)$.
+    \item Para cada $v \in V^-$, insere-se o arco $(v, t)$ com capacidade $c'(v, t) = -p(v) > 0$.
+    \item Para cada dependência $(u, v) \in A$, insere-se o arco $(u, v)$ com capacidade infinita $c'(u, v) = \infty$.
+\end{enumerate}
+
+A Figura~\ref{fig:fechamento_peso_maximo} ilustra a construção de $D'$ e a partição induzida por um corte $s$-$t$ de capacidade finita.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[thick]
+    \draw[cut S] (-0.7, -2.0) rectangle (4.3, 2.1);
+    \node[cut label S] at (-0.5, 1.95) {$\mathbf{S}$ (selecionados $U = S \setminus \{s\}$)};
+
+    \draw[cut T] (6.1, -2.0) rectangle (10.5, 2.1);
+    \node[cut label T] at (10.3, 1.95) {$\mathbf{T}$ (descartados)};
+
+    \node[source node] (s) at (0.2, 0.0) {$s$};
+    \node[s node internal] (u1) at (3.2, 1.1) {$u_1$};
+    \node[s node internal] (v1) at (3.2, -1.0) {$v_1$};
+
+    \node[t node internal] (u2) at (7.0, 1.1) {$u_2$};
+    \node[t node internal] (v2) at (7.0, -1.0) {$v_2$};
+    \node[sink node] (t) at (9.6, 0.0) {$t$};
+
+    \draw[line width=1.6pt, dashed, cutviolet] (5.2, -2.05) -- (5.2, 2.15)
+        node[above=2.5pt, solid, font=\scriptsize\bfseries, text=cutviolet!90!black, fill=white, inner sep=2.5pt, rounded corners=3pt, draw=cutviolet!70] {Corte Finito $(S, T)$};
+
+    \draw[flow edge] (s) -- node[edge lbl above] {$p(u_1) > 0$} (u1);
+    \draw[sat edge] (s) to[bend right=12] node[edge lbl above, text=cutviolet!90!black, pos=0.62] {$p(u_2) > 0$} (u2);
+
+    \draw[flow edge] (u1) -- node[edge lbl right] {$\infty$} (v1);
+    \draw[flow edge] (u2) -- node[edge lbl left] {$\infty$} (v2);
+
+    \draw[sat edge] (v1) to[bend right=14] node[edge lbl below, text=cutviolet!90!black, pos=0.38] {$-p(v_1) > 0$} (t);
+    \draw[flow edge] (v2) -- node[edge lbl below] {$-p(v_2) > 0$} (t);
+\end{tikzpicture}
+\caption{Redução de Picard do Fechamento de Peso Máximo ao Corte Mínimo $s$-$t$. Arcos de dependência com capacidade $\infty$ não cruzam cortes finitos $(S, T)$ no sentido $S \to T$; o corte penaliza lucros positivos omitidos ($u_2 \in V^+ \cap T$) e custos assumidos ($v_1 \in V^- \cap S$).}
+\label{fig:fechamento_peso_maximo}
+\end{figure}
+
+\begin{teorema}[Redução de Picard, 1976][teo:picard]
+Existe uma bijeção entre os cortes $s$-$t$ de capacidade finita $(S, T)$ na rede auxiliar $D'$ e os fechamentos $U = S \setminus \{s\}$ em $D$. Além disso, a capacidade do corte e o peso do fechamento correspondente satisfazem:
+\begin{equation}\label{eq:picard}
+    p(U) = \sum_{v \in V^+} p(v) - \ccap_{D'}(S, T).
+\end{equation}
+Em particular, se $(S^*, T^*)$ é um corte mínimo de $D'$, então $U^* = S^* \setminus \{s\}$ é um fechamento de peso máximo de $D$.
+\end{teorema}
+
+\intuicao{Custo de Renúncia e Penalidade} Se todas as tarefas lucrativas ($V^+$) pudessem ser selecionadas livremente sem pagar pelos pré-requisitos negativos ($V^-$), o ganho ideal seria $P^+ = \sum_{v \in V^+} p(v)$. Ao escolher um fechamento $U$, incorre-se em duas perdas em relação a esse teto: renuncia-se ao lucro de cada $v \in V^+ \setminus U$ e paga-se o custo $-p(v)$ de cada $v \in V^- \cap U$. A capacidade do corte $(S, T)$ mede exatamente a soma dessas duas perdas.
+
+\begin{demonstracao}
+Primeiramente, observe que o corte trivial $(\{s\}, V \cup \{t\})$ não atravessa nenhum arco de $A$ e possui capacidade finita $P^+ \coloneqq \sum_{v \in V^+} p(v)$, logo o corte mínimo de $D'$ é sempre finito.
+
+Seja $(S, T)$ um corte $s$-$t$ qualquer em $D'$ e defina $U \coloneqq S \setminus \{s\}$. Como os únicos arcos de capacidade infinita em $D'$ são exatamente os arcos $(u, v) \in A$, a condição $\ccap_{D'}(S, T) < \infty$ ocorre se, e somente se, não existe arco $(u, v) \in A$ com $u \in S$ e $v \in T$. Como $s \in S$ e $t \in T$ não pertencem a $V$, isso equivale a $\forall (u, v) \in A,\, u \in U \implies v \in U$, ou seja, $U$ é um fechamento em $D$.
+
+Para todo corte finito $(S, T)$, os arcos que cruzam de $S$ para $T$ pertencem exclusivamente a duas classes disjuntas:
+\begin{enumerate}
+    \item Arcos $(s, v)$ com $v \in V^+ \cap T = V^+ \setminus U$, cada qual com capacidade $p(v)$;
+    \item Arcos $(v, t)$ com $v \in V^- \cap S = V^- \cap U$, cada qual com capacidade $-p(v)$.
+\end{enumerate}
+Somando essas contribuições:
+\begin{equation*}
+    \ccap_{D'}(S, T) = \sum_{v \in V^+ \setminus U} p(v) + \sum_{v \in V^- \cap U} (-p(v)).
+\end{equation*}
+Escrevendo $P^+ = \sum_{v \in V^+ \cap U} p(v) + \sum_{v \in V^+ \setminus U} p(v)$ e subtraindo a expressão anterior, obtém-se:
+\begin{equation*}
+    P^+ - \ccap_{D'}(S, T) = \sum_{v \in V^+ \cap U} p(v) + \sum_{v \in V^- \cap U} p(v) = \sum_{v \in U} p(v) = p(U),
+\end{equation*}
+pois vértices em $V^0$ contribuem com $0$. Como $P^+$ é uma constante fixa da instância, maximizar $p(U)$ sobre todos os fechamentos $U \subseteq V$ equivale exatamente a minimizar $\ccap_{D'}(S, T)$ sobre todos os cortes $s$-$t$ de $D'$.
+\end{demonstracao}
+
+\implicacoes{e Especializações} O Teorema~\ref{teo:picard} unifica diversas modelagens combinatórias clássicas~\cite{ahuja1993network, korte2018combinatorial}:
+\begin{itemize}
+    \item \textbf{Seleção de Projetos e Mineração a Céu Aberto:} Tarefas com receita $p(v) > 0$ dependem de equipamentos ou etapas de infraestrutura com custo $p(v) < 0$, ou blocos de minério dependem da remoção prévia dos blocos sobrepostos.
+    \item \textbf{Subgrafo Induzido de Peso Máximo em Grafos Não Direcionados:} Dado um grafo $G = (V_G, E_G)$ com custos não negativos $a(v)$ nos vértices e recompensas $w(e) > 0$ nas arestas, deseja-se selecionar $X \subseteq V_G$ maximizando $\sum_{e \subseteq X} w(e) - \sum_{v \in X} a(v)$. Criando um vértice auxiliar $z_e$ de peso $+w(e)$ para cada aresta $e = \{u, v\}$ com dependências $(z_e, u)$ e $(z_e, v)$ e atribuindo peso $-a(v)$ a cada $v \in V_G$, o lucro da aresta $e$ só é contabilizado se ambas as extremidades integrarem $U$. Essa formulação encontra-se validada computacionalmente em \code{implementations/problems/max-flow/petya-and-graph/}.
+    \item \textbf{Conexão com Cortes de Energia em Visão:} A minimização de funções de energia submodulares sobre variáveis binárias, tratada na Segmentação Interativa de Imagens (Capítulo~\ref{sec:segmentacao}), obedece à mesma estrutura dual entre penalidades unárias (T-links) e dependências acopladas entre variáveis.
+\end{itemize}
+
+
+\section{Circulação e Fluxos com Cotas Inferiores e Demandas}\label{sec:cotas_inferiores}
+
+Em redes de transporte e escalonamento, frequentemente exige-se não apenas que o fluxo não ultrapasse a capacidade superior $c(a)$, mas também que atenda a um fluxo mínimo obrigatório $l(a)$ por arco e a balanços nodais prefixados.
+
+\begin{definicao}[Circulação com Cotas Inferiores e Demandas][def:cotas_inferiores]
+Seja $D = (V, A)$ um digrafo munido de cotas inferiores $l: A \to \mathbb{Z}_{\ge 0}$, capacidades superiores $c: A \to \mathbb{Z}_{\ge 0}$ com $0 \le l(a) \le c(a)$ para todo $a \in A$, custos unitários $w: A \to \mathbb{Z}$ e demandas nodais externas $b: V \to \mathbb{Z}$ com $\sum_{v \in V} b(v) = 0$. Uma função $f: A \to \mathbb{Z}_{\ge 0}$ é um \textbf{fluxo viável com cotas inferiores} se satisfaz:
+\begin{align}
+    \sum_{(u, v) \in A} f(u, v) - \sum_{(v, z) \in A} f(v, z) &= b(v), \qquad \forall\, v \in V, \label{eq:balanco_cotas} \\
+    l(a) \le f(a) &\le c(a), \qquad \forall\, a \in A. \label{eq:limites_cotas}
+\end{align}
+Quando $b(v) = 0$ para todo $v \in V$, denomina-se $f$ uma \textbf{circulação viável}. O custo total do fluxo é $\cost(f) \coloneqq \sum_{a \in A} w(a) f(a)$.
+\end{definicao}
+
+Adota-se aqui a convenção de fluxo líquido de entrada em $v$: se $b(v) < 0$, o vértice atua como oferta líquida; se $b(v) > 0$, atua como demanda líquida. Pela decomposição $f(a) = l(a) + f'(a)$, a variável residual $f'(a)$ varia no intervalo padrão $0 \le f'(a) \le c'(a) \coloneqq c(a) - l(a)$. Substituindo $f = l + f'$ em~\eqref{eq:balanco_cotas}, obtém-se a conservação modificada:
+\begin{equation}\label{eq:balanco_aux}
+    \sum_{(u, v) \in A} f'(u, v) - \sum_{(v, z) \in A} f'(v, z) = b(v) + \sum_{(v, z) \in A} l(v, z) - \sum_{(u, v) \in A} l(u, v) \eqqcolon -B(v),
+\end{equation}
+em que o \textbf{excedente líquido das cotas} em $v$ vale:
+\begin{equation}
+    B(v) \coloneqq \sum_{(u, v) \in A} l(u, v) - \sum_{(v, z) \in A} l(v, z) - b(v).
+\end{equation}
+Note que $\sum_{v \in V} B(v) = -\sum_{v \in V} b(v) = 0$, pois cada $l(u, v)$ contribui com $+l(u, v)$ em $v$ e $-l(u, v)$ em $u$. Constrói-se a rede auxiliar $D' = (V \cup \{s^*, t^*\}, A')$ mantendo cada arco $a \in A$ com capacidade $c'(a) = c(a) - l(a)$ e custo $w(a)$, acrescida dos arcos de compensação de custo nulo:
+\begin{enumerate}
+    \item Se $B(v) > 0$, insere-se $(s^*, v)$ com capacidade $B(v)$ e custo $0$.
+    \item Se $B(v) < 0$, insere-se $(v, t^*)$ com capacidade $-B(v)$ e custo $0$.
+\end{enumerate}
+Define-se o déficit global $L_{\text{tot}} \coloneqq \sum_{v \in V:\, B(v) > 0} B(v) = \sum_{v \in V:\, B(v) < 0} (-B(v))$. A construção é ilustrada na Figura~\ref{fig:cotas_inferiores}.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[thick]
+\begin{scope}[xshift=0cm]
+    \tikzsubcaption{(2.1,2.6)}{(a) Arco original com cota $[l, c]$}
+    \node[flow node] (u0) at (0.3, 1.0) {$u$};
+    \node[flow node] (v0) at (3.9, 1.0) {$v$};
+    \draw[flow edge] (u0) -- node[edge lbl above] {$l \le f \le c,\; w$} (v0);
+    \node[font=\footnotesize, below=10pt, align=center] at (2.1, 0.2) {Consome $l$ em $u$\\Entrega $l$ em $v$};
+\end{scope}
+
+\node at (5.0, 1.0) {\Huge $\Rightarrow$};
+
+\begin{scope}[xshift=6.0cm]
+    \tikzsubcaption{(3.0,2.6)}{(b) Rede auxiliar $D'$ com compensação}
+    \node[source node] (ss) at (0.0, 2.0) {$s^*$};
+    \node[flow node] (u1) at (1.8, 0.4) {$u$};
+    \node[flow node] (v1) at (4.4, 0.4) {$v$};
+    \node[sink node] (tt) at (6.2, 2.0) {$t^*$};
+
+    \draw[flow edge] (u1) -- node[edge lbl below] {$c - l,\; w$} (v1);
+    \draw[sat edge] (ss) to[bend left=18] node[edge lbl above, text=cutviolet!90!black] {$l$ (se $B(v)>0$)} (v1);
+    \draw[sat edge] (u1) to[bend right=18] node[edge lbl below, text=cutviolet!90!black] {$l$ (se $B(u)<0$)} (tt);
+\end{scope}
+\end{tikzpicture}
+\caption{Eliminação de cotas inferiores $l \le f \le c$ via decomposição $f = l + f'$. O fluxo obrigatório $l$ é pré-alocado no balanço nodal $B$, deixando capacidade residual $c - l$ na rede auxiliar $D'$ com superfonte $s^*$ e supersumidouro $t^*$.}
+\label{fig:cotas_inferiores}
+\end{figure}
+
+\begin{teorema}[Viabilidade e Otimalidade com Cotas Inferiores][teo:cotas_inferiores]
+Para qualquer rede $D$ com $0 \le l(a) \le c(a)$ e sua rede auxiliar $D'$:
+\begin{enumerate}
+    \item \textbf{Viabilidade:} Existe um fluxo viável $f$ em $D$ se, e somente se, o fluxo máximo $f'^*$ de $s^*$ a $t^*$ em $D'$ satisfaz $|f'^*| = L_{\text{tot}}$ (isto é, todos os arcos emergentes de $s^*$ ficam saturados).
+    \item \textbf{Custo Mínimo:} Caso exista fluxo viável e $D$ não possua ciclos negativos de capacidade residual positiva no caso de emprego de caminhos mínimos sucessivos, seja $f'^*$ um fluxo máximo de $s^*$ a $t^*$ de custo mínimo em $D'$ (de valor $L_{\text{tot}}$). Então $f^* \coloneqq l + f'^*|_A$ é um fluxo viável de custo mínimo em $D$, com:
+    \begin{equation}
+        \cost_D(f^*) = \sum_{a \in A} w(a) l(a) + \cost_{D'}(f'^*).
+    \end{equation}
+\end{enumerate}
+\end{teorema}
+
+\intuicao{Fluxo Obrigatório e Balanço Residual} Fixa-se antecipadamente a parcela obrigatória $l(a)$ em cada arco. Essa pré-alocação gera déficit em vértices dos quais sai mais fluxo obrigatório do que entra ($B(u) < 0$) e excesso nos vértices que recebem mais fluxo obrigatório do que enviam ($B(v) > 0$). Enviar $L_{\text{tot}}$ unidades de $s^*$ até $t^*$ na rede residual de folgas $c - l$ fornece exatamente a circulação complementar necessária para restabelecer a conservação de fluxo em toda a rede.
+
+\begin{demonstracao}
+$(\Rightarrow)$ Seja $f$ um fluxo viável em $D$ e defina $f'(a) \coloneqq f(a) - l(a)$ para todo $a \in A$. Pela Equação~\eqref{eq:limites_cotas}, tem-se $0 \le f'(a) \le c'(a)$. Para os arcos incidentes aos terminais artificiais, defina $f'(s^*, v) = B(v)$ quando $B(v) > 0$ e $f'(v, t^*) = -B(v)$ quando $B(v) < 0$. Em cada vértice $v \in V$:
+\begin{itemize}
+    \item Se $B(v) > 0$, a entrada por $(s^*, v)$ soma $+B(v)$ ao saldo líquido de entrada de $f'$ em $v$; pela Equação~\eqref{eq:balanco_aux}, o fluxo líquido em $A$ contribui com $-B(v)$, resultando em balanço total nulo em $v$.
+    \item Se $B(v) < 0$, a saída por $(v, t^*)$ contribui com $-(-B(v)) = +B(v)$ na entrada líquida, novamente somando $0$ com o saldo $-B(v)$ dos arcos em $A$.
+    \item Se $B(v) = 0$, a Equação~\eqref{eq:balanco_aux} fornece conservação direta.
+\end{itemize}
+Logo $f'$ é um $s^*$-$t^*$ fluxo válido em $D'$ de valor $\sum_{B(v) > 0} f'(s^*, v) = L_{\text{tot}}$, que satura todos os arcos incidentes a $s^*$ (e, como $\ccap_{D'}(\{s^*\}, V' \setminus \{s^*\}) = L_{\text{tot}}$, esse é o fluxo máximo possível em $D'$).
+
+$(\Leftarrow)$ Reciprocamente, todo fluxo máximo $f'^*$ de valor $L_{\text{tot}}$ satura obrigatoriamente todos os arcos $(s^*, v)$ e $(v, t^*)$ (pois as somas de suas capacidades igualam $L_{\text{tot}}$). Pela restrição de conservação em cada $v \in V$ na rede $D'$, os arcos em $A$ satisfazem~\eqref{eq:balanco_aux} e $0 \le f'^*(a) \le c(a) - l(a)$, donde $f \coloneqq l + f'^*|_A$ satisfaz~\eqref{eq:balanco_cotas} e~\eqref{eq:limites_cotas}.
+
+Para a parte (2), a correspondência $f \leftrightarrow f'|_A$ dada por $f = l + f'|_A$ é uma bijeção entre o conjunto de fluxos viáveis de $D$ e o conjunto de fluxos $s^*$-$t^*$ em $D'$ de valor $L_{\text{tot}}$. Como os arcos auxiliares possuem custo nulo:
+\begin{equation*}
+    \cost_D(f) = \sum_{a \in A} w(a) \bigl(l(a) + f'(a)\bigr) = \sum_{a \in A} w(a) l(a) + \cost_{D'}(f'),
+\end{equation*}
+diferindo por uma constante independente de $f'$. Portanto, minimizar $\cost_{D'}(f')$ sobre os fluxos de valor $L_{\text{tot}}$ produz exatamente o fluxo viável de custo mínimo em $D$~\cite{ahuja1993network, schrijver2003combinatorial}. Se houver arcos em $D'$ com $w(a) < 0$ e o algoritmo escolhido exigir ausência de ciclos negativos iniciais (como SSP), basta saturar previamente esses arcos adicionando $c'(a)$ unidades em sua direção na forma de demanda auxiliar e inserindo apenas o arco reverso de custo $-w(a) > 0$.
+\end{demonstracao}
+
+
+\subsection{Fluxo \texorpdfstring{$s$-$t$}{s-t} Viável, Máximo e Mínimo sob Cotas Inferiores}\label{sec:fluxo_st_cotas}
+
+Quando se busca um fluxo entre dois terminais específicos $s, t \in V$ ($b(v) = 0$ para $v \notin \{s, t\}$) sujeito a $l(a) \le f(a) \le c(a)$, a redução de circulação resolve os três problemas derivados em sequência direta:
+\begin{enumerate}
+    \item \textbf{Viabilidade $s$-$t$:} Insere-se em $D$ um arco de retorno $(t, s)$ com $l(t, s) = 0$ e $c(t, s) = \infty$, convertendo o fluxo $s$-$t$ em uma circulação. A rede admite fluxo $s$-$t$ viável se, e somente se, $D'$ admite fluxo de valor $L_{\text{tot}}$ entre $s^*$ e $t^*$. O valor inicial obtido vale $f_0 \coloneqq f'^*(t, s)$.
+    \item \textbf{Fluxo Máximo com Cotas:} Após certificar a viabilidade, removem-se $s^*$, $t^*$ e o arco de retorno $(t, s)$ da rede residual obtida $D'_{f'^*}$ (preservando os fluxos $f'^*$ nos arcos de $A$). Computando um fluxo máximo adicional $\Delta_{\max}$ de $s$ até $t$ em $D'_{f'^*}$, nenhum arco viola $f'(a) \ge 0$, garantindo $f(a) \ge l(a)$ e produzindo o fluxo máximo viável $|f^*_{\max}| = f_0 + \Delta_{\max}$.
+    \item \textbf{Fluxo Mínimo com Cotas:} De modo simétrico, removidos $s^*$, $t^*$ e $(t, s)$ de $D'_{f'^*}$, computa-se um fluxo máximo $\Delta_{\text{ret}}$ na direção oposta, de $t$ até $s$, sobre a rede residual $D'_{f'^*}$. Enviar fluxo de $t$ para $s$ no grafo residual cancela fluxo excedente de $s$ para $t$ sem jamais reduzir $f'(a)$ abaixo de zero, atingindo o fluxo mínimo viável $|f^*_{\min}| = f_0 - \Delta_{\text{ret}}$.
+\end{enumerate}
+
+\implicacoes{e Especializações} O modelo com cotas inferiores unifica problemas com restrições rígidas de ativação e balanço:
+\begin{itemize}
+    \item \textbf{Restrições de Balanço de Grau e Coloração Ponderada:} Problemas em grafos bipartidos nos quais cada vértice requer diferença positiva (ou negativa) entre incidências de duas categorias de arestas e custos mínimos por cor reduzem-se à circulação de custo mínimo com cotas $l = 1$ em vértices com predominância obrigatória e arco de retorno $(t, s)$ de capacidade infinita e custo nulo. Esse padrão está implementado e validado em \code{implementations/problems/min-cost-flow/red-blue-graph/}.
+    \item \textbf{Reconstrução de Capacidades Compatíveis com Corte Mínimo:} Ao exigir que todo arco pertencente a uma lista de rotas ativas satisfaça $f(a) \ge 1$ em uma circulação, uma segunda passagem determina capacidades $c(a)$ de modo que um subconjunto prescrito forme um corte mínimo saturado (validado em \code{implementations/problems/max-flow/maximum-flow/}).
+\end{itemize}
+
+
+\section{Emparelhamentos Capacitados e Decomposição por Atributos Independentes}\label{sec:b_matching_decomp}
+
+O emparelhamento bipartido clássico impõe grau máximo $1$ a cada vértice em uma solução. Em problemas de alocação múltipla ou de acoplamento com multiplicidades inteiras, cada vértice e cada ligação admitem cotas superiores próprias.
+
+\begin{definicao}[$b$-Emparelhamento Bipartido][def:b_matching]
+Seja $G = (L \cup R, E)$ um grafo bipartido com capacidades nodais $b: L \cup R \to \mathbb{Z}_{\ge 1}$ e capacidades de aresta $c: E \to \mathbb{Z}_{\ge 1}$. Um \textbf{$b$-emparelhamento} é uma função inteira $x: E \to \mathbb{Z}_{\ge 0}$ tal que:
+\begin{align}
+    \sum_{e \in \delta(v)} x(e) &\le b(v), \qquad \forall\, v \in L \cup R, \\
+    0 \le x(e) &\le c(e), \qquad \forall\, e \in E.
+\end{align}
+Denota-se por $\nu_b(G)$ o valor máximo de $\sum_{e \in E} x(e)$.
+\end{definicao}
+
+Quando as escolhas em um sistema combinatório separam-se em dimensões disjuntas que não interagem entre si, o problema global fatora-se em subinstâncias ortogonais independentes.
+
+\begin{teorema}[Redução, Expansão Unitária e Decomposição Ortogonal][teo:decomp_ortogonal]
+Considere um $b$-emparelhamento bipartido sobre $G = (L \cup R, E)$:
+\begin{enumerate}
+    \item \textbf{Redução a Fluxo Máximo:} $\nu_b(G)$ coincide com o valor do fluxo máximo na rede $D' = (L \cup R \cup \{s, t\}, A')$ com $c'(s, u) = b(u)$ para $u \in L$, $c'(v, t) = b(v)$ para $v \in R$ e $c'(u, v) = c(u, v)$ para $\{u, v\} \in E$.
+    \item \textbf{Equivalência por Expansão Unitária:} Seja $B \coloneqq \sum_{v \in L \cup R} b(v)$. Caso se substitua cada vértice $v$ por $b(v)$ cópias unitárias $v^{(1)}, \dots, v^{(b(v))}$ conectando todas as cópias de $u$ às cópias de $v$ com aresta unitária (quando $c(u, v) = \infty$ ou $c(u, v) \ge \min(b(u), b(v))$), o emparelhamento bipartido máximo simples no grafo expandido $G_{\text{exp}}$ satisfaz $\nu(G_{\text{exp}}) = \nu_b(G)$.
+    \item \textbf{Aditividade Ortogonal:} Se a função objetivo e as restrições de um sistema bipartido particionam-se sobre um conjunto finito de atributos independentes $\mathcal{K}$ em subinstâncias disjuntas $\{G_k\}_{k \in \mathcal{K}}$ com suas respectivas cotas $b_k$, o ótimo global satisfaz $\nu_{\text{global}} = \sum_{k \in \mathcal{K}} \nu_{b_k}(G_k)$.
+\end{enumerate}
+\end{teorema}
+
+\intuicao{Separação de Dimensões Independentes} Multiplicidades inteiras nos vértices atuam como reservas de unidades idênticas; quando diferentes atributos não concorrem pela mesma unidade (por exemplo, fatores primos distintos em operações divisórias), cada atributo define uma rede de emparelhamento fechada que pode ser resolvida separadamente ou empilhada em componentes conexos disjuntos.
+
+\begin{demonstracao}
+(1) Pelo Teorema da Integralidade (Teorema~\ref{teo:integralidade}), como todas as capacidades de $D'$ são inteiras, existe fluxo máximo inteiro $f^*$. A conservação de fluxo nos vértices de $L$ e $R$ impõe $\sum_{v \in N(u)} f^*(u, v) = f^*(s, u) \le b(u)$ e $\sum_{u \in N(v)} f^*(u, v) = f^*(v, t) \le b(v)$, estabelecendo correspondência exata com $x(\{u, v\}) = f^*(u, v)$.
+
+(2) Se $x$ é um $b$-emparelhamento válido em $G$, cada vértice $v$ participa de $d_x(v) \le b(v)$ unidades de emparelhamento, que podem ser atribuídas às primeiras $d_x(v)$ cópias distintas de $v$ em $G_{\text{exp}}$; reciprocamente, fundir as $b(v)$ cópias de cada vértice de volta em $v$ projeta qualquer emparelhamento unitário de $G_{\text{exp}}$ em um $b$-emparelhamento de mesmo valor em $G$ (pois $x(u, v) \le \min(b(u), b(v)) \le c(u, v)$).
+
+(3) Como as componentes $G_k$ para $k \in \mathcal{K}$ não compartilham arestas nem vértices de capacidade acoplada, a matriz de restrições é diagonal em blocos, logo o máximo da soma coincide com a soma dos máximos individuais $\sum_{k \in \mathcal{K}} \nu_{b_k}(G_k)$.
+\end{demonstracao}
+
+\implicacoes{e Especializações} Quando $B = \sum_v b(v)$ é pequeno (por exemplo, logarítmico nos parâmetros da entrada), a expansão unitária transforma um problema capacitado em uma rede unitária pura, habilitando o algoritmo de \lstinline{HopcroftKarp} em tempo $\mathcal{O}(|E(G_{\text{exp}})|\sqrt{B})$. Uma especialização direta ocorre em \textbf{grafos aritméticos por fatoração prima}: dado um vetor de inteiros $(a_1, \dots, a_n)$ e pares permitidos $(i, j)$ com $i + j$ ímpar nos quais se pode dividir $a_i$ e $a_j$ por um divisor comum $d > 1$, cada operação elemental reduz-se à escolha de um fator primo $p$. Pelo Teorema Fundamental da Aritmética, operações em primos distintos $p \neq q$ não interferem entre si, decompondo o problema ortogonalmente por primo $p$ com cota $b_p(i) = v_p(a_i)$ (multiplicidade de $p$ em $a_i$) e $B \le \sum_i \log_2 a_i$. Essa técnica encontra-se validada em \code{implementations/problems/max-flow/array-and-operations/}.
+
+
+\section{Cobertura Mínima de Caminhos em DAGs e o Teorema de Dilworth}\label{sec:dag_dilworth}
+
+Em digrafos acíclicos (DAGs) e conjuntos parcialmente ordenados (\textit{posets}), particionar elementos em cadeias ou rotas minimiza o número de recursos necessários para executar sequências dependentes.
+
+\begin{definicao}[Cobertura por Caminhos em DAG e Conjunto Parcialmente Ordenado][def:path_cover_poset]
+Seja $D = (V, A)$ um digrafo acíclico. Uma \textbf{cobertura por caminhos disjuntos em vértices} é uma coleção de caminhos direcionados simples $P_1, \dots, P_k$ (permitindo caminhos triviais de comprimento zero) que particionam $V$, isto é, $V = \bigsqcup_{i=1}^k V(P_i)$. Em uma \textbf{cobertura por caminhos gerais}, permite-se que dois caminhos compartilhem vértices, exigindo apenas $V = \bigcup_{i=1}^k V(P_i)$.
+
+Em um conjunto parcialmente ordenado finito $(P, \preceq)$, uma \textbf{cadeia} é um subconjunto totalmente ordenado $C \subseteq P$ e uma \textbf{anticadeia} é um subconjunto $A_{\text{anti}} \subseteq P$ de elementos dois a dois incomparáveis.
+\end{definicao}
+
+Para qualquer DAG $D = (V, A)$, define-se o \textbf{grafo bipartido dividido} $B(D) \coloneqq (V_{\text{out}} \cup V_{\text{in}}, E_B)$, no qual cada vértice $v \in V$ origina uma cópia de saída $v_{\text{out}} \in V_{\text{out}}$ e uma cópia de entrada $v_{\text{in}} \in V_{\text{in}}$, com:
+\begin{equation}
+    \{u_{\text{out}}, v_{\text{in}}\} \in E_B \iff (u, v) \in A.
+\end{equation}
+A Figura~\ref{fig:dag_path_cover} apresenta a construção de $B(D)$ e sua correspondência com uma cobertura por caminhos.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[thick]
+\begin{scope}[xshift=0cm]
+    \tikzsubcaption{(1.6,3.4)}{(a) DAG $D$ (2 caminhos: $1 \to 2 \to 4$ e $3$)}
+    \node[flow node] (d1) at (0.2, 2.4) {$1$};
+    \node[flow node] (d2) at (1.6, 1.5) {$2$};
+    \node[flow node] (d3) at (0.2, 0.4) {$3$};
+    \node[flow node] (d4) at (3.1, 1.5) {$4$};
+
+    \draw[match edge, ->] (d1) -- (d2);
+    \draw[flow edge, gray] (d1) to[bend left=22] (d4);
+    \draw[flow edge, gray] (d3) -- (d2);
+    \draw[match edge, ->] (d2) -- (d4);
+\end{scope}
+
+\node at (4.5, 1.4) {\Huge $\Rightarrow$};
+
+\begin{scope}[xshift=5.9cm]
+    \tikzsubcaption{(1.8,3.4)}{(b) Bipartido $B(D)$ com $|M|=2$}
+    \node[bip label L, font=\small\bfseries] at (0.0, 3.0) {$V_{\text{out}}$};
+    \node[bip label R, font=\small\bfseries] at (3.6, 3.0) {$V_{\text{in}}$};
+
+    \foreach \i/\y in {1/2.4, 2/1.6, 3/0.8, 4/0.0} {
+        \node[bip L, minimum size=6.5mm, font=\footnotesize] (lo\i) at (0.0, \y) {$\i_{\text{out}}$};
+        \node[bip R, minimum size=6.5mm, font=\footnotesize] (ri\i) at (3.6, \y) {$\i_{\text{in}}$};
+    }
+
+    \draw[match edge] (lo1) -- (ri2);
+    \draw[unmatch edge, dashed] (lo1) -- (ri4);
+    \draw[unmatch edge, dashed] (lo3) -- (ri2);
+    \draw[match edge] (lo2) -- (ri4);
+\end{scope}
+\end{tikzpicture}
+\caption{Redução da Cobertura Mínima por Caminhos Disjuntos em DAG para Emparelhamento Bipartido Máximo. Em (b), cada aresta do emparelhamento $M = \{\{1_{\text{out}}, 2_{\text{in}}\}, \{2_{\text{out}}, 4_{\text{in}}\}\}$ corresponde a um arco que concatena vértices no DAG (a), gerando $|V| - |M| = 4 - 2 = 2$ caminhos disjuntos.}
+\label{fig:dag_path_cover}
+\end{figure}
+
+\begin{teorema}[Cobertura Mínima por Caminhos Disjuntos em DAG][teo:dag_path_cover]
+Em qualquer digrafo acíclico $D = (V, A)$, a quantidade mínima $k^*$ de caminhos direcionados disjuntos em vértices que cobrem $V$ é dada por~\cite{korte2018combinatorial, cook1998combinatorial}:
+\begin{equation}
+    k^* = |V| - \nu\bigl(B(D)\bigr),
+\end{equation}
+onde $\nu(B(D))$ denota a cardinalidade de um emparelhamento máximo no grafo bipartido dividido $B(D)$.
+\end{teorema}
+
+\begin{demonstracao}
+Seja $M \subseteq E_B$ um emparelhamento qualquer em $B(D)$, e defina o conjunto de arcos correspondente $A_M \coloneqq \{(u, v) \in A \mid \{u_{\text{out}}, v_{\text{in}}\} \in M\}$. Como cada $u_{\text{out}}$ incide em no máximo uma aresta de $M$ e cada $v_{\text{in}}$ incide em no máximo uma aresta de $M$, todo vértice $v \in V$ possui grau de saída no máximo $1$ e grau de entrada no máximo $1$ no subgrafo gerador $H = (V, A_M)$. Como $D$ é acíclico, $H$ não contém ciclos direcionados; logo cada componente conexa de $H$ é um caminho direcionado simples.
+
+Iniciando com $|V|$ caminhos triviais (quando $M = \emptyset$), cada arco inserido em $A_M$ conecta o extremo final de um caminho ao extremo inicial de outro caminho distinto, reduzindo em exatamente $1$ o número de componentes conexas. Assim, $H$ compõe-se de exatamente $|V| - |M|$ caminhos disjuntos em vértices cobrindo $V$.
+
+Reciprocamente, dada qualquer partição de $V$ em $k$ caminhos disjuntos $P_1, \dots, P_k$, a união dos arcos pertencentes a esses caminhos forma um conjunto $A_P$ com $|A_P| = |V| - k$ tal que cada vértice tem no máximo um arco entrante e um arco sainte em $A_P$, induzindo um emparelhamento $M_P$ em $B(D)$ de tamanho $|V| - k$. Portanto, minimizar $k$ equivale a maximizar $|M|$ em $B(D)$.
+\end{demonstracao}
+
+Quando os caminhos podem compartilhar vértices (equivalente à partição de um \textit{poset} em cadeias), substitui-se $D$ pelo seu \textbf{fecho transitivo} $D^* = (V, A^*)$, no qual $(u, v) \in A^*$ sempre que existe caminho não trivial de $u$ até $v$ em $D$ (ou $u \prec v$ no \textit{poset}). Qualquer cadeia em $D^*$ corresponde a um caminho não necessariamente disjunto em $D$ obtido por atalhos transitivos. O teorema de Dilworth~\cite{dilworth1950decomposition} caracteriza exatamente essa cobertura via dualidade de König.
+
+\begin{teorema}[Teorema de Dilworth, 1950][teo:dilworth]
+Em todo conjunto parcialmente ordenado finito $(P, \preceq)$, o número mínimo de cadeias que particionam (ou cobrem) $P$ é igual à cardinalidade máxima de uma anticadeia em $(P, \preceq)$~\cite{dilworth1950decomposition, schrijver2003combinatorial}.
+\end{teorema}
+
+\intuicao{Dualidade entre Cadeias e Anticadeias} Dois elementos de uma mesma anticadeia são incomparáveis e jamais podem integrar a mesma cadeia, donde o número mínimo de cadeias é pelo menos o tamanho da maior anticadeia. Aplicando o Teorema de König ao bipartido do fecho transitivo, os vértices que permanecem completamente fora da cobertura mínima de vértices formam uma anticadeia cuja cardinalidade iguala a cobertura mínima por caminhos.
+
+\begin{demonstracao}
+Seja $\alpha_{\text{anti}}$ o tamanho máximo de uma anticadeia e $\kappa$ o número mínimo de cadeias que cobrem $P$. Como nenhuma cadeia contém dois elementos distintos de uma mesma anticadeia, vale trivialmente $\kappa \ge \alpha_{\text{anti}}$.
+
+Para provar $\kappa \le \alpha_{\text{anti}}$, represente a ordem estrita $\prec$ pelo DAG transitivamente fechado $D^* = (P, A^*)$, onde $(u, v) \in A^* \iff u \prec v$. Toda coleção de caminhos disjuntos em $D^*$ define uma partição de $P$ em cadeias; pelo Teorema~\ref{teo:dag_path_cover}, vale $\kappa \le |P| - \nu(B(D^*))$ (de fato $\kappa = |P| - \nu(B(D^*))$, pois toda cadeia contém uma subcadeia disjunta após remover duplicatas).
+
+Pelo Teorema de König (Teorema~\ref{teo:konig}) aplicado a $B(D^*) = (P_{\text{out}} \cup P_{\text{in}}, E_{B^*})$, existe uma cobertura mínima de vértices $C \subseteq P_{\text{out}} \cup P_{\text{in}}$ com $|C| = \nu(B(D^*))$. Defina o conjunto de elementos não tocados por $C$:
+\begin{equation*}
+    I \coloneqq \bigl\{ v \in P \mid v_{\text{out}} \notin C \text{ e } v_{\text{in}} \notin C \bigr\}.
+\end{equation*}
+Cada elemento $v \in P \setminus I$ contribui com pelo menos um vértice em $C$ (seja $v_{\text{out}}$, $v_{\text{in}}$ ou ambos), logo $|P \setminus I| \le |C|$, isto é:
+\begin{equation*}
+    |I| \ge |P| - |C| = |P| - \nu\bigl(B(D^*)\bigr) \ge \kappa.
+\end{equation*}
+Resta verificar que $I$ é uma anticadeia. Se existissem $u, v \in I$ comparáveis, digamos $u \prec v$, então $(u, v) \in A^*$ e a aresta $\{u_{\text{out}}, v_{\text{in}}\}$ pertenceria a $E_{B^*}$; entretanto, nem $u_{\text{out}}$ nem $v_{\text{in}}$ estão em $C$, contradizendo o fato de $C$ cobrir todas as arestas de $B(D^*)$. Logo $I$ é uma anticadeia com $|I| \ge \kappa$, concluindo que $\alpha_{\text{anti}} \ge |I| \ge \kappa$, portanto $\kappa = \alpha_{\text{anti}}$.
+\end{demonstracao}
+
+\implicacoes{e Complexidade} Para cobertura por caminhos disjuntos em DAGs esparsos, a aplicação de \lstinline{HopcroftKarp}~\cite{hopcroft1973n52} sobre $B(D)$ resolve o problema em tempo $\mathcal{O}(|A| \sqrt{|V|})$. Para a partição mínima em cadeias de um \textit{poset} ou cobertura não disjunta, o cômputo prévio do fecho transitivo $D^*$ em $\mathcal{O}(|V| \cdot |A|)$ seguido de \lstinline{HopcroftKarp} opera em $\mathcal{O}(|V|^{5/2})$, e o corte residual de König constrói explicitamente a anticadeia testemunha $I$ em $\mathcal{O}(|V| + |A^*|)$.
+
+
+\section{Custos Convexos por Partes em Fluxo de Custo Mínimo}\label{sec:custos_convexos}
+
+No modelo padrão de Fluxo de Custo Mínimo, o custo de transportar $x$ unidades por um arco $a$ cresce linearmente como $w(a) \cdot x$. Em redes sujeitas a congestionamento, penalidades de desvio ou custos quadráticos, o custo marginal por unidade adicional de fluxo torna-se crescente.
+
+\begin{definicao}[Custo Convexo por Partes Discreto][def:custo_convexo]
+Seja $D = (V, A)$ uma rede de fluxo com capacidades inteiras $c(a) \in \mathbb{Z}_{\ge 1}$ e demandas nodais $b: V \to \mathbb{Z}$. Uma função custo $g_a: \{0, 1, \dots, c(a)\} \to \mathbb{Z}$ associada ao arco $a \in A$ é \textbf{convexa discreta} se $g_a(0) = 0$ e seus custos marginais $\Delta_a(k) \coloneqq g_a(k) - g_a(k - 1)$ são não decrescentes:
+\begin{equation}
+    \Delta_a(1) \le \Delta_a(2) \le \dots \le \Delta_a\bigl(c(a)\bigr).
+\end{equation}
+Agrupando incrementos iguais em $r_a$ faixas consecutivas de comprimentos inteiros $u_{a,1}, \dots, u_{a,r_a} \ge 1$ ($\sum_{j=1}^{r_a} u_{a,j} = c(a)$) e inclinações estritamente crescentes $w_{a,1} < w_{a,2} < \dots < w_{a,r_a}$, obtém-se uma função linear por partes convexa.
+\end{definicao}
+
+Para reduzir o problema não linear $\min \sum_{a \in A} g_a(f(a))$ ao Fluxo de Custo Mínimo linear padrão, constrói-se o multidigrafo $D' = (V, A')$ substituindo cada arco $a = (u, v) \in A$ por $r_a$ arcos paralelos $a_1, \dots, a_{r_a}$ de $u$ para $v$, onde o $j$-ésimo arco paralelo $a_j$ possui capacidade $u_{a,j}$ e custo unitário linear $w_{a,j}$~\cite{ahuja1993network}.
+
+\begin{teorema}[Linearização Exata de Custos Convexos por Partes][teo:custos_convexos]
+Todo fluxo inteiro de custo mínimo $f'$ na rede expandida $D'$ induz um fluxo inteiro viável $f(a) \coloneqq \sum_{j=1}^{r_a} f'(a_j)$ em $D$ de custo convexo mínimo, satisfazendo:
+\begin{equation}
+    \sum_{a \in A} g_a\bigl(f(a)\bigr) = \sum_{a \in A} \sum_{j=1}^{r_a} w_{a,j} f'(a_j) = \cost_{D'}(f').
+\end{equation}
+\end{teorema}
+
+\intuicao{Saturação por Ordem Crescente de Custo Marginal} Como os arcos paralelos de um mesmo par $(u, v)$ concorrem exatamente pela mesma função de oferta e demanda entre $u$ e $v$, qualquer roteamento ótimo preenche integralmente os segmentos de menor inclinação $w_{a,1}, w_{a,2}, \dots$ antes de enviar fluxo pelos trechos mais caros. Essa ordem de preenchimento reproduz fielmente os incrementos marginais de $g_a$.
+
+\begin{demonstracao}
+Todo fluxo viável $f$ em $D$ com $0 \le f(a) \le c(a)$ admite uma representação sequencial $f'_{\text{ord}}$ em $D'$ saturando ordenadamente os segmentos de $1$ até $r_a$ até atingir a soma $f(a)$, cujo custo linear em $D'$ coincide exatamente com $\sum_{a \in A} g_a(f(a))$ pela soma telescópica dos incrementos marginais. Assim, $\min_{f'} \cost_{D'}(f') \le \min_f \sum_{a \in A} g_a(f(a))$.
+
+Reciprocamente, seja $f'$ um fluxo inteiro viável de custo mínimo em $D'$ e defina $f(a) \coloneqq \sum_{j=1}^{r_a} f'(a_j)$. Suponha, por absurdo, que para algum arco $a \in A$ existam índices $1 \le i < j \le r_a$ tais que $f'(a_i) < u_{a,i}$ e $f'(a_j) > 0$. Defina $\delta \coloneqq \min\bigl(u_{a,i} - f'(a_i),\, f'(a_j)\bigr) \ge 1$. Como $a_i$ e $a_j$ possuem as mesmas extremidades $(u, v)$, o fluxo modificado $f''$ obtido aumentando $f'(a_i)$ em $\delta$ e reduzindo $f'(a_j)$ em $\delta$ (mantendo os demais arcos inalterados) satisfaz integralmente as restrições de capacidade e a conservação de fluxo em $u$ e $v$. Todavia, seu custo total varia de:
+\begin{equation*}
+    \cost_{D'}(f'') - \cost_{D'}(f') = \delta \cdot (w_{a,i} - w_{a,j}) < 0,
+\end{equation*}
+pois $w_{a,i} < w_{a,j}$ pela convexidade estrita entre faixas. Isso contradiz a otimalidade de $f'$. Logo, para todo $a \in A$, os segmentos $a_1, \dots, a_{r_a}$ encontram-se preenchidos em ordem crescente, implicando $\sum_{j=1}^{r_a} w_{a,j} f'(a_j) = g_a(f(a))$. Somando sobre $a \in A$, conclui-se que $f$ minimiza o custo convexo em $D$ e atinge $\cost_{D'}(f')$.
+\end{demonstracao}
+
+\implicacoes{e Especializações} No caso particular quadrático $g_a(x) = \alpha_a x^2$ ($\alpha_a > 0$), os incrementos marginais valem $\Delta_a(k) = \alpha_a(2k - 1)$ para $k = 1, \dots, c(a)$, decompondo o arco em $c(a)$ arcos unitários paralelos de custos $\alpha_a, 3\alpha_a, 5\alpha_a, \dots, (2c(a) - 1)\alpha_a$. Em aplicações com funções quadráticas sobre graus ou frequências em grafos esparsos, essa técnica penaliza o acúmulo desbalanceado de carga. Sob implementação com \lstinline{SuccessiveShortestDijkstra}, quando $c(a)$ é elevado mas o fluxo total esperado $F$ é moderado, os arcos paralelos sucessivos de cada feixe podem ser inseridos sob demanda (\textit{lazy expansion}) apenas após a saturação do segmento imediatamente anterior, limitando o tamanho ativo da rede a $\mathcal{O}(|A| + F)$.

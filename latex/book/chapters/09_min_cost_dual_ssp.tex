@@ -1,0 +1,137 @@
+% =========================================================================
+% MÉTODOS DUAIS E PRIMAL-DUAIS: CAMINHOS DE CUSTO MÍNIMO
+% =========================================================================
+\chapter{Métodos Duais e Primal-Duais: Caminhos de Custo Mínimo}\label{sec:mcf_dual}
+
+O algoritmo \textit{Successive Shortest Path} (SSP)~\cite{ahuja1993network, schrijver2003combinatorial} adota a estratégia dual: mantém a ausência de ciclos negativos em $D_f$ como invariante contínua e aumenta o fluxo líquido por caminhos de menor custo até atingir a viabilidade.
+
+\section{Invariante Dual e Aumentos Sucessivos (Successive Shortest Path)}\label{sec:ssp}
+
+Partindo do fluxo nulo ($f \equiv 0$), o digrafo residual inicial $D_0$ não possui ciclos negativos (assumindo custos iniciais não negativos em ciclos).
+
+A cada iteração:
+\begin{enumerate}
+    \item Determina-se o caminho simples $P$ de menor custo residual de $s$ a $t$ em $D_f$.
+    \item Calcula-se o gargalo $\delta = \min_{(u,v) \in P} c_f(u,v) > 0$.
+    \item Aumenta-se o fluxo em $\delta$ ao longo de $P$ via \lstinline{push_flow}.
+\end{enumerate}
+
+\paragraph{Preservação da Invariante Dual.}
+O aumento ao longo do caminho de custo mínimo não introduz ciclos de custo negativo em $D_f$. Se um novo ciclo $C$ contivesse arcos reversos $(v,u)$ com $(u,v) \in P$, seu custo residual seria $w_{f'}(v,u) = -w_f(u,v) = d(u) - d(v)$. Como para os demais arcos vale $w_f(x,y) \ge d(y) - d(x)$ pela desigualdade triangular, o custo total do ciclo satisfaz $w_{f'}(C) \ge \sum_C [d(y) - d(x)] = 0$, assegurando a ausência de ciclos negativos.
+
+
+\section{Variante com SPFA}\label{sec:ssp_spfa}
+
+Como arcos reversos adquirem custos negativos $w_f(v,u) = -w(u,v) < 0$, o algoritmo de Dijkstra não pode ser aplicado diretamente sobre $w_f$.
+
+A classe \lstinline{SuccessiveShortest} (Código~\ref{lst:successive_shortest}, Apêndice~\ref{ap:successive_shortest}) utiliza o \textit{Shortest Path Faster Algorithm} (SPFA), variante de Bellman-Ford com fila de vértices relaxados.
+
+Com custo $\mathcal{O}(|V| \cdot |A|)$ por busca e até $F = |f^*|$ aumentos unitários, a complexidade total é:
+\begin{equation}
+    \mathcal{O}(|V| \cdot |A| \cdot F)
+\end{equation}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[scale=1.05, thick]
+\begin{scope}[xshift=0cm]
+  \tikzsubcaption{(2.5,2.8)}{(a) Grafo residual com arco reverso negativo}
+  \node[source node] (s) at (0, 1.0) {$s$};
+  \node[flow node] (u) at (2.5, 2.0) {$u$};
+  \node[flow node] (v) at (2.5, 0.0) {$v$};
+  \node[sink node] (t) at (5.0, 1.0) {$t$};
+
+  \draw[flow edge] (s) -- node[edge lbl below, pos=0.45] {$w_f\!=\!1$} (v);
+  \draw[flow edge] (v) -- node[edge lbl below] {$w_f\!=\!2$} (t);
+  \draw[flow edge] (u) -- node[edge lbl right] {$w_f\!=\!3$} (t);
+  \draw[rev edge, line width=1.4pt] (u) -- node[edge lbl left, text=red!80!black] {$w_f\!=\!{-4}$} (v);
+  \draw[flow edge, dashed, gray] (s) -- (u);
+
+  \node[font=\footnotesize, align=center, below=5pt] at (2.5,-0.7) {Arco reverso $u \to v$ com $w_f = -4 < 0$};
+\end{scope}
+
+\begin{scope}[xshift=7.5cm]
+  \tikzsubcaption{(2.5,2.8)}{(b) Dinâmica da fila SPFA}
+  \node[source node] (s2) at (0, 1.0) {$s$};
+  \node[active node] (u2) at (2.5, 2.0) {$u$};
+  \node[active node] (v2) at (2.5, 0.0) {$v$};
+  \node[sink node] (t2) at (5.0, 1.0) {$t$};
+
+  \draw[tree edge] (s2) -- node[edge lbl above, pos=0.45, text=blue!80!black] {$d(u)\!=\!2$} (u2);
+  \draw[flow edge] (s2) -- node[edge lbl below, pos=0.45] {$d(v)\!=\!1$} (v2);
+  \draw[sat edge, line width=1.5pt] (u2) -- node[edge lbl left, text=red!80!black] {$w_f\!=\!{-4}$} (v2);
+  \draw[flow edge] (v2) -- node[edge lbl below] {$d(t)\!=\!1$} (t2);
+
+  \node[font=\footnotesize, align=center, below=5pt] at (2.5,-0.7) {Relaxação: $d(v)$ reduz de $1$ para $2 - 4 = -2$\\Vértice $v$ é reinserido na fila};
+\end{scope}
+\end{tikzpicture}
+\caption{Mecânica do SPFA em caminhos aumentantes de custo mínimo: relaxação de arcos com custo residual negativo.}
+\label{fig:spfa_mcf}
+\end{figure}
+
+
+\section{Variante com Potenciais Nodais e Dijkstra}\label{sec:ssp_dijkstra}
+
+A técnica de potenciais nodais~\cite{edmonds1972theoretical} transforma os custos em valores não negativos $\bar{w}_\pi(u,v) = w(u,v) - \pi(u) + \pi(v) \ge 0$, viabilizando o uso de Dijkstra.
+
+A cada iteração, calculam-se as distâncias mínimas $d(v)$ a partir de $s$ sob $\bar{w}_\pi$. Atualizando $\pi'(v) = \pi(v) - d(v)$, o novo custo reduzido satisfaz:
+\begin{equation}
+    \bar{w}_{\pi'}(u,v) = \bar{w}_\pi(u,v) + d(u) - d(v) \ge 0
+\end{equation}
+Para arcos reversos criados ao longo do caminho de menor custo, vale $d(v) = d(u) + \bar{w}_\pi(u,v)$, de modo que $\bar{w}_{\pi'}(v,u) = -\bar{w}_{\pi'}(u,v) = 0 \ge 0$.
+
+A classe \lstinline{SuccessiveShortestDijkstra} (Código~\ref{lst:successive_shortest_dijkstra}, Apêndice~\ref{ap:successive_shortest_dijkstra}) implementa essa estratégia com complexidade:
+\begin{equation}
+    \mathcal{O}(F \cdot |A| \log |V|)
+\end{equation}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[thick]
+    \node[source node] (s) at (0, 1.5) {$s$};
+    \node[flow node] (u) at (3.5, 3.0) {$u$};
+    \node[flow node] (v) at (3.5, 0.0) {$v$};
+    \node[sink node] (t) at (7.0, 1.5) {$t$};
+
+    \node[font=\footnotesize, blue!80!black, left=3pt] at (s.west) {$\pi(s)\!=\!0$};
+    \node[font=\footnotesize, blue!80!black, above=3pt] at (u.north) {$\pi(u)\!=\!2$};
+    \node[font=\footnotesize, blue!80!black, below=3pt] at (v.south) {$\pi(v)\!=\!1$};
+    \node[font=\footnotesize, blue!80!black, right=3pt] at (t.east) {$\pi(t)\!=\!5$};
+
+    \draw[tree edge] (s) -- node[edge lbl below, text=blue!80!black, pos=0.55] {$c_f\!=\!3, \;\bar{w}\!=\!0$} (u);
+    \draw[tree edge] (u) -- node[edge lbl above, text=blue!80!black, pos=0.5] {$c_f\!=\!2, \;\bar{w}\!=\!0$} (t);
+
+    \draw[flow edge] (s) -- node[edge lbl below, pos=0.5] {$c_f\!=\!4, \;\bar{w}\!=\!1$} (v);
+    \draw[flow edge] (v) -- node[edge lbl below, pos=0.5] {$c_f\!=\!1, \;\bar{w}\!=\!2$} (t);
+    \draw[flow edge] (u) -- node[edge lbl, right=3pt, pos=0.5] {$c_f\!=\!2, \;\bar{w}\!=\!1$} (v);
+
+    \draw[rev edge, bend right=38] (u) to node[edge lbl above, text=red!80!black, pos=0.5] {reverso: $\bar{w}'\!=\!0$} (s);
+\end{tikzpicture}
+\caption{Iteração de \textit{Successive Shortest Path} com potenciais nodais $\pi$. O caminho mais curto possui $\bar{w}_\pi = 0$, e arcos reversos gerados preservam $\bar{w}' = 0 \ge 0$.}
+\label{fig:ssp_iteracao}
+\end{figure}
+
+
+\section{Equivalência com o Algoritmo Húngaro (Kuhn-Munkres)}\label{sec:kuhn_munkres_eq}
+
+O Algoritmo Húngaro~\cite{kuhn1955hungarian, munkres1957algorithms} para o problema de atribuição bipartida ponderada equivale à execução do método \textit{Successive Shortest Path} com potenciais nodais sobre redes unitárias com balanceamento $b(v) \in \{+1, -1\}$.
+
+Sejam $L = \{1, \dots, n\}$ e $R = \{1, \dots, m\}$ ($n \le m$) as partições de um grafo bipartido com matriz de custos $W = (w_{i,j}) \in \mathbb{R}^{n \times m}$. O algoritmo mantém potenciais duais $u_i$ para $i \in L$ e $v_j$ para $j \in R$ que satisfazem a condição de viabilidade dual:
+\begin{equation}
+    u_i + v_j \le w_{i,j}, \quad \forall (i, j) \in L \times R,
+\end{equation}
+com igualdade $u_i + v_j = w_{i,j}$ para todo par $(i, j)$ pertencente ao emparelhamento corrente $M$. A cada fase $i = 1, \dots, n$, constrói-se uma árvore alternante enraizada em $i$ mantendo, para cada coluna não visitada $j \in R$, a folga dual mínima:
+\begin{equation}
+    \text{minv}[j] = \min_{i_0 \in S_L} \bigl(w_{i_0, j} - u_{i_0} - v_j\bigr),
+\end{equation}
+onde $S_L \subseteq L$ denota o conjunto de linhas já incorporadas à árvore alternante. A seleção de $\Delta = \min_{j \notin S_R} \text{minv}[j]$ e a atualização conjunta de $u$, $v$ e $\text{minv}$ determinam o caminho aumentante de menor custo reduzido para a linha $i$ em tempo $\mathcal{O}(m^2)$, sem necessidade de fila de prioridades. Ao final das $n$ fases, obtém-se a atribuição de custo mínimo em tempo $\mathcal{O}(n \cdot m^2) = \mathcal{O}(|V|^3)$.
+
+Na biblioteca deste projeto, a classe \lstinline{KuhnMunkres} (Código~\ref{lst:kuhn_munkres}, Apêndice~\ref{ap:kuhn_munkres}) herda polimorficamente de \lstinline{CostNetwork}: o método \lstinline{extract_assignment_matrix} extrai a matriz de custos da rede $s \to L \to R \to t$, executa o procedimento primal-dual em $\mathcal{O}(|V|^3)$ e materializa os fluxos unitários ótimos nos arcos da rede residual via \lstinline{push_flow}.
+
+
+\section{Comparação entre as Variantes}\label{sec:ssp_comparacao}
+
+\begin{itemize}
+    \item \textbf{SPFA:} Opera diretamente sobre custos residuais sem manter o vetor de potenciais $\pi$, com menor complexidade de código, indicada para redes esparsas com poucos aumentos.
+    \item \textbf{Dijkstra com Potenciais:} Requer a manutenção dos potenciais nodais $\pi$, mas assegura tempo de pior caso $\mathcal{O}(F \cdot |A| \log |V|)$ com fila de prioridades, apresentando menor tempo de CPU em redes densas.
+\end{itemize}

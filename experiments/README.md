@@ -40,14 +40,14 @@ experiments/
 
 ## ⚡ Separação de Escopo: IC vs. Livro (Pós-IC)
 
-Para garantir que os relatórios entregues na Iniciação Científica (`ic.pdf`, `report.pdf`, `monolith.pdf`, `poster.pdf`) permaneçam estritamente fiéis aos 9 algoritmos originais da IC, enquanto o Livro (`book.pdf`) incorpore todas as expansões Pós-IC, os benchmarks são divididos em duas suítes independentes:
+Para garantir que os relatórios entregues na Iniciação Científica (`ic.pdf`, `report.pdf`, `monolith.pdf`, `poster.pdf`) permaneçam **finalizados e congelados** nos 9 algoritmos originais da IC, enquanto o Livro (`book.pdf`) siga em evolução contínua incorporando todas as expansões Pós-IC, os benchmarks são divididos em duas suítes independentes:
 
-1. **Suíte da IC (`make bench-ic` / `(cd experiments && make ic)`):**
+1. **Suíte da IC — 🔒 Congelada (`make bench-ic` / `(cd experiments && make ic)`):**
     - **Fluxo Máximo (5 motores):** `FordFulkerson`, `EdmondsKarp`, `Dinic`, `PushRelabel`, `PushRelabelImproved`.
     - **Custo Mínimo (4 motores):** `CycleCanceling`, `SuccessiveShortest`, `SuccessiveShortestDijkstra`, `NetworkSimplex`.
-    - **Saídas:** `latex/tables/` e `latex/figures/`.
+    - **Saídas:** `latex/tables/` e `latex/figures/` (registro histórico da IC finalizado).
 
-2. **Suíte do Livro / Pós-IC (`make bench-book` / `(cd experiments && make book)`):**
+2. **Suíte do Livro / Pós-IC — 🟢 Evolução Ativa (`make bench-book` / `(cd experiments && make book)`):**
     - **Fluxo Máximo (6 motores):** Inclui o algoritmo **MPM (Malhotra-Kumar-Maheshwari)** em $\mathcal{O}(\|V\|^3)$ nas 40 instâncias DIMACS.
     - **Custo Mínimo (6 motores):** Inclui os algoritmos fortemente polinomiais **`MinimumMeanCycleCanceling`** ($\mathcal{O}(\|V\|^2 \cdot \|A\|^3 \log \|V\|)$) e **`CancelAndTighten`** ($\mathcal{O}(\|V\|^2 \cdot \|A\|^2 \log \|V\|)$) avaliados nas 40 instâncias DIMACS Netgen via `--suite book` (preservando os 4 motores originais congelados em `--suite ic`).
     - **Emparelhamento Bipartido (8 motores):** Compara os algoritmos dedicados **`Kuhn`** e **`HopcroftKarp`** contra os 6 motores gerais de fluxo máximo.
@@ -61,11 +61,11 @@ Para garantir que os relatórios entregues na Iniciação Científica (`ic.pdf`,
 1. **Tempo de CPU (ms):** Mensurado através de `std::chrono::high_resolution_clock` no driver C++, isolando o tempo de leitura de arquivo (I/O) do tempo de resolução algorítmica.
 2. **Número de Operações:** Contagem de aumentações, cancelamentos de ciclos, operações de _push/relabel_ e pivoteamentos no _Network Simplex_.
 3. **Pico de Memória:** Aferição do consumo de memória residente (RSS) para avaliar overhead estrutural.
-4. **Verificação de Corretude:** Comparação cruzada automática do valor ótimo $f^_$ ou $z^_$ entre todos os algoritmos para assegurar integridade dos resultados.
+4. **Verificação de Corretude:** Comparação cruzada automática do valor ótimo $f^*$ ou $z^*$ entre todos os algoritmos para assegurar integridade dos resultados.
 5. **Critério Estatístico:** Cada instância é executada múltiplas vezes (ex: $N=5$ repetições) para cálculo de média e desvio-padrão, com controle de _timeout_ (ex: 60s).
 
 ---
 
 ## 📌 Status e Próximos Passos
 
-O detalhamento das tarefas e o cronograma de implementação deste módulo estão documentados no [**`TODO.md`**](../TODO.md#--to-do-experimentos-e-valida%C3%A7%C3%A3o-experimental).
+O detalhamento das tarefas e o acompanhamento experimental completo estão documentados no [**`TODO.md`**](../TODO.md#-bloco-v-validação-experimental-e-histórico-institucional).

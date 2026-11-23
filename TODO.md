@@ -1,15 +1,21 @@
 # 📋 TO-DO Geral: Problemas de Fluxos em Redes
 
-Documento de acompanhamento integral da pesquisa de Iniciação Científica (UFABC): **"Problemas de Fluxos em Redes: Teoria, Algoritmos e Implementações"**, orientada pela Profa. Dra. Cristiane Maria Sato e conduzida pelo pesquisador Gabriel Frigo.
+Documento de acompanhamento da pesquisa **"Problemas de Fluxos em Redes: Teoria, Algoritmos e Implementações"**, iniciada como Iniciação Científica na UFABC (orientação da Profa. Dra. Cristiane Maria Sato, condução de Gabriel Frigo) e continuada na forma do livro monográfico ([`latex/book.tex`](./latex/book.tex)) e da biblioteca C++23 em [`implementations/`](./implementations/).
+
+> [!IMPORTANT]
+> **Ciclo de Vida do Repositório:**
+>
+> - 🔒 **Iniciação Científica UFABC (`proposal.tex`, `report.tex`, `ic.tex`, `monolith.tex`, `poster.tex`, `latex/sections/`, `latex/tables/`, `latex/figures/`):** **Finalizada e congelada.** Texto, tabelas, figuras e pôster permanecem preservados como registro histórico entregue no Edital 01/2025 PIC/PIBIC. Apenas correções de código nos 9 motores originais da IC continuam sincronizadas automaticamente nos apêndices (`01` a `11`) e no `monolith.tex` via `make sync-code`.
+> - 🟢 **Livro Monográfico (`latex/book.tex`), Biblioteca C++23 e Benchmarks Pós-IC (`make bench-book`):** **Em evolução contínua**, concentrando novos algoritmos, modelagens combinatórias, provas formais e validações em juízes online.
 
 ---
 
 ## 🧭 Sumário de Navegação
 
-- [🏛️ Bloco I: Gestão, Pendências e Roadmap](#-bloco-i-gestão-pendências-e-roadmap)
-    - [👩‍🏫 Direcionamentos da Orientadora (Cristiane Sato)](#-direcionamentos-da-orientadora-cristiane-sato)
-    - [🔧 Pendências Imediatas da IC](#-pendências-imediatas-da-ic)
-    - [🚀 Futuras Expansões (Pós-IC)](#-futuras-expansões-pós-ic)
+- [📖 Bloco I: Roadmap Ativo do Livro (book.tex) & Expansões](#-bloco-i-roadmap-ativo-do-livro-booktex--expansões)
+    - [Arquitetura Editorial do Livro (`book.tex`)](#-arquitetura-editorial-do-livro-booktex)
+    - [Roadmap Editorial e Estrutural do Livro (`book.tex`)](#-roadmap-editorial-e-estrutural-do-livro-booktex)
+    - [Expansões Algorítmicas Concluídas (Pós-IC)](#-expansões-algorítmicas-concluídas-pós-ic)
 - [⚡ Bloco II: Motores de Fluxo em C++23](#-bloco-ii-motores-de-fluxo-em-c23)
     - [Algoritmos de Fluxo Máximo](#-algoritmos-de-fluxo-máximo)
     - [Algoritmos de Fluxo de Custo Mínimo](#-algoritmos-de-fluxo-de-custo-mínimo)
@@ -25,35 +31,49 @@ Documento de acompanhamento integral da pesquisa de Iniciação Científica (UFA
     - [Teoria em Grafos Bipartidos](#-teoria-em-grafos-bipartidos)
     - [Teoremas de Fluxo de Custo Mínimo](#-teoremas-de-fluxo-de-custo-mínimo)
     - [Network Simplex: Estruturas e Mecânicas](#-network-simplex-estruturas-e-mecânicas)
-- [📊 Bloco V: Validação Experimental e Monografia](#-bloco-v-validação-experimental-e-monografia)
+    - [Teoremas de Modelagens Avançadas (Cap. 12)](#-teoremas-de-modelagens-avançadas-cap-12)
+- [📊 Bloco V: Validação Experimental e Histórico Institucional](#-bloco-v-validação-experimental-e-histórico-institucional)
     - [Infraestrutura e Automação de Benchmarks](#-infraestrutura-e-automação-de-benchmarks)
     - [Instâncias e Geradores Sintéticos](#-instâncias-e-geradores-sintéticos)
     - [Baterias Experimentais e Análise de Desempenho](#-baterias-experimentais-e-análise-de-desempenho)
-    - [Livro e Monografia Independente (`book.tex`)](#-livro-e-monografia-independente-booktex)
+    - [Histórico Institucional: Iniciação Científica UFABC (🔒 Finalizado)](#-histórico-institucional-iniciação-científica-ufabc--finalizado)
 
 ---
 
-# 🏛️ Bloco I: Gestão, Pendências e Roadmap
+# 📖 Bloco I: Roadmap Ativo do Livro (`book.tex`) & Expansões
 
-## 👩‍🏫 Direcionamentos da Orientadora (Cristiane Sato)
+## 📚 Arquitetura Editorial do Livro (`book.tex`)
 
-Progresso das tarefas, correções e direcionamentos solicitados pela orientadora (Cristiane Sato) durante as reuniões de acompanhamento da iniciação científica.
+Monografia independente em LaTeX ([`latex/book.tex`](./latex/book.tex)), estruturada em **5 Partes e 14 Capítulos** com 15 motores algorítmicos C++23, modelagens combinatórias genéricas, aplicação em visão computacional e suíte experimental dedicada (`latex/book/tables/`, `latex/book/figures/`):
 
----
-
-## 🔧 Pendências Imediatas da IC
-
-Progresso das etapas finais para conclusão institucional da iniciação científica junto à orientadora e refinamento dos artefatos de entrega.
-
-- ✅ **Auditoria e Revisão de Texto:** Leitura final e refinamento do relatório institucional e monografia em conjunto com a orientadora (Profa. Dra. Cristiane Sato).
-- ✅ **Execução de Benchmarks Locais:** Execução final das baterias de testes na máquina de referência e atualização das tabelas no relatório (`make bench-ic`).
-- ✅ **Pôster Científico Institucional (`latex/poster.tex`):** Conversão e editoração completa do pôster 90×120 cm com galeria visual da segmentação de imagens por corte mínimo e resultados experimentais DIMACS da IC.
+| Parte / Eixo Editorial                                         | Capítulos                                             | Escopo Consolidado                                                                                                           |
+| :------------------------------------------------------------- | :---------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| **Parte I:** Teoria Estrutural e Algoritmos de Fluxo Máximo    | `01_fundamentals` a `04_preflow_push` (Caps. 1–4)     | Definições formais, Dualidade MFMC e Integralidade, Caminhos Aumentantes (FF, EK, Dinic, MPM) e Push-Relabel (FIFO e Gap).   |
+| **Parte II:** Otimização em Grafos Bipartidos e Conectividade  | `05_bipartite_graphs` a `06_connectivity` (5–6)       | Emparelhamento, König, Gallai, Hall, Kuhn, Hopcroft-Karp, Menger, Vertex Splitting e Decomposição Linear.                    |
+| **Parte III:** Fluxo de Custo Mínimo e Otimização Primal-Dual  | `07_min_cost_theory` a `11_min_cost_synthesis` (7–11) | Teoria MCF, Métodos Primais (Klein, MMCC, Cancel-and-Tighten), Métodos Duais (SSP, Kuhn-Munkres), Network Simplex e Síntese. |
+| **Parte IV:** Modelagem, Reduções e Aplicações Práticas        | `12_advanced_modeling` a `13_segmentation` (12–13)    | Fechamento de Peso Máximo, Cotas Inferiores, $b$-Emparelhamentos, DAGs/Dilworth, Custos Convexos e Segmentação de Imagens.   |
+| **Parte V:** Validação Experimental e Engenharia de Desempenho | `14_benchmarks` (Cap. 14) + Apêndices `00`–`18`       | Protocolo com 80 instâncias DIMACS + 18 bipartidas, tabelas, gráficos Pós-IC e listagens C++23 sincronizadas.                |
 
 ---
 
-## 🚀 Futuras Expansões (Pós-IC)
+## 🧭 Roadmap Editorial e Estrutural do Livro (`book.tex`)
 
-Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e integrados exclusivamente ao livro monográfico ([`latex/book.tex`](./latex/book.tex)), mantendo os artefatos institucionais da Iniciação Científica ([`latex/ic.tex`](./latex/ic.tex), [`latex/report.tex`](./latex/report.tex) e [`latex/poster.tex`](./latex/poster.tex)) congelados no escopo original entregue.
+- [x] **Reorganização Arquitetural em 5 Partes:** Deslocar a _Segmentação Interativa de Imagens_ para a Parte IV (**Modelagem, Reduções e Aplicações Práticas**, Cap. 13) antes dos Benchmarks (Parte V, Cap. 14), preservando a continuidade teórica direta entre Conectividade (Cap. 6) e Fluxo de Custo Mínimo (Cap. 7).
+- [x] **Particionamento Didático dos Algoritmos de Custo Mínimo:** Dividir o antigo Cap. 9 em **Métodos Primais de Cancelamento de Ciclos** (Cap. 8: Klein $\to$ MMCC $\to$ Cancel-and-Tighten) e **Métodos Duais e Primal-Duais: Caminhos de Custo Mínimo** (Cap. 9: SSP-SPFA, SSP-Dijkstra e Kuhn-Munkres).
+- [x] **Formalização Genérica de Modelagens Avançadas (Cap. 12):** Redigir [`12_advanced_modeling.tex`](./latex/book/chapters/12_advanced_modeling.tex) cobrindo Fechamento de Peso Máximo (Picard), Circulação e Fluxos com Cotas Inferiores ($l \le f \le c$), $b$-Emparelhamentos e Decomposição Ortogonal, Cobertura Mínima de Caminhos em DAGs / Teorema de Dilworth e Custos Convexos por Partes.
+- [ ] **Implementar e Validar Código para as Modelagens já Formalizadas no Livro (`LaTeX: ✅ | Código: ⏳`):**
+    - Cobertura Mínima de Caminhos em DAG (Disjunta / Transitiva) — validar em POJ 2060 / UVa 1184.
+    - Teorema de Dilworth e Anticadeia Máxima em Posets — validar em POJ 1548 / SPOJ _MDOLLS_.
+    - Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores — validar em LOJ 116 / LOJ 117.
+    - Custos Convexos por Partes em MCF — validar em [CF 863F](https://codeforces.com/problemset/problem/863/F).
+- [ ] **Apêndice de Templates Compactos para Maratona (ICPC):** Criar apêndice com versões enxutas (~60 linhas) de `Dinic` e `MCMF-Dijkstra` voltadas para caderno de competição (_Notebook ICPC_), validadas automaticamente contra os motores OOP de [`flow-network/`](./implementations/flow-network/) e [`cost-network/`](./implementations/cost-network/).
+- [ ] **Expansão de Modelagens de Fronteira (Nível 3):** Formalizar no Cap. 12 e validar em código Redes Expandidas no Tempo, Corte Mínimo Global (Stoer-Wagner) / Árvore de Gomory-Hu, Dualidade Planar ($s$-$t$ Corte Mínimo $\iff$ Caminho Dual), Subgrafo de Densidade Máxima (Goldberg, 1984) e Otimização Paramétrica / Dualidade Linear de MCF.
+
+---
+
+## 🚀 Expansões Algorítmicas Concluídas (Pós-IC)
+
+Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e integrados exclusivamente ao livro monográfico ([`latex/book.tex`](./latex/book.tex)), mantendo os artefatos institucionais da Iniciação Científica congelados no escopo original entregue.
 
 | Algoritmo / Componente                                                                           | Referência Teórica                    |                  Complexidade                   | LaTeX (Livro) | Implementação | Foco e Descrição Técnica                                                                                         |
 | :----------------------------------------------------------------------------------------------- | :------------------------------------ | :---------------------------------------------: | :-----------: | :-----------: | :--------------------------------------------------------------------------------------------------------------- |
@@ -65,8 +85,6 @@ Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e i
 | [**Cancel-and-Tighten**](./implementations/cost-network/CancelAndTighten.hpp)                    | Goldberg & Tarjan (1989)              | $\mathcal{O}(\|V\|^2 \cdot \|A\|^2 \log \|V\|)$ |      ✅       |      ✅       | Escalonamento $\varepsilon$-ótimo combinando cancelamento de ciclos admissíveis e aperto de potenciais nodais.   |
 | [**Harness de Benchmark Bipartido**](./experiments/drivers/bipartite_runner.cpp)                 | Suíte Comparativa Dedicada            |               Benchmark Empírico                |      ✅       |      ✅       | Avaliação empírica: reduções genéricas via `FlowNetwork`/`CostNetwork` vs. algoritmos dedicados bipartidos.      |
 
-### 📋 Tarefas Concluídas (Pós-IC)
-
 - [x] **Kuhn:** Implementar algoritmo de Kuhn em C++23 ([`Kuhn.hpp`](./implementations/flow-network/Kuhn.hpp)) herdando de [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp) para emparelhamento bipartido via caminhos alternantes em $\mathcal{O}(\|V\| \cdot \|E\|)$.
 - [x] **Hopcroft-Karp:** Implementar motor dedicado de emparelhamento bipartido máximo em C++23 ([`HopcroftKarp.hpp`](./implementations/flow-network/HopcroftKarp.hpp)) herdando de [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp) com complexidade $\mathcal{O}(\|E\| \sqrt{\|V\|})$.
 - [x] **Algoritmo Húngaro (Kuhn-Munkres):** Implementar algoritmo Húngaro em C++23 ([`KuhnMunkres.hpp`](./implementations/cost-network/KuhnMunkres.hpp)) herdando de [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp) para problema de atribuição de custo mínimo em $\mathcal{O}(\|V\|^3)$.
@@ -75,21 +93,13 @@ Desenvolvimento algorítmico e pesquisa teórica concluídos na fase Pós-IC e i
 - [x] **Cancel-and-Tighten:** Implementar motor fortemente polinomial de Goldberg-Tarjan em C++23 ([`CancelAndTighten.hpp`](./implementations/cost-network/CancelAndTighten.hpp)) herdando de [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp) com cancelamento de ciclos admissíveis e aperto de potenciais em $\mathcal{O}(\|V\|^2 \cdot \|A\|^2 \log \|V\|)$.
 - [x] **Benchmark Bipartido e Separação IC vs. Livro:** Separar os artefatos experimentais da IC (`latex/tables/`, `latex/figures/`, `make bench-ic`) dos artefatos expandidos do Livro Pós-IC (`latex/book/tables/`, `latex/book/figures/`, `make bench-book`).
 
-### 🧭 Roadmap Editorial e Estrutural do Livro (`book.tex` — Foco Maratona)
-
-- [ ] **Reorganização Arquitetural das Partes:** Deslocar o Capítulo 7 (Segmentação Interativa de Imagens) para uma Parte final dedicada a **Aplicações e Modelagens**, preservando a continuidade teórica direta entre Conectividade (Cap. 6) e Fluxo de Custo Mínimo (Cap. 8).
-- [ ] **Particionamento Didático do Capítulo 9:** Dividir os algoritmos de Fluxo de Custo Mínimo em dois capítulos coesos: **Métodos Primais de Cancelamento de Ciclos** (Klein $\to$ MMCC $\to$ Cancel-and-Tighten) e **Métodos Duais e Primal-Duais** (SSP-SPFA, SSP-Dijkstra e Kuhn-Munkres).
-- [ ] **Expansão do Capítulo 11 com Reduções de Custo:** Integrar reduções avançadas de custo mínimo (circulação com cotas inferiores, custos convexos por partes e dualidade linear em diferenças de potencial) junto à transformação Min-Cost Max-Flow.
-- [ ] **Formalização Teórica dos Problemas Avançados Resolvidos:** Redigir no livro as seções formais e provas das modelagens que já possuem solução validada em código no repositório ([`petya-and-graph`](./implementations/problems/max-flow/petya-and-graph/main.cpp) para Fecho de Peso Máximo; [`red-blue-graph`](./implementations/problems/min-cost-flow/red-blue-graph/main.cpp) para Circulação com Cotas Inferiores; [`array-and-operations`](./implementations/problems/max-flow/array-and-operations/main.cpp) para Grafos Aritméticos por Fatores Primos).
-- [ ] **Apêndice de Templates Compactos para Maratona (ICPC):** Criar apêndice com versões enxutas (~60 linhas) de `Dinic` e `MCMF-Dijkstra` voltadas para caderno de competição (_Notebook ICPC_), validadas automaticamente contra os motores OOP de [`flow-network/`](./implementations/flow-network/) e [`cost-network/`](./implementations/cost-network/).
-
 ---
 
 # ⚡ Bloco II: Motores de Fluxo em C++23
 
 ## ⚡ Algoritmos de Fluxo Máximo
 
-Progresso dos algoritmos de fluxo máximo implementados em C++ e documentados no [LaTeX](./latex/book.tex). O código-fonte de cada algoritmo pode ser encontrado no diretório de [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp).
+Progresso dos algoritmos de fluxo máximo implementados em C++ e documentados no [Livro](./latex/book.tex). O código-fonte de cada algoritmo pode ser encontrado no diretório de [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`FlowNetwork`](./implementations/flow-network/FlowNetwork.hpp).
 
 | Nome                                                                            | LaTeX | Implementação | Descrição                                                                                                                            |
 | :------------------------------------------------------------------------------ | :---: | :-----------: | :----------------------------------------------------------------------------------------------------------------------------------- |
@@ -106,7 +116,7 @@ Progresso dos algoritmos de fluxo máximo implementados em C++ e documentados no
 
 ## 🧮 Algoritmos de Fluxo de Custo Mínimo
 
-Progresso dos algoritmos de fluxo de custo mínimo documentados no [LaTeX](./latex/book.tex) e implementados no diretório [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp).
+Progresso dos algoritmos de fluxo de custo mínimo documentados no [Livro](./latex/book.tex) e implementados no diretório [Implementações](./implementations/README.md), onde cada algoritmo herda da classe base abstrata [`CostNetwork`](./implementations/cost-network/CostNetwork.hpp).
 
 | Nome                                                                                            | LaTeX | Implementação | Descrição                                                                                                                                                            |
 | :---------------------------------------------------------------------------------------------- | :---: | :-----------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -124,7 +134,7 @@ Progresso dos algoritmos de fluxo de custo mínimo documentados no [LaTeX](./lat
 
 ## 🛠️ Mecânicas e Técnicas de Redução
 
-Progresso dos conceitos, mecânicas e reduções de rede documentadas no [LaTeX](./latex/ic.tex) e validadas nas soluções em C++.
+Progresso dos conceitos, mecânicas e reduções de rede documentadas no [Livro](./latex/book.tex) e validadas nas soluções em C++.
 
 ### Estruturas e Mecânicas de Busca
 
@@ -171,43 +181,44 @@ Progresso dos conceitos, mecânicas e reduções de rede documentadas no [LaTeX]
 
 ### Modelagens Avançadas de Fluxo
 
-| Técnica de Modelagem                                            | LaTeX | Implementação | Foco e Aplicação Prática                                                                                    |
-| :-------------------------------------------------------------- | :---: | :-----------: | :---------------------------------------------------------------------------------------------------------- |
-| **Fechamento de Peso Máximo (_Project Selection_)**             |  ✅   |      ✅       | Seleção de projetos com dependências e lucros/custos reduzida ao corte mínimo $s-t$ (validação: CF 1082G).  |
-| **Circulação com Demandas e Limites ($l \le f \le c$)**         |  ✅   |      ✅       | Atendimento de demandas nodais $b(v)$ e capacidades mínimas via nós de compensação (validação: CF 1288F).   |
-| **Cobertura Mínima de Caminhos em DAG (Disjunta / Transitiva)** |  ⏳   |      ⏳       | Partição mínima de vértices de um DAG em caminhos via redução bipartida de Hopcroft-Karp.                   |
-| **Teorema de Dilworth e Anticadeia Máxima em Posets**           |  ⏳   |      ⏳       | Dualidade entre cardinalidade da maior anticadeia e cobertura mínima por cadeias em conjuntos ordenados.    |
-| **Custos Convexos por Partes em MCF (_Convex Cost Flow_)**      |  ⏳   |      ⏳       | Discretização de funções de custo convexas inteiras via múltiplos arcos paralelos de custo marginal.        |
-| **Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores**          |  ⏳   |      ⏳       | Viabilidade por arco de retorno $(t, s, \infty)$ acoplada à maximização ou minimização residual.            |
-| **Redes Expandidas no Tempo (_Time-Expanded Networks_)**        |  ⏳   |      ⏳       | Roteamento dinâmico multi-período por replicação temporal de camadas $V \times \{0, \dots, T\}$.            |
-| **Corte Mínimo Global (Stoer-Wagner) e Árvore de Gomory-Hu**    |  ⏳   |      ⏳       | Estrutura compacta de $\|V\| - 1$ cortes equivalentes para consultas par-a-par e corte global não-dirigido. |
-| **Dualidade Planar ($s$-$t$ Corte Mínimo $\iff$ Caminho Dual)** |  ⏳   |      ⏳       | Redução do corte mínimo em grafos planares $s$-$t$ ao caminho mínimo de Dijkstra no digrafo dual.           |
-| **Subgrafo de Densidade Máxima (_Maximum Density Subgraph_)**   |  ⏳   |      ⏳       | Busca binária paramétrica acoplada ao corte mínimo $s$-$t$ (algoritmo de Goldberg, 1984).                   |
+| Técnica de Modelagem                                             | LaTeX (Cap. 12) | Implementação | Foco e Aplicação Prática                                                                                                 |
+| :--------------------------------------------------------------- | :-------------: | :-----------: | :----------------------------------------------------------------------------------------------------------------------- |
+| **Fechamento de Peso Máximo (Redução de Picard)**                |       ✅        |      ✅       | Seleção de projetos com dependências e subgrafo induzido de peso máximo via corte mínimo $s-t$ (CF 1082G).               |
+| **Circulação com Demandas e Cotas Inferiores ($l \le f \le c$)** |       ✅        |      ✅       | Atendimento de demandas $b(v)$ e capacidades mínimas via compensação $s^* / t^*$ (CF 1288F e CF 843E).                   |
+| **$b$-Emparelhamentos Capacitados e Decomposição Ortogonal**     |       ✅        |      ✅       | Multiplicidades nodais com expansão unitária e particionamento em atributos disjuntos / fatores primos (CF 498C).        |
+| **Cobertura Mínima de Caminhos em DAG (Disjunta / Transitiva)**  |       ✅        |      ⏳       | Partição mínima de vértices de um DAG em caminhos via bipartido dividido $B(D)$ e `HopcroftKarp` (código pendente).      |
+| **Teorema de Dilworth e Anticadeia Máxima em Posets**            |       ✅        |      ⏳       | Dualidade entre cadeias e anticadeias via König no fecho transitivo $B(D^*)$ (código pendente).                          |
+| **Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores**           |       ✅        |      ⏳       | Viabilidade por arco de retorno $(t, s, \infty)$ acoplada à maximização/minimização residual (código dedicado pendente). |
+| **Custos Convexos por Partes em MCF (_Convex Cost Flow_)**       |       ✅        |      ⏳       | Linearização por múltiplos arcos paralelos de custo marginal crescente (código pendente).                                |
+| **Redes Expandidas no Tempo (_Time-Expanded Networks_)**         |       ⏳        |      ⏳       | Roteamento dinâmico multi-período por replicação temporal de camadas $V \times \{0, \dots, T\}$.                         |
+| **Corte Mínimo Global (Stoer-Wagner) e Árvore de Gomory-Hu**     |       ⏳        |      ⏳       | Estrutura compacta de $\|V\| - 1$ cortes equivalentes para consultas par-a-par e corte global não-dirigido.              |
+| **Dualidade Planar ($s$-$t$ Corte Mínimo $\iff$ Caminho Dual)**  |       ⏳        |      ⏳       | Redução do corte mínimo em grafos planares $s$-$t$ ao caminho mínimo de Dijkstra no digrafo dual.                        |
+| **Subgrafo de Densidade Máxima (_Maximum Density Subgraph_)**    |       ⏳        |      ⏳       | Busca binária paramétrica acoplada ao corte mínimo $s$-$t$ (algoritmo de Goldberg, 1984).                                |
 
 ---
 
 ## 🖼️ Aplicação Prática: Segmentação de Imagens
 
-Software e pipeline de visão computacional desenvolvido em C++23 que emprega corte mínimo $s-t$ para segmentação binária de imagens (primeiro plano vs. fundo). O código reside em [`applications/image-segmentation/`](./applications/image-segmentation/).
+Software e pipeline de visão computacional desenvolvido em C++23 que emprega corte mínimo $s-t$ para segmentação binária de imagens (primeiro plano vs. fundo), documentado no **Capítulo 13** do Livro ([`13_segmentation.tex`](./latex/book/chapters/13_segmentation.tex)) e implementado em [`applications/image-segmentation/`](./applications/image-segmentation/).
 
-| Módulo / Componente                                                                        | LaTeX | Implementação | Descrição                                                                                                  |
-| :----------------------------------------------------------------------------------------- | :---: | :-----------: | :--------------------------------------------------------------------------------------------------------- |
-| [Segmentação de Imagens (Max Flow / Min Cut)](./applications/image-segmentation/README.md) |  ✅   |      ✅       | Software para separar foreground/background em fotografias utilizando modelagem de corte mínimo em grafos. |
-| [Parser e Manipulador de Imagens PPM](./applications/image-segmentation/ppm.cpp)           |  ✅   |      ✅       | Leitor e escritor de imagens em formato Portable Pixmap (`.ppm`) sem dependências externas.                |
-| [Parser de Sementes (_Seeds_)](./applications/image-segmentation/seeds.cpp)                |  ✅   |      ✅       | Mapeador de pistas interativas do usuário para nós de super-fonte ($s$) e super-sumidouro ($t$).           |
-| [Pipeline Principal de Segmentação](./applications/image-segmentation/main.cpp)            |  ✅   |      ✅       | Construção da rede em grade 2D, resolução via `FlowNetwork` e escrita da máscara de saída.                 |
+| Módulo / Componente                                                                        | LaTeX (Cap. 13) | Implementação | Descrição                                                                                                  |
+| :----------------------------------------------------------------------------------------- | :-------------: | :-----------: | :--------------------------------------------------------------------------------------------------------- |
+| [Segmentação de Imagens (Max Flow / Min Cut)](./applications/image-segmentation/README.md) |       ✅        |      ✅       | Software para separar foreground/background em fotografias utilizando modelagem de corte mínimo em grafos. |
+| [Parser e Manipulador de Imagens PPM](./applications/image-segmentation/ppm.cpp)           |       ✅        |      ✅       | Leitor e escritor de imagens em formato Portable Pixmap (`.ppm`) sem dependências externas.                |
+| [Parser de Sementes (_Seeds_)](./applications/image-segmentation/seeds.cpp)                |       ✅        |      ✅       | Mapeador de pistas interativas do usuário para nós de super-fonte ($s$) e super-sumidouro ($t$).           |
+| [Pipeline Principal de Segmentação](./applications/image-segmentation/main.cpp)            |       ✅        |      ✅       | Construção da rede em grade 2D, resolução via `FlowNetwork` e escrita da máscara de saída.                 |
 
 ---
 
 ## 💻 Validação em Juízes Online: Problemas Resolvidos
 
-A suíte de problemas clássicos implementada no repositório valida todas as reduções teóricas implementadas em motores de fluxo. Cada problema possui código autocontido, testes e Makefile dedicado em [`implementations/problems/`](./implementations/problems/).
+A suíte de problemas clássicos implementada no repositório valida as reduções teóricas implementadas nos motores de fluxo. Cada problema possui código autocontido, testes e Makefile dedicado em [`implementations/problems/`](./implementations/problems/).
 
 ### ⚡ Problemas de Fluxo Máximo
 
 | Problema            | Juiz Online                                                                       | Código Local                                                               | Técnica de Fluxo Empregada                                    |
 | :------------------ | :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------------------------------------ |
-| **Download Speed**  | [CSES 1694](https://cses.fi/problemset/task/1694)                                 | [`main.cpp`](./implementations/problems/max-flow/download-speed/main.cpp)  | $s-t$ Fluxo Máximo canônico sobre rede residual.              |
+| **Download Speed**  | [CSES 1694](https://cses.fi/problemset/task/1694)                                 | [`main.cpp`](./implementations/problems/max-flow/download-speed/main.cpp)  | $s-t$ Fluxo Máximo sobre rede residual.                       |
 | **Police Chase**    | [CSES 1695](https://cses.fi/problemset/task/1695)                                 | [`main.cpp`](./implementations/problems/max-flow/police-chase/main.cpp)    | Corte Mínimo $s-t$ (Max-Flow Min-Cut) em arcos bidirecionais. |
 | **Time Travel**     | [Beecrowd 2082](https://judge.beecrowd.com/en/problems/view/2082)                 | [`main.cpp`](./implementations/problems/max-flow/time-travel/main.cpp)     | Corte Mínimo Global via fixação iterativa de fontes.          |
 | **School Dance**    | [CSES 1696](https://cses.fi/problemset/task/1696)                                 | [`main.cpp`](./implementations/problems/max-flow/school-dance/main.cpp)    | Emparelhamento Máximo Bipartido via capacidades unitárias.    |
@@ -222,7 +233,7 @@ A suíte de problemas clássicos implementada no repositório valida todas as re
 | **Parcel Delivery**      | [CSES 2121](https://cses.fi/problemset/task/2121)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/parcel-delivery/main.cpp)    | Fluxo de Custo Mínimo com Demanda Exata $k$.               |
 | **Task Assignment**      | [CSES 2129](https://cses.fi/problemset/task/2129)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/task-assignment/main.cpp)    | Atribuição Bipartida de Custo Mínimo (Assignment Problem). |
 | **Distinct Routes II**   | [CSES 2130](https://cses.fi/problemset/task/2130)                                 | [`main.cpp`](./implementations/problems/min-cost-flow/distinct-routes-ii/main.cpp) | Min-Cost $k$-Disjoint Paths e decomposição de caminhos.    |
-| **Edição de Rede (MCF)** | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./implementations/problems/min-cost-flow/network-editing/main.cpp)    | Otimização de Custos de Topologia com Min Cost Flow.       |
+| **Edição de Rede (MCF)** | [CF Gym 106679E](https://codeforces.com/gym/106679/problem/E) (Maratona SBC 2026) | [`main.cpp`](./implementations/problems/min-cost-flow/network-editing/main.cpp)    | Otimização de Custos com Min Cost Flow.                    |
 
 ---
 
@@ -230,40 +241,40 @@ A suíte de problemas clássicos implementada no repositório valida todas as re
 
 Problemas selecionados para validação avançada de técnicas específicas de modelagem de fluxo:
 
-| Problema                                                                | Plataforma / ID                                                      | Código Local                                                                    | Técnica de Fluxo Alvo                                           |    Status    |
-| :---------------------------------------------------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------ | :-------------------------------------------------------------- | :----------: |
-| [Fast Maximum Flow](https://www.spoj.com/problems/FASTFLOW/)            | [SPOJ FASTFLOW](https://www.spoj.com/problems/FASTFLOW/)             | [`main.cpp`](./implementations/problems/max-flow/fast-maximum-flow/main.cpp)    | Benchmark extremo de vazão em digrafos densos e esparsos.       | ✅ Resolvido |
-| [Petya and Graph](https://codeforces.com/problemset/problem/1082/G)     | [Codeforces 1082G](https://codeforces.com/problemset/problem/1082/G) | [`main.cpp`](./implementations/problems/max-flow/petya-and-graph/main.cpp)      | Fechamento de Peso Máximo (_Project Selection_) via Min-Cut.    | ✅ Resolvido |
-| [Array and Operations](https://codeforces.com/problemset/problem/498/C) | [Codeforces 498C](https://codeforces.com/problemset/problem/498/C)   | [`main.cpp`](./implementations/problems/max-flow/array-and-operations/main.cpp) | Emparelhamento Bipartido Máximo indexado por fatores primos.    | ✅ Resolvido |
-| [Maximum Flow](https://codeforces.com/problemset/problem/843/E)         | [Codeforces 843E](https://codeforces.com/problemset/problem/843/E)   | [`main.cpp`](./implementations/problems/max-flow/maximum-flow/main.cpp)         | Reconstrução de capacidades compatíveis a partir de corte.      | ✅ Resolvido |
-| [Red-Blue Graph](https://codeforces.com/contest/1288/problem/f)         | [Codeforces 1288F](https://codeforces.com/contest/1288/problem/f)    | [`main.cpp`](./implementations/problems/min-cost-flow/red-blue-graph/main.cpp)  | Circulação com Demandas e Limites Inferiores ($l \le f \le c$). | ✅ Resolvido |
+| Problema                                                                | Plataforma / ID                                                      | Código Local                                                                    | Técnica de Fluxo Alvo                                             |    Status    |
+| :---------------------------------------------------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------ | :---------------------------------------------------------------- | :----------: |
+| [Fast Maximum Flow](https://www.spoj.com/problems/FASTFLOW/)            | [SPOJ FASTFLOW](https://www.spoj.com/problems/FASTFLOW/)             | [`main.cpp`](./implementations/problems/max-flow/fast-maximum-flow/main.cpp)    | Benchmark extremo de vazão em digrafos densos e esparsos.         | ✅ Resolvido |
+| [Petya and Graph](https://codeforces.com/problemset/problem/1082/G)     | [Codeforces 1082G](https://codeforces.com/problemset/problem/1082/G) | [`main.cpp`](./implementations/problems/max-flow/petya-and-graph/main.cpp)      | Fechamento de Peso Máximo (Redução de Picard) via Min-Cut.        | ✅ Resolvido |
+| [Array and Operations](https://codeforces.com/problemset/problem/498/C) | [Codeforces 498C](https://codeforces.com/problemset/problem/498/C)   | [`main.cpp`](./implementations/problems/max-flow/array-and-operations/main.cpp) | Decomposição ortogonal por fatores primos ($b$-emparelhamento).   | ✅ Resolvido |
+| [Maximum Flow](https://codeforces.com/problemset/problem/843/E)         | [Codeforces 843E](https://codeforces.com/problemset/problem/843/E)   | [`main.cpp`](./implementations/problems/max-flow/maximum-flow/main.cpp)         | Corte mínimo + circulação com cotas inferiores ($l \le f \le c$). | ✅ Resolvido |
+| [Red-Blue Graph](https://codeforces.com/contest/1288/problem/f)         | [Codeforces 1288F](https://codeforces.com/contest/1288/problem/f)    | [`main.cpp`](./implementations/problems/min-cost-flow/red-blue-graph/main.cpp)  | Circulação de custo mínimo com cotas inferiores em bipartidos.    | ✅ Resolvido |
 
 ---
 
 ## 🏆 Backlog de Modelagens e Problemas (Livro Maratona)
 
-Roteiro priorizado de novas modelagens, teoremas construtivos e problemas clássicos de programação competitiva planejados para expansão do livro monográfico ([`latex/book.tex`](./latex/book.tex)), estruturado por faixa de dificuldade competitiva.
+Roteiro priorizado de modelagens, teoremas construtivos e problemas clássicos de programação competitiva para o livro monográfico ([`latex/book.tex`](./latex/book.tex)), estruturado por faixa de dificuldade competitiva e alinhado 1:1 entre teoria LaTeX e código C++.
 
 ### 🥉 Nível 1: ICPC Regional e Nacional (Base Indispensável)
 
-| Modelagem / Técnica Alvo                                             | Motor Principal                | Problemas de Validação (Juízes Online)                                                 | LaTeX (Livro) | Código Local |    Status    |
-| :------------------------------------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------- | :-----------: | :----------: | :----------: |
-| **Capacidades em Vértices (_Vertex Splitting_ $v_{in}\to v_{out}$)** | `Dinic`                        | [CSES 1711 (_Distinct Routes_)](https://cses.fi/problemset/task/1711), SPOJ _DISJPATH_ |      ✅       |      ✅      | ✅ Concluído |
-| **Recuperação Explícita da Partição do Corte Mínimo $(S, T)$**       | `Dinic`                        | [CSES 1695 (_Police Chase_)](https://cses.fi/problemset/task/1695)                     |      ✅       |      ✅      | ✅ Concluído |
-| **Atribuição Bipartida e Escalonamento Ponderado**                   | `KuhnMunkres` / `SSP-Dijkstra` | [CSES 2129 (_Task Assignment_)](https://cses.fi/problemset/task/2129)                  |      ✅       |      ✅      | ✅ Concluído |
-| **Cobertura Mínima de Caminhos em DAG (Disjuntos e Transitivos)**    | `HopcroftKarp`                 | POJ 2060 (_Taxi Cab Scheme_), UVa 1184 (_Air Raid_)                                    |      ⏳       |      ⏳      | ⏳ Planejado |
-| **Teorema de Dilworth e Anticadeia Máxima em Posets**                | `HopcroftKarp` + König         | POJ 1548 (_Robots_), SPOJ _MDOLLS_ (_Nested Dolls_)                                    |      ⏳       |      ⏳      | ⏳ Planejado |
+| Modelagem / Técnica Alvo                                             | Motor Principal                | Problemas de Validação (Juízes Online)                                                 | LaTeX (Livro) | Código Local |        Status         |
+| :------------------------------------------------------------------- | :----------------------------- | :------------------------------------------------------------------------------------- | :-----------: | :----------: | :-------------------: |
+| **Capacidades em Vértices (_Vertex Splitting_ $v_{in}\to v_{out}$)** | `Dinic`                        | [CSES 1711 (_Distinct Routes_)](https://cses.fi/problemset/task/1711), SPOJ _DISJPATH_ |      ✅       |      ✅      |     ✅ Concluído      |
+| **Recuperação Explícita da Partição do Corte Mínimo $(S, T)$**       | `Dinic`                        | [CSES 1695 (_Police Chase_)](https://cses.fi/problemset/task/1695)                     |      ✅       |      ✅      |     ✅ Concluído      |
+| **Atribuição Bipartida e Escalonamento Ponderado**                   | `KuhnMunkres` / `SSP-Dijkstra` | [CSES 2129 (_Task Assignment_)](https://cses.fi/problemset/task/2129)                  |      ✅       |      ✅      |     ✅ Concluído      |
+| **Cobertura Mínima de Caminhos em DAG (Disjuntos e Transitivos)**    | `HopcroftKarp`                 | POJ 2060 (_Taxi Cab Scheme_), UVa 1184 (_Air Raid_)                                    |      ✅       |      ⏳      | ⏳ Implementar Código |
+| **Teorema de Dilworth e Anticadeia Máxima em Posets**                | `HopcroftKarp` + König         | POJ 1548 (_Robots_), SPOJ _MDOLLS_ (_Nested Dolls_)                                    |      ✅       |      ⏳      | ⏳ Implementar Código |
 
 ### 🥈 Nível 2: ICPC Nacional, Codeforces Div.1 e CSES Avançado
 
-| Modelagem / Técnica Alvo                                           | Motor Principal                   | Problemas de Validação (Juízes Online)                                                                    | LaTeX (Livro) | Código Local |        Status        |
-| :----------------------------------------------------------------- | :-------------------------------- | :-------------------------------------------------------------------------------------------------------- | :-----------: | :----------: | :------------------: |
-| **Fechamento de Peso Máximo (_Max-Weight Closure_ / Projetos)**    | `Dinic`                           | [CF 1082G (_Petya and Graph_)](https://codeforces.com/problemset/problem/1082/G), SPOJ _PROFIT_           |      ⏳       |      ✅      | ⏳ Formalizar Teoria |
-| **Circulação Viável e MCF com Cotas Inferiores ($l \le f \le c$)** | `SSP-Dijkstra` / `Dinic`          | [CF 1288F (_Red-Blue Graph_)](https://codeforces.com/contest/1288/problem/f), SGU 194 (_Reactor Cooling_) |      ⏳       |      ✅      | ⏳ Formalizar Teoria |
-| **Emparelhamento em Grafos Aritméticos / Fatores Primos**          | `Dinic` / `HopcroftKarp`          | [CF 498C (_Array and Operations_)](https://codeforces.com/problemset/problem/498/C)                       |      ⏳       |      ✅      | ⏳ Formalizar Teoria |
-| **Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores**             | `Dinic`                           | LOJ 116 (_Max Flow with Lower Bounds_), LOJ 117 (_Min Flow with Lower Bounds_)                            |      ⏳       |      ⏳      |     ⏳ Planejado     |
-| **MCF com Custos Convexos por Partes (Arcos Paralelos)**           | `SSP-Dijkstra` / `NetworkSimplex` | [CF 863F (_Almost Permutation_)](https://codeforces.com/problemset/problem/863/F)                         |      ⏳       |      ⏳      |     ⏳ Planejado     |
-| **Fluxo em Redes Expandidas no Tempo (_Time-Expanded_)**           | `Dinic`                           | SPOJ _EVACUATE_, UVa 10985 (_Rings'n'Ropes_)                                                              |      ⏳       |      ⏳      |     ⏳ Planejado     |
+| Modelagem / Técnica Alvo                                           | Motor Principal                   | Problemas de Validação (Juízes Online)                                                                                                   | LaTeX (Livro) | Código Local |        Status         |
+| :----------------------------------------------------------------- | :-------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- | :-----------: | :----------: | :-------------------: |
+| **Fechamento de Peso Máximo (Redução de Picard / Projetos)**       | `Dinic` / `MPM`                   | [CF 1082G (_Petya and Graph_)](https://codeforces.com/problemset/problem/1082/G), SPOJ _PROFIT_                                          |      ✅       |      ✅      |     ✅ Concluído      |
+| **Circulação Viável e MCF com Cotas Inferiores ($l \le f \le c$)** | `SSP-Dijkstra` / `Dinic`          | [CF 1288F (_Red-Blue Graph_)](https://codeforces.com/contest/1288/problem/f), [CF 843E](https://codeforces.com/problemset/problem/843/E) |      ✅       |      ✅      |     ✅ Concluído      |
+| **$b$-Emparelhamentos e Decomposição por Fatores Primos**          | `HopcroftKarp`                    | [CF 498C (_Array and Operations_)](https://codeforces.com/problemset/problem/498/C)                                                      |      ✅       |      ✅      |     ✅ Concluído      |
+| **Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores**             | `Dinic`                           | LOJ 116 (_Max Flow with Lower Bounds_), LOJ 117 (_Min Flow with Lower Bounds_)                                                           |      ✅       |      ⏳      | ⏳ Implementar Código |
+| **MCF com Custos Convexos por Partes (Arcos Paralelos)**           | `SSP-Dijkstra` / `NetworkSimplex` | [CF 863F (_Almost Permutation_)](https://codeforces.com/problemset/problem/863/F)                                                        |      ✅       |      ⏳      | ⏳ Implementar Código |
+| **Fluxo em Redes Expandidas no Tempo (_Time-Expanded_)**           | `Dinic`                           | SPOJ _EVACUATE_, UVa 10985 (_Rings'n'Ropes_)                                                                                             |      ⏳       |      ⏳      |     ⏳ Planejado      |
 
 ### 🥇 Nível 3: ICPC World Finals e Fronteira Teórica
 
@@ -278,7 +289,7 @@ Roteiro priorizado de novas modelagens, teoremas construtivos e problemas cláss
 
 # 📚 Bloco IV: Teoria e Rigor Matemático
 
-Progresso dos teoremas, axiomas e provas formais documentados no [LaTeX](./latex/ic.tex) e no livro monográfico ([`latex/book.tex`](./latex/book.tex)).
+Progresso dos teoremas, axiomas e provas formais documentados no livro monográfico ([`latex/book.tex`](./latex/book.tex)).
 
 ## ⚖️ Axiomas e Leis Fundamentais
 
@@ -326,9 +337,21 @@ Todos os conceitos fundamentais do Network Simplex estão completamente formaliz
 | Ciclo Fundamental e Arco Limitante (Leaving Arc) |  ✅   |      ✅       | Identificação do ciclo único formado pela inserção do arco e do arco gargalo que deixa a base.               |
 | Pivoteamento e Atualização da Árvore             |  ✅   |      ✅       | Atualização da árvore geradora, do fluxo residual e dos potenciais nodais duais em $\mathcal{O}(\|V\|)$.     |
 
+## 🧩 Teoremas de Modelagens Avançadas (Cap. 12)
+
+Provas formais integradas ao [`12_advanced_modeling.tex`](./latex/book/chapters/12_advanced_modeling.tex):
+
+| Teorema / Resultado Formal                       | LaTeX | Prova Formal | Descrição                                                                                                                               |
+| :----------------------------------------------- | :---: | :----------: | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| Redução de Picard (Fechamento de Peso Máximo)    |  ✅   |      ✅      | Bijeção entre cortes $s$-$t$ finitos e fechamentos em digrafos com identidade exata $p(U) = P^+ - \ccap(S, T)$.                         |
+| Viabilidade e Otimalidade com Cotas Inferiores   |  ✅   |      ✅      | Saturação total da superfonte compensadora $s^*$ na rede residual $c - l$ e preservação linear de custos $\sum w(a)l(a) + \cost(f'^*)$. |
+| Expansão Unitária e Decomposição Ortogonal       |  ✅   |      ✅      | Equivalência de $b$-emparelhamentos por replicação nodal e aditividade $\sum_k \nu_{b_k}(G_k)$ sobre atributos disjuntos.               |
+| Cobertura Mínima em DAG e Teorema de Dilworth    |  ✅   |      ✅      | Igualdade $k^* = \|V\| - \nu(B(D))$ e dedução construtiva da igualdade cadeia-anticadeia via Teorema de König no fecho transitivo.      |
+| Linearização Exata de Custos Convexos por Partes |  ✅   |      ✅      | Argumento de troca garantindo o preenchimento sequencial dos arcos paralelos em ordem não decrescente de inclinação marginal.           |
+
 ---
 
-# 📊 Bloco V: Validação Experimental e Monografia
+# 📊 Bloco V: Validação Experimental e Histórico Institucional
 
 ## 🛠️ Infraestrutura e Automação de Benchmarks
 
@@ -367,25 +390,22 @@ Infraestrutura completa de testes empíricos implementada em C++23 e Python para
 | Sensibilidade a Custos e Capacidades   |  ✅   |    ✅    | Avaliação de desempenho variando a magnitude dos custos ($C$) e capacidades ($U$).                             |
 | Eficiência Prática do Network Simplex  |  ✅   |    ✅    | Contagem empírica do número de pivoteamentos e tempo por iteração frente aos métodos de caminhos.              |
 | Corretude Cruzada de Custo Mínimo      |  ✅   |    ✅    | Validação automática garantindo que todas as soluções viáveis encontram exatamente o mesmo custo ótimo $z^*$.  |
-| Seção de Resultados Experimentais      |  ✅   |    ✅    | Redação formal da metodologia experimental, especificações de hardware e discussão no relatório institucional. |
-| Tabelas Comparativas de Desempenho     |  ✅   |    ✅    | Tabelas formatadas em `booktabs` integradas ao documento LaTeX.                                                |
+| Seção de Resultados Experimentais      |  ✅   |    ✅    | Redação formal da metodologia experimental, especificações de hardware e discussão no livro e relatório da IC. |
+| Tabelas Comparativas de Desempenho     |  ✅   |    ✅    | Tabelas formatadas em `booktabs` integradas aos documentos LaTeX.                                              |
 | Gráficos de Desempenho e Curvas Log    |  ✅   |    ✅    | Figuras comparativas e curvas de escalabilidade geradas pelo pipeline e incluídas no LaTeX.                    |
 
 ---
 
-## 📖 Livro e Monografia Independente (`book.tex`)
+## 🏛️ Histórico Institucional: Iniciação Científica UFABC (🔒 Finalizado)
 
-Acompanhamento da elaboração e manutenção do livro monográfico independente em LaTeX ([`book.tex`](./latex/book.tex)), projetado com máxima densidade matemática e computacional, 100% voltado para distribuição aberta e leitura fluida, desvinculado dos formulários institucionais de Iniciação Científica da UFABC.
+Registro consolidado das entregas concluídas no âmbito do Edital 01/2025 PIC/PIBIC/UFABC sob orientação da Profa. Dra. Cristiane Maria Sato. **Os documentos abaixo encontram-se congelados** (apenas correções eventuais de código nos 9 motores originais da IC propagam para os apêndices `01..11` via `make sync-code`):
 
-| Etapa / Componente                  | Status | Descrição                                                                                         |
-| :---------------------------------- | :----: | :------------------------------------------------------------------------------------------------ |
-| **Arquitetura Editorial (`book`)**  |   ✅   | Adoção da classe `book`, capa limpa e elegante, folha de rosto e prefácio do autor.               |
-| **Emancipação Estrutural da IC**    |   ✅   | Remoção de notas a pareceristas, status de atividades de bolsa e seções artificiais de relatório. |
-| **Estrutura em Partes e Capítulos** |   ✅   | Promoção dos macro-blocos a 4 partes temáticas e 12 capítulos ordenados logicamente.              |
-| **Pareamento Teórico Integral**     |   ✅   | Inclusão de 100% dos 11 teoremas com suas 4 dimensões (enunciado, intuição, prova, impacto).      |
-| **Pareamento Algorítmico e C++23**  |   ✅   | Inclusão de todas as implementações dos motores de fluxo e reduções nos Apêndices.                |
-| **Automação de Compilação**         |   ✅   | Inclusão de regras `make book` no `latex/Makefile` e no `Makefile` raiz.                          |
-| **Atualização da Documentação**     |   ✅   | Atualização dos `README.md` (raiz e `latex/`) e esteira de CI/CD para release do PDF.             |
+| Entrega Institucional                                 | Escopo / Arquivo                                                                                       | Status | Síntese do Entregável                                                                                                     |
+| :---------------------------------------------------- | :----------------------------------------------------------------------------------------------------- | :----: | :------------------------------------------------------------------------------------------------------------------------ |
+| **Proposta Inicial do Projeto**                       | [`latex/proposal.tex`](./latex/proposal.tex)                                                           | 🔒 ✅  | Plano de trabalho e cronograma submetidos ao edital de Iniciação Científica.                                              |
+| **Relatório Final, Versão Limpa e Monólito Overleaf** | [`report.tex`](./latex/report.tex), [`ic.tex`](./latex/ic.tex), [`monolith.tex`](./latex/monolith.tex) | 🔒 ✅  | Revisão integral com a orientadora, 9 motores originais (5 Max-Flow + 4 MCF) e resultados de `make bench-ic`.             |
+| **Benchmarks Congelados da IC (`--suite ic`)**        | `latex/tables/`, `latex/figures/`                                                                      | 🔒 ✅  | Bateria final executada na máquina de referência com validação cruzada e curvas log-log originais da IC.                  |
+| **Pôster Científico do Simpósio de IC (90×120 cm)**   | [`latex/poster.tex`](./latex/poster.tex)                                                               | 🔒 ✅  | Editoração visual completa com síntese teórica, arquitetura C++23, galeria da segmentação de imagens e resultados DIMACS. |
 
 ---
 

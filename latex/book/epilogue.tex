@@ -4,20 +4,22 @@
 \chapter*{Epílogo: Síntese e Horizontes de Pesquisa}\label{sec:conclusoes}
 \addcontentsline{toc}{chapter}{Epílogo: Síntese e Horizontes de Pesquisa}
 
-Os resultados e implementações consolidados neste volume integram a teoria matemática da Otimização Combinatória à engenharia de software em C++23. O texto estruturou-se em quatro eixos:
+Os resultados e implementações consolidados neste volume integram a teoria matemática da Otimização Combinatória à engenharia de software em C++23. O texto estruturou-se em cinco eixos:
 
 \begin{enumerate}[leftmargin=1.5em, itemsep=0.4em]
-    \item \textbf{Fundamentação Teórica:} Demonstração matemática dos teoremas estruturais de fluxo (Fluxo Máximo e Corte Mínimo, Integralidade, Decomposição de Fluxo, Teoremas de Menger, König e as Quatro Dualidades em grafos bipartidos; e, em custo mínimo, otimalidade por ciclos negativos, custos reduzidos, folga complementar e Total Unimodularidade da matriz de incidência).
+    \item \textbf{Fundamentação Teórica de Fluxo Máximo e Conectividade:} Demonstração matemática dos teoremas estruturais de fluxo (Fluxo Máximo e Corte Mínimo, Integralidade, Decomposição de Fluxo, Teoremas de Menger, König, Gallai e Hall), acompanhados de algoritmos primais (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{MPM}) e duais (\lstinline{PushRelabel}, \lstinline{PushRelabelImproved}).
 
-    \item \textbf{Arquitetura em C++23:} Desenvolvimento de classes base abstratas e 13 algoritmos especializados divididos em duas famílias:
+    \item \textbf{Arquitetura em C++23:} Desenvolvimento de classes base abstratas e 15 algoritmos especializados divididos em duas famílias:
     \begin{itemize}
         \item \textbf{Família \lstinline{FlowNetwork} (Fluxo Máximo e Emparelhamento Bipartido):} \lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{MPM}, \lstinline{PushRelabel} (FIFO), \lstinline{PushRelabelImproved} (Gap Heuristic), \lstinline{Kuhn} e \lstinline{HopcroftKarp}.
-        \item \textbf{Família \lstinline{CostNetwork} (Custo Mínimo e Atribuição Bipartida):} \lstinline{CycleCanceling}, \lstinline{SuccessiveShortest} (SPFA), \lstinline{SuccessiveShortestDijkstra} (Potenciais), \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres} (Algoritmo Húngaro).
+        \item \textbf{Família \lstinline{CostNetwork} (Custo Mínimo e Atribuição Bipartida):} \lstinline{CycleCanceling}, \lstinline{MinimumMeanCycleCanceling}, \lstinline{CancelAndTighten}, \lstinline{SuccessiveShortest} (SPFA), \lstinline{SuccessiveShortestDijkstra} (Potenciais), \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres} (Algoritmo Húngaro).
     \end{itemize}
 
-    \item \textbf{Reduções e Aplicações:} Resolução de problemas clássicos (\textit{Maximum Bipartite Matching}, \textit{Minimum Vertex Cover}, \textit{Maximum Independent Set}, caminhos disjuntos e corte mínimo) e aplicação em \textbf{Segmentação Interativa de Imagens} via corte mínimo em grafos (\textit{Graph Cuts}).
+    \item \textbf{Fluxo de Custo Mínimo e Dualidade:} Otimalidade por ciclos negativos, custos reduzidos, folga complementar, algoritmos fortemente polinomiais de cancelamento de ciclos ($\varepsilon$-otimalidade), caminhos sucessivos e \textit{Network Simplex} (Total Unimodularidade).
 
-    \item \textbf{Avaliação Experimental:} Protocolo de medição de tempo de CPU sob isolamento em instâncias padronizadas da literatura (coleções DIMACS), validando a corretude das soluções por certificação cruzada.
+    \item \textbf{Modelagens Avançadas e Aplicações Práticas:} Reduções combinatórias gerais (Fechamento de Peso Máximo, Circulação e Fluxos com Cotas Inferiores, $b$-Emparelhamentos e Decomposição Ortogonal, Cobertura Mínima de Caminhos em DAGs com Teorema de Dilworth e Linearização de Custos Convexos por Partes) e aplicação em \textbf{Segmentação Interativa de Imagens} via corte mínimo em grafos (\textit{Graph Cuts}).
+
+    \item \textbf{Avaliação Experimental:} Protocolo de medição de tempo de CPU sob isolamento em instâncias padronizadas da literatura (coleções DIMACS e suíte bipartida), validando a corretude das soluções por certificação cruzada.
 \end{enumerate}
 
 Como trabalhos futuros, destacam-se a avaliação empírica sobre grafos esparsos de grande porte, a implementação de versões paralelas em OpenMP para algoritmos de pré-fluxo e a exploração de regras de pivoteamento adicionais no \textit{Network Simplex} (como \textit{Candidate List Pricing}).

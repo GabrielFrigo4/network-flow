@@ -185,12 +185,13 @@ A teoria de fluxos em digrafos situa-se na interseção entre Matemática Discre
 
 Este volume aborda de forma integrada o rigor conceitual e o desenvolvimento de software em C++23, buscando conectar as provas formais de otimalidade às estruturas de dados e decisões de implementação.
 
-O livro organiza-se em quatro eixos:
+O livro organiza-se em cinco eixos:
 \begin{enumerate}[leftmargin=1.5em, itemsep=0.4em]
-    \item \textbf{Fundamentação Teórica:} Demonstrações formais dos teoremas fundamentais de fluxos em redes (do Teorema do Fluxo Máximo e Corte Mínimo à Total Unimodularidade), acompanhadas de definições rigorosas e intuições estruturais;
-    \item \textbf{Arquitetura em C++23:} Implementação orientada a objetos com classes base abstratas, representações residuais indexadas e estruturas de dados otimizadas para memória contígua;
-    \item \textbf{Reduções e Aplicações:} Resolução de problemas clássicos em grafos bipartidos, caminhos disjuntos e o modelo de corte mínimo aplicado à Segmentação Interativa de Imagens;
-    \item \textbf{Protocolo Experimental:} Metodologia empírica sob isolamento de tempo de CPU e validação cruzada sobre as coleções de benchmark da literatura (DIMACS).
+    \item \textbf{Fundamentos e Fluxo Máximo:} Demonstrações formais da teoria de fluxos em redes (do Teorema do Fluxo Máximo e Corte Mínimo aos algoritmos de caminhos aumentantes e pré-fluxo) combinadas com implementação orientada a objetos em C++23;
+    \item \textbf{Estruturas Bipartidas e Conectividade:} Dualidades combinatórias de König, Gallai, Hall e Menger, caminhos disjuntos e decomposição linear de fluxos em caminhos e ciclos;
+    \item \textbf{Fluxo de Custo Mínimo e Otimização Primal-Dual:} Formulação por ciclos negativos e custos reduzidos, métodos primais fortemente polinomiais, métodos duais por caminhos sucessivos e o algoritmo \textit{Network Simplex};
+    \item \textbf{Modelagens Avançadas e Aplicações Práticas:} Reduções gerais (fechamento de peso máximo, cotas inferiores, $b$-emparelhamentos, cobertura em DAGs e custos convexos) e o modelo de corte mínimo aplicado à Segmentação Interativa de Imagens;
+    \item \textbf{Protocolo Experimental e Engenharia de Desempenho:} Metodologia empírica sob isolamento de tempo de CPU e validação cruzada sobre as coleções de benchmark da literatura (DIMACS) e suítes bipartidas.
 \end{enumerate}
 
 Esta versão monográfica consolida o conteúdo técnico da pesquisa de forma completa e autocontida, com demonstrações matemáticas detalhadas, implementações de referência e benchmarks experimentais.
