@@ -449,7 +449,7 @@ Infraestrutura completa de testes empíricos implementada em C++23 e Python para
 
 ## 🏛️ Histórico Institucional: Iniciação Científica UFABC (🔒 Finalizado)
 
-Registro consolidado das entregas concluídas no âmbito do Edital 01/2025 PIC/PIBIC/UFABC sob orientação da Profa. Dra. Cristiane Maria Sato. **Os documentos abaixo encontram-se congelados** (apenas correções eventuais de código nos 9 motores originais da IC propagam para os apêndices `01..11` via `make sync-code`):
+Registro consolidado das entregas concluídas no âmbito do Edital 01/2025 PIC/PIBIC/UFABC sob orientação da Profa. Dra. Cristiane Maria Sato. **Os documentos abaixo encontram-se congelados** (apenas correções eventuais de código nos 9 motores originais da IC propagam para os apêndices de código compartilhados com a IC via `make sync-code`):
 
 | Entrega Institucional                                 | Escopo / Arquivo                                                                                       | Status | Síntese do Entregável                                                                                                     |
 | :---------------------------------------------------- | :----------------------------------------------------------------------------------------------------- | :----: | :------------------------------------------------------------------------------------------------------------------------ |

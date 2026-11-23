@@ -6,7 +6,7 @@ from pathlib import Path
 LISTING_DEFINITIONS = [
     {
         "source": "implementations/flow-network/FlowNetwork.hpp",
-        "output": "latex/appendices/01_flownetwork.tex",
+        "output": "latex/appendices/10_flownetwork.tex",
         "title": "Implementação da Interface Base ``Flow-Network''",
         "label_appendix": "ap:flownetwork",
         "caption": "Implementação em C++ da interface base \\lstinline{FlowNetwork} para a modelagem abstrata de redes de fluxo.",
@@ -14,7 +14,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/FordFulkerson.hpp",
-        "output": "latex/appendices/02_ford_fulkerson.tex",
+        "output": "latex/appendices/11_ford_fulkerson.tex",
         "title": "Implementação da Classe ``Ford-Fulkerson''",
         "label_appendix": "ap:ford_fulkerson",
         "caption": "Implementação em C++ da classe \\lstinline{FordFulkerson}, método genérico de caminhos aumentantes via DFS.",
@@ -22,7 +22,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/EdmondsKarp.hpp",
-        "output": "latex/appendices/03_edmonds_karp.tex",
+        "output": "latex/appendices/12_edmonds_karp.tex",
         "title": "Implementação da Classe ``Edmonds-Karp''",
         "label_appendix": "ap:edmonds_karp",
         "caption": "Implementação em C++ da classe \\lstinline{EdmondsKarp}, baseada na seleção iterativa de caminhos mais curtos via Busca em Largura (BFS).",
@@ -30,7 +30,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/Dinic.hpp",
-        "output": "latex/appendices/04_dinic.tex",
+        "output": "latex/appendices/13_dinic.tex",
         "title": "Implementação da Classe ``Dinic''",
         "label_appendix": "ap:dinic",
         "caption": "Implementação em C++ da classe \\lstinline{Dinic}, estruturada com Digrafo de Níveis e otimização de ponteiros mortos no cálculo do fluxo bloqueador.",
@@ -38,7 +38,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/PushRelabel.hpp",
-        "output": "latex/appendices/05_push_relabel.tex",
+        "output": "latex/appendices/15_push_relabel.tex",
         "title": "Implementação da Classe ``Push-Relabel''",
         "label_appendix": "ap:push_relabel",
         "caption": "Implementação em C++ da classe \\lstinline{PushRelabel}, baseada no método de pré-fluxos e política de processamento em fila (FIFO).",
@@ -46,7 +46,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/PushRelabelImproved.hpp",
-        "output": "latex/appendices/06_push_relabel_improved.tex",
+        "output": "latex/appendices/16_push_relabel_improved.tex",
         "title": "Implementação da Classe ``Push-Relabel Improved''",
         "label_appendix": "ap:push_relabel_improved",
         "caption": "Implementação em C++ da classe \\lstinline{PushRelabelImproved}, otimizada empiricamente com a Heurística de Lacuna (\\textit{Gap Heuristic}).",
@@ -54,7 +54,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/CostNetwork.hpp",
-        "output": "latex/appendices/07_costnetwork.tex",
+        "output": "latex/appendices/30_costnetwork.tex",
         "title": "Implementação da Interface Base ``Cost-Network''",
         "label_appendix": "ap:costnetwork",
         "caption": "Implementação em C++ da interface base \\lstinline{CostNetwork} para a modelagem abstrata de redes de fluxo com custos.",
@@ -62,7 +62,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/CycleCanceling.hpp",
-        "output": "latex/appendices/08_cycle_canceling.tex",
+        "output": "latex/appendices/31_cycle_canceling.tex",
         "title": "Implementação da Classe ``Cycle-Canceling''",
         "label_appendix": "ap:cycle_canceling",
         "caption": "Implementação em C++ do algoritmo \\textit{Cycle Canceling}.",
@@ -70,7 +70,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/SuccessiveShortest.hpp",
-        "output": "latex/appendices/09_ssp_spfa.tex",
+        "output": "latex/appendices/34_ssp_spfa.tex",
         "title": "Implementação da Classe ``Successive-Shortest-Path''",
         "label_appendix": "ap:successive_shortest",
         "caption": "Implementação em C++ do algoritmo \\textit{Successive Shortest Path} com SPFA.",
@@ -78,7 +78,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/SuccessiveShortestDijkstra.hpp",
-        "output": "latex/appendices/10_ssp_dijkstra.tex",
+        "output": "latex/appendices/35_ssp_dijkstra.tex",
         "title": "Implementação da Classe ``Successive-Shortest-Path'' com Dijkstra e Potenciais",
         "label_appendix": "ap:successive_shortest_dijkstra",
         "caption": "Implementação em C++ do algoritmo \\textit{Successive Shortest Path} com Potenciais Nodais e Dijkstra.",
@@ -86,7 +86,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/NetworkSimplex.hpp",
-        "output": "latex/appendices/11_network_simplex.tex",
+        "output": "latex/appendices/36_network_simplex.tex",
         "title": "Implementação da Classe ``Network-Simplex''",
         "label_appendix": "ap:network_simplex",
         "caption": "Implementação em C++ do algoritmo \\textit{Network Simplex}.",
@@ -94,7 +94,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/MPM.hpp",
-        "output": "latex/appendices/12_mpm.tex",
+        "output": "latex/appendices/14_mpm.tex",
         "title": "Implementação da Classe ``MPM''",
         "label_appendix": "ap:mpm",
         "caption": "Implementação em C++ do algoritmo de Malhotra, Kumar e Maheshwari (MPM).",
@@ -102,7 +102,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/Kuhn.hpp",
-        "output": "latex/appendices/13_kuhn.tex",
+        "output": "latex/appendices/20_kuhn.tex",
         "title": "Implementação da Classe ``Kuhn''",
         "label_appendix": "ap:kuhn",
         "caption": "Implementação em C++ do algoritmo de Kuhn para emparelhamento bipartido máximo.",
@@ -110,7 +110,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/flow-network/HopcroftKarp.hpp",
-        "output": "latex/appendices/14_hopcroft_karp.tex",
+        "output": "latex/appendices/21_hopcroft_karp.tex",
         "title": "Implementação da Classe ``Hopcroft-Karp''",
         "label_appendix": "ap:hopcroft_karp",
         "caption": "Implementação em C++ do algoritmo de Hopcroft-Karp para emparelhamento bipartido máximo.",
@@ -118,7 +118,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/KuhnMunkres.hpp",
-        "output": "latex/appendices/15_kuhn_munkres.tex",
+        "output": "latex/appendices/37_kuhn_munkres.tex",
         "title": "Implementação da Classe ``Kuhn-Munkres''",
         "label_appendix": "ap:kuhn_munkres",
         "caption": "Implementação em C++ do algoritmo Húngaro (Kuhn-Munkres) para atribuição bipartida de custo mínimo.",
@@ -126,7 +126,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/MinimumMeanCycleCanceling.hpp",
-        "output": "latex/appendices/17_minimum_mean_cycle_canceling.tex",
+        "output": "latex/appendices/32_minimum_mean_cycle_canceling.tex",
         "title": "Implementação da Classe ``Minimum-Mean Cycle Canceling''",
         "label_appendix": "ap:minimum_mean_cycle_canceling",
         "caption": "Implementação em C++ do algoritmo \\textit{Minimum-Mean Cycle Canceling} com aritmética inteira de 128 bits.",
@@ -134,7 +134,7 @@ LISTING_DEFINITIONS = [
     },
     {
         "source": "implementations/cost-network/CancelAndTighten.hpp",
-        "output": "latex/appendices/18_cancel_and_tighten.tex",
+        "output": "latex/appendices/33_cancel_and_tighten.tex",
         "title": "Implementação da Classe ``Cancel-and-Tighten''",
         "label_appendix": "ap:cancel_and_tighten",
         "caption": "Implementação em C++ do algoritmo \\textit{Cancel-and-Tighten} com ordenação topológica em DAG admissível e aperto via algoritmo de Karp.",
