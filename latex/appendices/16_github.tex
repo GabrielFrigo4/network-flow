@@ -11,11 +11,11 @@ Para garantir a reprodutibilidade dos experimentos e disponibilizar o código-fo
 O repositório \textbf{Network Flow} está estruturado nos seguintes diretórios principais:
 \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
 \raggedright
-    \item \textbf{Fluxo Máximo} (\path{Implementações/FlowNetwork/}): Módulos base e algoritmos (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{PushRelabel} e \lstinline{PushRelabelImproved});
-    \item \textbf{Fluxo de Custo Mínimo} (\path{Implementações/CostNetwork/}): Módulos base e algoritmos (\lstinline{CycleCanceling}, \lstinline{SuccessiveShortestPath} e \lstinline{NetworkSimplex});
-    \item \textbf{Problemas} (\path{Implementações/Problemas/}): Resoluções para problemas combinatórios clássicos (como \textit{Minimum Vertex Cover}, emparelhamentos e caminhos disjuntos);
-    \item \textbf{Aplicações Práticas} (\path{Aplicações/Segmentação de Imagens/}): Segmentação de imagens via corte mínimo em grafos (\textit{Graph Cuts});
-    \item \textbf{Experimentos} (\path{Experimentos/}): Scripts de automação de testes, leitura de instâncias DIMACS e avaliação experimental.
+    \item \textbf{Fluxo Máximo} (\path{implementations/flow-network/}): Interface base \lstinline{FlowNetwork} e algoritmos concretos (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{MPM}, \lstinline{PushRelabel}, \lstinline{PushRelabelImproved}, \lstinline{Kuhn} e \lstinline{HopcroftKarp});
+    \item \textbf{Fluxo de Custo Mínimo} (\path{implementations/cost-network/}): Interface base \lstinline{CostNetwork} e algoritmos concretos (\lstinline{CycleCanceling}, \lstinline{MinimumMeanCycleCanceling}, \lstinline{CancelAndTighten}, \lstinline{SuccessiveShortest}, \lstinline{SuccessiveShortestDijkstra}, \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres});
+    \item \textbf{Problemas} (\path{implementations/problems/}): Resoluções para problemas combinatórios clássicos e de maratona (como \textit{Minimum Vertex Cover}, emparelhamentos, caminhos disjuntos, fechamento de peso máximo e demandas mínimas);
+    \item \textbf{Aplicações Práticas} (\path{applications/image-segmentation/}): Segmentação de imagens via corte mínimo em grafos (\textit{Graph Cuts});
+    \item \textbf{Experimentos} (\path{experiments/}): Scripts de automação de benchmarks, leitura de instâncias DIMACS e geração de tabelas e gráficos experimentais.
 \end{itemize}
 
 O código-fonte completo pode ser consultado, clonado e executado através do endereço:

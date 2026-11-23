@@ -1414,7 +1414,7 @@ void push_flow(const Size edge_id, const Long flow_amount) {
 A biblioteca organiza-se em duas famílias baseadas nos padrões \textit{Strategy}, \textit{Factory Method} e \textit{Prototype}~\cite{gamma1994design}:
 \begin{itemize}
     \item \textbf{Família \lstinline{FlowNetwork} (Fluxo Máximo):} Interface base abstrata com o método virtual puro \lstinline{compute_max_flow(source, sink)}. Os algoritmos concretos (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{MPM}, \lstinline{PushRelabel}, \lstinline{PushRelabelImproved}, \lstinline{Kuhn} e \lstinline{HopcroftKarp}) implementam estratégias de busca distintas mantendo total intercambialidade;
-    \item \textbf{Família \lstinline{CostNetwork} (Custo Mínimo):} Interface base abstrata que incorpora o custo linear unitário $w$ aos arcos, com o método virtual puro \lstinline{compute_min_cost_max_flow(source, sink)} implementado por \lstinline{CycleCanceling}, \lstinline{SuccessiveShortest}, \lstinline{SuccessiveShortestDijkstra}, \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres}.
+    \item \textbf{Família \lstinline{CostNetwork} (Custo Mínimo):} Interface base abstrata que incorpora o custo linear unitário $w$ aos arcos, com o método virtual puro \lstinline{compute_min_cost_max_flow(source, sink)} implementado por \lstinline{CycleCanceling}, \lstinline{MinimumMeanCycleCanceling}, \lstinline{CancelAndTighten}, \lstinline{SuccessiveShortest}, \lstinline{SuccessiveShortestDijkstra}, \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres}.
 \end{itemize}
 
 Os métodos virtuais \lstinline{make(n)} e \lstinline{clone()} permitem a instanciação e a clonagem profunda (\textit{deep copy}) de instâncias polimórficas preservando o estado residual, o que é fundamental em aplicações iterativas como corte mínimo e segmentação de imagens.
@@ -3083,11 +3083,11 @@ Para garantir a reprodutibilidade dos experimentos e disponibilizar o código-fo
 O repositório \textbf{Network Flow} está estruturado nos seguintes diretórios principais:
 \begin{itemize}[leftmargin=1.5em, itemsep=0.2em]
 \raggedright
-    \item \textbf{Fluxo Máximo} (\path{Implementações/FlowNetwork/}): Módulos base e algoritmos (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{PushRelabel} e \lstinline{PushRelabelImproved});
-    \item \textbf{Fluxo de Custo Mínimo} (\path{Implementações/CostNetwork/}): Módulos base e algoritmos (\lstinline{CycleCanceling}, \lstinline{SuccessiveShortestPath} e \lstinline{NetworkSimplex});
-    \item \textbf{Problemas} (\path{Implementações/Problemas/}): Resoluções para problemas combinatórios clássicos (como \textit{Minimum Vertex Cover}, emparelhamentos e caminhos disjuntos);
-    \item \textbf{Aplicações Práticas} (\path{Aplicações/Segmentação de Imagens/}): Segmentação de imagens via corte mínimo em grafos (\textit{Graph Cuts});
-    \item \textbf{Experimentos} (\path{Experimentos/}): Scripts de automação de testes, leitura de instâncias DIMACS e avaliação experimental.
+    \item \textbf{Fluxo Máximo} (\path{implementations/flow-network/}): Interface base \lstinline{FlowNetwork} e algoritmos concretos (\lstinline{FordFulkerson}, \lstinline{EdmondsKarp}, \lstinline{Dinic}, \lstinline{MPM}, \lstinline{PushRelabel}, \lstinline{PushRelabelImproved}, \lstinline{Kuhn} e \lstinline{HopcroftKarp});
+    \item \textbf{Fluxo de Custo Mínimo} (\path{implementations/cost-network/}): Interface base \lstinline{CostNetwork} e algoritmos concretos (\lstinline{CycleCanceling}, \lstinline{MinimumMeanCycleCanceling}, \lstinline{CancelAndTighten}, \lstinline{SuccessiveShortest}, \lstinline{SuccessiveShortestDijkstra}, \lstinline{NetworkSimplex} e \lstinline{KuhnMunkres});
+    \item \textbf{Problemas} (\path{implementations/problems/}): Resoluções para problemas combinatórios clássicos e de maratona (como \textit{Minimum Vertex Cover}, emparelhamentos, caminhos disjuntos, fechamento de peso máximo e demandas mínimas);
+    \item \textbf{Aplicações Práticas} (\path{applications/image-segmentation/}): Segmentação de imagens via corte mínimo em grafos (\textit{Graph Cuts});
+    \item \textbf{Experimentos} (\path{experiments/}): Scripts de automação de benchmarks, leitura de instâncias DIMACS e geração de tabelas e gráficos experimentais.
 \end{itemize}
 
 O código-fonte completo pode ser consultado, clonado e executado através do endereço:
