@@ -16,6 +16,7 @@ WORKERS ?= 1
 .PHONY: help all \
         bench-all bench-pipeline bench-latex bench-publish bench-research sync-all check-all \
         latex build-latex release-map reports book report ic monolith proposal poster \
+        editorial cards minibooks notebooks slides \
         apps impl exp generate dimacs \
         bench bench-ic bench-book bench-smoke bench-tables bench-plots bench-artifacts \
         format clang-format prettier format-cpp format-md test setup clean clear distclean clean-results sync-code
@@ -46,6 +47,12 @@ help:
 	cmd "monolith"         "Gera e compila o monólito autocontido para Overleaf (monolith.pdf)"; \
 	cmd "proposal"         "Compila a proposta do projeto de pesquisa (proposal.pdf)"; \
 	cmd "poster"           "Compila o pôster do Simpósio de IC da UFABC (poster.pdf)"; \
+	sec "Artefatos Editoriais Vivos (Pós-IC):"; \
+	cmd "editorial"        "Compila todas as famílias editoriais (cards, minibooks, notebooks, slides)"; \
+	cmd "cards"            "Compila os cards de referência rápida (latex/cards)"; \
+	cmd "minibooks"        "Compila os mini-books monotemáticos (latex/minibooks)"; \
+	cmd "notebooks"        "Compila os cadernos ICPC e Maratona (latex/notebooks)"; \
+	cmd "slides"           "Compila as apresentações Beamer (latex/slides)"; \
 	sec "Módulos Individuais & Experimentos:"; \
 	cmd "dimacs"           "Gera todas as 80 instâncias de referência DIMACS + suíte bipartida"; \
 	cmd "bench"            "Executa todos os benchmarks (IC e Livro/Pós-IC)"; \
@@ -183,6 +190,21 @@ proposal:
 
 poster:
 	(cd "latex" && $(MAKE) poster)
+
+editorial:
+	(cd "latex" && $(MAKE) editorial)
+
+cards:
+	(cd "latex" && $(MAKE) cards)
+
+minibooks:
+	(cd "latex" && $(MAKE) minibooks)
+
+notebooks:
+	(cd "latex" && $(MAKE) notebooks)
+
+slides:
+	(cd "latex" && $(MAKE) slides)
 
 sync-code:
 	$(PYTHON) .scripts/sync_listings.py

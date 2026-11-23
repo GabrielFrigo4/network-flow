@@ -29,7 +29,18 @@ A documentação oficial da pesquisa é gerada a partir dos códigos-fonte em La
 | [📄&nbsp;**`monolith.pdf`**][baixar_pdf_monolito] | **IC (UFABC)**     | 🔒 **Finalizado (IC)** | [🖋️&nbsp;`monolith.tex`](./latex/monolith.tex) | Versão em arquivo único compilável autossuficiente (sem `\input`), idêntica ao relatório formal da IC, ideal para edição direta e compartilhamento na plataforma Overleaf.                                                                                    |
 
 > [!IMPORTANT]
-> **Política de Ciclo de Vida (IC Finalizada vs. Livro Contínuo):** Os 5 artefatos entregues à Iniciação Científica da UFABC (`proposal.pdf`, `report.pdf`, `ic.pdf`, `monolith.pdf` e `poster.pdf`) estão **finalizados e congelados** como registro histórico do Edital 01/2025 PIC/PIBIC: seu texto, tabelas, figuras e pôster não recebem novos algoritmos nem reescritas. Eventuais correções de bugs nos 9 motores originais da IC continuam sincronizadas automaticamente nos apêndices computacionais (`01` a `11`) e no `monolith.tex` via `make sync-code`. Toda expansão teórica, novas modelagens, algoritmos e benchmarks (`make bench-book`) concentram-se exclusivamente no **Livro (`book.pdf`)**, em [`implementations/`](./implementations/) e em [`applications/`](./applications/).
+> **Política de Ciclo de Vida (IC Finalizada vs. Artefatos Vivos Pós-IC):** Os 5 artefatos entregues à Iniciação Científica da UFABC (`proposal.pdf`, `report.pdf`, `ic.pdf`, `monolith.pdf` e `poster.pdf`) estão **finalizados e congelados** como registro histórico do Edital 01/2025 PIC/PIBIC: seu texto, tabelas, figuras e pôster não recebem novos algoritmos nem reescritas. Eventuais correções de bugs nos 9 motores originais da IC continuam sincronizadas automaticamente nos apêndices computacionais (`01` a `11`) e no `monolith.tex` via `make sync-code`. Toda evolução contínua concentra-se exclusivamente no **Livro (`book.pdf`)**, nas **novas famílias editoriais vivas** abaixo, em [`implementations/`](./implementations/) e em [`applications/`](./applications/).
+
+### 🎨 Artefatos Editoriais Vivos (Planejados — Pós-IC)
+
+Além do livro monográfico ([`book.tex`](./latex/book.tex)), o diretório [`latex/`](./latex/) conta com quatro famílias editoriais vivas já estruturadas (pastas, `README.md` e `Makefile` POSIX prontos para expansão futura):
+
+| Família Editorial                            | Status                    | Escopo e Formato                                                                          |
+| :------------------------------------------- | :------------------------ | :---------------------------------------------------------------------------------------- |
+| [**`latex/cards/`**](./latex/cards/)         | 🟢 Estrutura / ⏳ Autoria | **9 Cards de Referência Rápida** (_cheat sheets_ de 1 página para teoremas e receitas).   |
+| [**`latex/minibooks/`**](./latex/minibooks/) | 🟢 Estrutura / ⏳ Autoria | **6 Mini-Books Monotemáticos** (volumes curtos e autocontidos de 15–30 páginas por tema). |
+| [**`latex/notebooks/`**](./latex/notebooks/) | 🟢 Estrutura / ⏳ Autoria | **3 Cadernos ICPC e Maratona** (templates compactos em C++23 e listas de redução).        |
+| [**`latex/slides/`**](./latex/slides/)       | 🟢 Estrutura / ⏳ Autoria | **4 Apresentações Beamer** (aulas, oficinas de maratona e seminários com diagramas TikZ). |
 
 ---
 
@@ -178,6 +189,11 @@ Permite orquestrar todo o projeto diretamente a partir da raiz:
 | `make latex`        | Compila todos os documentos LaTeX (`book.pdf`, `ic.pdf`, `report.pdf`, `monolith.pdf`, `proposal.pdf`, `poster.pdf`).               |
 | `make book`         | Compila o livro/monografia independente (`book.pdf`).                                                                               |
 | `make poster`       | Compila o pôster científico da Iniciação Científica (`poster.pdf`).                                                                 |
+| `make editorial`    | Compila todas as famílias editoriais vivas (`cards`, `minibooks`, `notebooks`, `slides`).                                           |
+| `make cards`        | Compila os cards de referência rápida em [`latex/cards/`](./latex/cards/).                                                          |
+| `make minibooks`    | Compila os mini-books monotemáticos em [`latex/minibooks/`](./latex/minibooks/).                                                    |
+| `make notebooks`    | Compila os cadernos ICPC e Maratona em [`latex/notebooks/`](./latex/notebooks/).                                                    |
+| `make slides`       | Compila as apresentações Beamer em [`latex/slides/`](./latex/slides/).                                                              |
 | `make bench-ic`     | Executa e gera exclusivamente os artefatos de benchmark da IC (`latex/tables/`, `latex/figures/`).                                  |
 | `make bench-book`   | Executa e gera os artefatos de benchmark do Livro / Pós-IC (`latex/book/tables/`, `latex/book/figures/`).                           |
 | `make apps`         | Compila todas as ferramentas e aplicações práticas em [`applications/`](./applications/).                                           |

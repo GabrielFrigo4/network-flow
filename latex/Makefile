@@ -23,6 +23,7 @@ BOOK_SRC   != find book -type f 2> "/dev/null" || true
 POSTER_SRC != find poster -type f 2> "/dev/null" || true
 
 .PHONY: default help all reports refresh ic report monolith proposal poster book \
+        editorial cards minibooks notebooks slides \
         clean clear distclean sync-code format format-md latex publish
 
 .SUFFIXES:
@@ -51,6 +52,12 @@ help:
 	cmd "monolith"            "Gera e compila o monólito autocontido (monolith.pdf)"; \
 	cmd "proposal"            "Compila a proposta do projeto de pesquisa (proposal.pdf)"; \
 	cmd "poster"              "Compila o pôster do Simpósio de IC da UFABC (poster.pdf)"; \
+	sec "Artefatos Editoriais Vivos (Pós-IC):"; \
+	cmd "editorial"           "Compila todas as famílias editoriais (cards, minibooks, notebooks, slides)"; \
+	cmd "cards"               "Compila os cards de referência rápida em cards/"; \
+	cmd "minibooks"           "Compila os mini-books monotemáticos em minibooks/"; \
+	cmd "notebooks"           "Compila os cadernos ICPC e Maratona em notebooks/"; \
+	cmd "slides"              "Compila as apresentações Beamer em slides/"; \
 	sec "Qualidade & Formatação:"; \
 	cmd "format"              "Formata documentação Markdown (prettier)"; \
 	sec "Limpeza:"; \
@@ -80,6 +87,20 @@ monolith: monolith.pdf
 proposal: proposal.pdf
 poster: poster.pdf
 book: book.pdf
+
+editorial: cards minibooks notebooks slides
+
+cards:
+	(cd "cards" && $(MAKE) all)
+
+minibooks:
+	(cd "minibooks" && $(MAKE) all)
+
+notebooks:
+	(cd "notebooks" && $(MAKE) all)
+
+slides:
+	(cd "slides" && $(MAKE) all)
 
 sync-code:
 	$(PYTHON) ../.scripts/sync_listings.py
@@ -131,9 +152,17 @@ monolith.tex: report.tex report/cover.tex common/header.tex $(SECTIONS) $(APPEND
 clean:
 	rm -rf build
 	rm -f *.aux *.log *.out *.toc *.bbl *.blg *.synctex.gz *.fls *.fdb_latexmk */*.aux
+	(cd "cards" && $(MAKE) clean)
+	(cd "minibooks" && $(MAKE) clean)
+	(cd "notebooks" && $(MAKE) clean)
+	(cd "slides" && $(MAKE) clean)
 
 clear: clean
 
 distclean: clean
 	rm -f $(TARGETS) *.pdf
 	if command -v $(LATEXMK) > "/dev/null" 2>&1; then $(LATEXMK) -C > "/dev/null" 2>&1 || true; fi
+	(cd "cards" && $(MAKE) distclean)
+	(cd "minibooks" && $(MAKE) distclean)
+	(cd "notebooks" && $(MAKE) distclean)
+	(cd "slides" && $(MAKE) distclean)

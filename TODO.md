@@ -6,7 +6,7 @@ Documento de acompanhamento da pesquisa **"Problemas de Fluxos em Redes: Teoria,
 > **Ciclo de Vida do Repositório:**
 >
 > - 🔒 **Iniciação Científica UFABC (`proposal.tex`, `report.tex`, `ic.tex`, `monolith.tex`, `poster.tex`, `latex/sections/`, `latex/tables/`, `latex/figures/`):** **Finalizada e congelada.** Texto, tabelas, figuras e pôster permanecem preservados como registro histórico entregue no Edital 01/2025 PIC/PIBIC. Apenas correções de código nos 9 motores originais da IC continuam sincronizadas automaticamente nos apêndices (`01` a `11`) e no `monolith.tex` via `make sync-code`.
-> - 🟢 **Livro Monográfico (`latex/book.tex`), Biblioteca C++23 e Benchmarks Pós-IC (`make bench-book`):** **Em evolução contínua**, concentrando novos algoritmos, modelagens combinatórias, provas formais e validações em juízes online.
+> - 🟢 **Livro Monográfico (`latex/book.tex`), Famílias Editoriais Vivas (`latex/cards/`, `latex/minibooks/`, `latex/notebooks/`, `latex/slides/`), Biblioteca C++23 e Benchmarks Pós-IC (`make bench-book`):** **Em evolução contínua**, concentrando novos algoritmos, modelagens combinatórias, materiais derivados e validações em juízes online.
 
 ---
 
@@ -15,6 +15,7 @@ Documento de acompanhamento da pesquisa **"Problemas de Fluxos em Redes: Teoria,
 - [📖 Bloco I: Roadmap Ativo do Livro (book.tex) & Expansões](#-bloco-i-roadmap-ativo-do-livro-booktex--expansões)
     - [Arquitetura Editorial do Livro (`book.tex`)](#-arquitetura-editorial-do-livro-booktex)
     - [Roadmap Editorial e Estrutural do Livro (`book.tex`)](#-roadmap-editorial-e-estrutural-do-livro-booktex)
+    - [Novos Artefatos Editoriais Vivos (Pós-IC)](#-novos-artefatos-editoriais-vivos-pós-ic)
     - [Expansões Algorítmicas Concluídas (Pós-IC)](#-expansões-algorítmicas-concluídas-pós-ic)
 - [⚡ Bloco II: Motores de Fluxo em C++23](#-bloco-ii-motores-de-fluxo-em-c23)
     - [Algoritmos de Fluxo Máximo](#-algoritmos-de-fluxo-máximo)
@@ -66,8 +67,58 @@ Monografia independente em LaTeX ([`latex/book.tex`](./latex/book.tex)), estrutu
     - Teorema de Dilworth e Anticadeia Máxima em Posets — validar em POJ 1548 / SPOJ _MDOLLS_.
     - Fluxo Máximo e Mínimo $s$-$t$ com Cotas Inferiores — validar em LOJ 116 / LOJ 117.
     - Custos Convexos por Partes em MCF — validar em [CF 863F](https://codeforces.com/problemset/problem/863/F).
-- [ ] **Apêndice de Templates Compactos para Maratona (ICPC):** Criar apêndice com versões enxutas (~60 linhas) de `Dinic` e `MCMF-Dijkstra` voltadas para caderno de competição (_Notebook ICPC_), validadas automaticamente contra os motores OOP de [`flow-network/`](./implementations/flow-network/) e [`cost-network/`](./implementations/cost-network/).
+- [ ] **Apêndice de Templates Compactos para Maratona (ICPC):** Criar apêndice no livro e integrar com os cadernos em [`latex/notebooks/`](./latex/notebooks/) usando versões enxutas (~60 linhas) de `Dinic` e `MCMF-Dijkstra` para caderno de competição (_Notebook ICPC_), validadas automaticamente contra os motores OOP de [`flow-network/`](./implementations/flow-network/) e [`cost-network/`](./implementations/cost-network/).
 - [ ] **Expansão de Modelagens de Fronteira (Nível 3):** Formalizar no Cap. 12 e validar em código Redes Expandidas no Tempo, Corte Mínimo Global (Stoer-Wagner) / Árvore de Gomory-Hu, Dualidade Planar ($s$-$t$ Corte Mínimo $\iff$ Caminho Dual), Subgrafo de Densidade Máxima (Goldberg, 1984) e Otimização Paramétrica / Dualidade Linear de MCF.
+
+---
+
+## 🎨 Novos Artefatos Editoriais Vivos (Pós-IC)
+
+Além do livro principal, novas frentes editoriais mantêm evolução contínua sem alterar os documentos congelados da IC:
+
+### Famílias Estruturadas no Repositório
+
+| Família Editorial              | Pasta                                    | Estrutura & Makefile | Artefatos `.tex` | Escopo e Descrição                                                                                           |
+| :----------------------------- | :--------------------------------------- | :------------------: | :--------------: | :----------------------------------------------------------------------------------------------------------- |
+| **Cards de Referência Rápida** | [`latex/cards/`](./latex/cards/)         |          ✅          |   ⏳ Planejado   | 9 _cheat sheets_ de 1 página para consulta rápida de teoremas, invariantes, complexidades e reduções.        |
+| **Mini-Books Monotemáticos**   | [`latex/minibooks/`](./latex/minibooks/) |          ✅          |   ⏳ Planejado   | 6 volumes curtos (15–30 páginas) dedicados a temas isolados para leitura independente.                       |
+| **Cadernos ICPC e Maratona**   | [`latex/notebooks/`](./latex/notebooks/) |          ✅          |   ⏳ Planejado   | 3 cadernos em 2 colunas com templates C++23 (~60 linhas) e checklists de modelagem para prova.               |
+| **Apresentações Beamer**       | [`latex/slides/`](./latex/slides/)       |          ✅          |   ⏳ Planejado   | 4 decks de slides reutilizando diretamente os diagramas vetoriais de [`latex/diagrams/`](./latex/diagrams/). |
+
+### Catálogo Completo Planejado por Família
+
+- **🃏 Cards (`latex/cards/README.md`) — 9 artefatos (`⏳ Planejado`):**
+    1. `max-flow-cheatsheet.tex` — Quadro comparativo dos 8 motores `FlowNetwork`.
+    2. `min-cost-cheatsheet.tex` — Quadro comparativo dos 7 motores `CostNetwork`.
+    3. `bipartite-dualities.tex` — As Quatro Dualidades (König, Gallai, Hall) e reconstrução residual.
+    4. `modeling-patterns-maxflow.tex` — Receituário visual em Fluxo Máximo (Vertex Splitting, Corte Mínimo, Picard).
+    5. `modeling-patterns-mcf.tex` — Receituário visual em Custo Mínimo (Cotas Inferiores, Custos Convexos, MCMF).
+    6. `dag-dilworth-card.tex` — Cobertura Mínima de Caminhos em DAGs, Bipartido Dividido $B(D)$ e Dilworth.
+    7. `network-simplex-pivoting.tex` — Mecânica visual do Network Simplex (`T/L/U`, `thread`, ciclo fundamental).
+    8. `strongly-polynomial-mcf.tex` — Síntese visual de Karp, $\varepsilon$-otimalidade, MMCC e Cancel-and-Tighten.
+    9. `graph-cuts-vision.tex` — Card visual de Segmentação Interativa de Imagens via Corte Mínimo (N-links e T-links).
+- **📘 Mini-Books (`latex/minibooks/README.md`) — 6 volumes (`⏳ Planejado`):**
+    1. `max-flow-essentials.tex` — _Guia Essencial de Fluxo Máximo_.
+    2. `bipartite-optimization.tex` — _Otimização em Grafos Bipartidos_.
+    3. `modeling-handbook.tex` — _Manual da Arte da Modelagem em Fluxos_.
+    4. `min-cost-and-simplex.tex` — _Fluxo de Custo Mínimo e Network Simplex_.
+    5. `strongly-polynomial-flows.tex` — _Algoritmos Fortemente Polinomiais em Redes_.
+    6. `graph-cuts-segmentation.tex` — _Visão Computacional com Corte Mínimo_.
+- **📓 Cadernos ICPC (`latex/notebooks/README.md`) — 3 cadernos (`⏳ Planejado`):**
+    1. `icpc-flow-notebook.tex` — _Caderno ICPC Completo de Fluxos em Redes_ (2 colunas).
+    2. `icpc-maxflow-cheatsheet.tex` — _Caderno Compacto de Fluxo Máximo e Bipartidos_.
+    3. `icpc-mcf-cheatsheet.tex` — _Caderno Compacto de Custo Mínimo_.
+- **📽️ Apresentações Beamer (`latex/slides/README.md`) — 4 decks (`⏳ Planejado`):**
+    1. `intro-max-flow.tex` — _Introdução a Fluxo Máximo e Corte Mínimo_.
+    2. `maratona-flow-modeling.tex` — _Oficina de Modelagem de Fluxos para Maratona (ICPC)_.
+    3. `min-cost-network-simplex.tex` — _Fluxo de Custo Mínimo, Dualidade e Network Simplex_.
+    4. `graph-cuts-vision-talk.tex` — _Segmentação de Imagens com Corte Mínimo em C++23_.
+
+### 💡 Ideias Bônus para Expansão Futura (Backlog Aberto)
+
+- [ ] **Listas de Exercícios Comentadas (`latex/workbooks/`):** Cadernos temáticos com enunciados originais, roteiro de redução guiado, gabarito matemático e dicas progressivas por nível.
+- [ ] **Galeria Standalone de Diagramas TikZ (`latex/diagrams/` $\to$ SVG/PDF):** Compilação isolada dos diagramas TikZ em figuras vetoriais independentes para reuso direto em READMEs, blog técnico e slides.
+- [ ] **Notas Técnicas / Artigos Curtos (`latex/articles/`):** Textos executivos de 8–12 páginas para divulgação técnica ou portfólio sem alterar o relatório congelado da IC.
 
 ---
 

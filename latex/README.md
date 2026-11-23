@@ -34,6 +34,10 @@ latex/
 ├── monolith.tex
 ├── proposal.tex
 ├── poster.tex        poster/
+├── cards/
+├── minibooks/
+├── notebooks/
+├── slides/
 ├── common/
 ├── sections/
 ├── diagrams/
@@ -41,6 +45,17 @@ latex/
 ├── tables/
 └── figures/
 ```
+
+### Pastas de Artefatos Editoriais Vivos (Pós-IC)
+
+Cada família editorial viva possui seu próprio `Makefile` POSIX independente e reaproveita diretamente [`common/`](./common/) e [`diagrams/`](./diagrams/) via `TEXINPUTS="..:" BIBINPUTS="..:"`:
+
+| Pasta                        | Status                    | Conteúdo Planejado                                                                        |
+| :--------------------------- | :------------------------ | :---------------------------------------------------------------------------------------- |
+| [`cards/`](./cards/)         | 🟢 Estrutura / ⏳ Autoria | **9 Cards de Referência Rápida** (1 página por tema; teoremas, complexidades e receitas). |
+| [`minibooks/`](./minibooks/) | 🟢 Estrutura / ⏳ Autoria | **6 Mini-Books Monotemáticos** (volumes autocontidos de 15–30 páginas por tópico).        |
+| [`notebooks/`](./notebooks/) | 🟢 Estrutura / ⏳ Autoria | **3 Cadernos ICPC e Maratona** (2 colunas, templates C++23 compactos e checklist).        |
+| [`slides/`](./slides/)       | 🟢 Estrutura / ⏳ Autoria | **4 Apresentações Beamer** (reaproveitando os diagramas TikZ de `diagrams/`).             |
 
 ### Pastas Locais (exclusivas de um documento)
 
@@ -93,6 +108,11 @@ O diretório conta com um [`Makefile`](./Makefile) compatível com POSIX que aut
 | `make report`    | Compila apenas o relatório formal com capa institucional (`report.pdf`).                                        |
 | `make monolith`  | Gera e compila o monólito autocontido (`monolith.pdf`).                                                         |
 | `make proposal`  | Compila apenas a proposta inicial (`proposal.pdf`).                                                             |
+| `make editorial` | Compila todas as famílias editoriais vivas (`cards`, `minibooks`, `notebooks`, `slides`).                       |
+| `make cards`     | Compila os cards de referência rápida em [`cards/`](./cards/).                                                  |
+| `make minibooks` | Compila os mini-books monotemáticos em [`minibooks/`](./minibooks/).                                            |
+| `make notebooks` | Compila os cadernos ICPC e Maratona em [`notebooks/`](./notebooks/).                                            |
+| `make slides`    | Compila as apresentações Beamer em [`slides/`](./slides/).                                                      |
 | `make sync-code` | Sincroniza automaticamente os apêndices LaTeX a partir do código C++ de `implementations/`.                     |
 | `make clean`     | Remove arquivos temporários e auxiliares (`.aux`, `.log`, `.toc`, `.out`, `.bbl`, etc.).                        |
 | `make distclean` | Remove arquivos temporários e também todos os PDFs compilados.                                                  |
