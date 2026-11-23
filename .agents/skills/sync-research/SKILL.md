@@ -1,59 +1,49 @@
 ---
 name: sync-research
-description: Runbook cognitivo para compilação, testes e sincronização de apêndices no projeto Networks Flow.
+description: Runbook cognitivo para compilação, testes algorítmicos, sincronização de apêndices LaTeX e rigor terminológico no projeto Network Flow.
 ---
 
-# 🔄 Sync Research Skill — Networks Flow
+# 🔄 Sync Research Skill — Network Flow
 
-Este runbook orienta o agente na execução de testes algorítmicos e na sincronização de código C++ com os apêndices da monografia.
-
-## Procedimento de Execução
-
-1. **Validação de Sintaxe C++:**
-    ```sh
-    make impl
-    ```
-2. **Execução de Testes dos Problemas:**
-    ```sh
-    make test
-    ```
-3. **Sincronização de Apêndices LaTeX:**
-    ```sh
-    make sync-code
-    ```
-4. **Verificação de Compilação do Livro:**
-    ```sh
-    make book
-    ```
-5. **Limpeza de Artefatos:**
-    ```sh
-    make clean
-    ```
+Este runbook orienta o agente na validação de implementações C++, execução de testes, sincronização de código com apêndices LaTeX e manutenção do rigor terminológico da pesquisa **Network Flow**.
 
 ---
 
-## ✍️ Diretrizes de Linguagem e Estilo Acadêmico (`Linguagem.txt`)
+## ⚙️ Fluxo Canônico de Build e Sincronização
 
-> **Regra de Ouro (Teste do Leitor Não-Nativo):** Uma pessoa não nativa em português (ou tradutor técnico) deve ser capaz de ler o texto sem qualquer confusão. O conteúdo matemático já é denso; o texto deve ser uma lente transparente para os conceitos formais.
+Execute os alvos do `Makefile` na raiz do repositório na ordem operacional abaixo:
 
-Ao redigir, revisar ou alterar qualquer arquivo `.tex` no projeto:
+```sh
+make impl
+make test
+make sync-code
+make book
+make clean
+```
 
-### 1. IC / Relatórios Institucionais (`latex/sections/`, `latex/ic.tex`, `latex/report.tex`)
+- **`make impl`:** Valida a sintaxe C++23 de todos os headers em `implementations/`.
+- **`make test`:** Executa as suítes de testes de algoritmos e aplicações.
+- **`make sync-code`:** Sincroniza implementações C++ com as listagens LaTeX (`.scripts/sync_listings.py`) e reconstrói o monólito (`.scripts/build_monolith.py`).
+- **`make book`:** Compila exclusivamente a monografia (`book.pdf`).
+- **`make clean`:** Remove artefatos temporários de compilação em todos os submódulos.
 
-- **Não complexa:** Estrutura sintática limpa e acessível.
-- **Acadêmica:** Rigor conceitual, impessoalidade e formalidade científica.
-- **Sem florear / Sem florear muito:** Proibição de metáforas físicas/líricas (fluidos, gravidade, guilhotinas) e zero adjetivos valorativos ou triunfalistas ("fantástico", "revolucionário", "supremacia absoluta", "excepcional elegância").
-- **Pouco rebuscada:** Vocabulário moderno e direto; evitar termos arcaicos ou pretensiosos.
-- **Sem palavras extras:** Eliminar chavões e muletas estilísticas ("vale ressaltar", "com o intuito de", "cabe enfatizar").
-- **Mais matemática:** Priorizar definições formais, notação de conjuntos, proposições e equações explícitas.
-- **Mais direta:** Enunciados objetivos e declarativos.
+---
 
-### 2. Livro / Monografia (`latex/book/chapters/`, `latex/book.tex`, `latex/book/`)
+## ✍️ Diretrizes Editoriais & Rigor Terminológico
 
-- Mesma sobriedade e concisão de IC/Relatório (sem floreios, pouco rebuscada, direta e matemática).
-- Ausência de limite de páginas: permite demonstrações completas e detalhadas, intuições bem fundamentadas e exemplos passo a passo, sem nunca adotar tom prolixo, dramático ou informal.
+Para regras gerais de redação científica (No-Fluff, Math-First, Teste do Leitor Não-Nativo, build isolado e sincronização de listagens), siga a skill global `latex-typesetting`. No projeto **Network Flow**, aplique as distinções estruturais e terminológicas específicas abaixo:
 
-### 3. Precisão Terminológica Matemática (Zero Jargão Fora de Contexto)
+### 1. Escopo por Documento LaTeX
 
-- Termos com definição técnica rigorosa NUNCA devem ser usados como sinônimos casuais ou adornos estilísticos.
-- Proibições específicas: _isomórfico_ (para código ou pivoteamentos), _topologia_ (para digrafos e redes gerais), _canônico_ (para instâncias DIMACS ou decomposição de fluxo), _geométrico_ (para grafos ou problemas de programação linear), e _convergência_ (para encerramento de algoritmos discretos exatos).
+- **IC / Relatórios Institucionais (`latex/sections/`, `latex/ic.tex`, `latex/report.tex`):** Máxima concisão, objetividade declarativa e foco em definições formais, proposições e equações explícitas devido ao limite de páginas.
+- **Livro / Monografia (`latex/book/chapters/`, `latex/book.tex`, `latex/book/`):** Sem limite de páginas; permite demonstrações completas, intuições bem fundamentadas e exemplos passo a passo mantendo sobriedade acadêmica.
+
+### 2. Precisão Terminológica Matemática (Fluxos em Redes)
+
+Termos com definição formal rigorosa NUNCA devem ser usados como sinônimos casuais ou adornos estilísticos:
+
+- **_Isomórfico_:** Proibido para código ou equivalência operacional de pivoteamentos.
+- **_Topologia_:** Proibido para designar estrutura de digrafos ou redes de fluxo gerais.
+- **_Canônico_:** Proibido para instâncias DIMACS ou decomposições arbitrárias de fluxo.
+- **_Geométrico_:** Proibido para propriedades combinatórias de grafos ou programação linear fora de contexto espacial.
+- **_Convergência_:** Proibido para encerramento finito de algoritmos combinatórios discretos exatos.
