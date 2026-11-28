@@ -1,3 +1,9 @@
+\directlua{
+  pdf.setmajorversion(2)
+  pdf.setminorversion(0)
+  pdf.setcompresslevel(9)
+  pdf.setobjcompresslevel(3)
+}
 % =========================================================================
 % PROBLEMAS DE FLUXOS EM REDES — LIVRO / MONOGRAFIA INDEPENDENTE
 % =========================================================================
@@ -14,6 +20,7 @@
 }
 
 \input{common/header.tex}
+\usepackage{lua-widow-control}
 
 \setstretch{1.18}
 

@@ -97,7 +97,7 @@ _(Alternativamente, você pode importar estes arquivos para plataformas online c
 
 ### Passos de Compilação
 
-O diretório conta com um [`Makefile`](./Makefile) compatível com POSIX que automatiza o ciclo completo de múltiplas passagens (`pdflatex` e `bibtex`), garantindo que o sumário, referências cruzadas e citações sejam gerados corretamente:
+O diretório conta com um [`Makefile`](./Makefile) compatível com POSIX que automatiza o ciclo completo de múltiplas passagens (`lualatex` via `latexmk -lualatex` e `bibtex`), gerando PDFs versão 2.0 e garantindo que o sumário, referências cruzadas e citações sejam gerados corretamente:
 
 | Comando          | Ação                                                                                                            |
 | :--------------- | :-------------------------------------------------------------------------------------------------------------- |
@@ -125,7 +125,7 @@ make all
 
 ## ☁️ Importação e Compilação no Overleaf
 
-O arquivo [`monolith.tex`](./monolith.tex) foi projetado para permitir a importação direta para o [Overleaf](https://www.overleaf.com/). Ele já contém o preâmbulo, as capas, o texto, as tabelas, os diagramas TikZ e os apêndices de C++23. Além dele, envie apenas os arquivos externos preservando os caminhos relativos:
+O arquivo [`monolith.tex`](./monolith.tex) foi projetado para permitir a importação direta para o [Overleaf](https://www.overleaf.com/) e inclui `% !TEX program = lualatex` no cabeçalho para seleção automática do compilador **LuaLaTeX**. Ele já contém o preâmbulo, as capas, o texto, as tabelas, os diagramas TikZ e os apêndices de C++23. Além dele, envie apenas os arquivos externos preservando os caminhos relativos:
 
 ```text
 monolith.tex

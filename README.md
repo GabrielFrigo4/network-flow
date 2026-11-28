@@ -206,7 +206,7 @@ Permite orquestrar todo o projeto diretamente a partir da raiz:
 
 Cada pasta principal possui seu próprio `Makefile` (.POSIX) encapsulado:
 
-- **[`latex/Makefile`](./latex/Makefile):** Ciclo completo multi-pass com `pdflatex` e `bibtex` (`make book`, `make ic`, `make report`, `make proposal`, `make clean`, `make distclean`).
+- **[`latex/Makefile`](./latex/Makefile):** Ciclo completo multi-pass com `lualatex` (`latexmk -lualatex`) e `bibtex` (`make book`, `make ic`, `make report`, `make proposal`, `make clean`, `make distclean`).
 - **[`applications/Makefile`](./applications/Makefile):** Compilação e execução de testes de todas as aplicações.
 - **[`implementations/Makefile`](./implementations/Makefile):** `make check` (sintaxe dos headers) e `make test` (testes de soluções).
 - **[`experiments/Makefile`](./experiments/Makefile):** Automação do pipeline de benchmarks.

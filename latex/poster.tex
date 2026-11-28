@@ -1,18 +1,22 @@
+\directlua{
+  pdf.setmajorversion(2)
+  pdf.setminorversion(0)
+  pdf.setcompresslevel(9)
+  pdf.setobjcompresslevel(3)
+}
 % =========================================================================
 % PÔSTER CIENTÍFICO (SIMPÓSIO DE INICIAÇÃO CIENTÍFICA UFABC)
 % =========================================================================
 \documentclass[final]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setsansfont[Scale=0.96]{Fira Sans}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+\renewcommand{\familydefault}{\sfdefault}
 \usepackage[brazilian]{babel}
+\usepackage{microtype}
 
-\IfFileExists{FiraSans.sty}{
-    \usepackage[sfdefault,scaled=0.96]{FiraSans}
-}{
-    \usepackage[scaled=0.95]{helvet}
-    \renewcommand{\familydefault}{\sfdefault}
-}
 \IfFileExists{newtxsf.sty}{
     \usepackage{newtxsf}
 }{}
@@ -27,11 +31,7 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{ragged2e}
-\usepackage{textcomp}
 \usepackage{hyperref}
-
-\DeclareUnicodeCharacter{00BA}{\textordmasculine}
-\DeclareUnicodeCharacter{00AA}{\textordfeminine}
 
 \graphicspath{
     {poster/logos/}

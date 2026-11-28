@@ -1,3 +1,15 @@
+% !TEX program = lualatex
+% =========================================================================
+% RELATÓRIO DE INICIAÇÃO CIENTÍFICA (COM CAPA INSTITUCIONAL UFABC)
+% =========================================================================
+
+\directlua{
+  pdf.setmajorversion(2)
+  pdf.setminorversion(0)
+  pdf.setcompresslevel(9)
+  pdf.setobjcompresslevel(3)
+}
+
 % =========================================================================
 % RELATÓRIO DE INICIAÇÃO CIENTÍFICA (COM CAPA INSTITUCIONAL UFABC)
 % =========================================================================
@@ -10,15 +22,22 @@
     headheight=15pt
 }
 
-\RequirePackage{fix-cm}
-
 % =========================================================================
-% CABEÇALHO UNIFICADO E DESIGN SYSTEM (NETWORK FLOW)
+% CABEÇALHO UNIFICADO E DESIGN SYSTEM (LUALATEX NATIVO)
 % =========================================================================
 
 % =========================================================================
 % PACOTES FUNDAMENTAIS
 % =========================================================================
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Latin Modern Roman}
+\setsansfont[Scale=MatchLowercase]{TeX Gyre Heros}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -26,25 +45,18 @@
 \usepackage{enumitem}
 \usepackage{mathtools}
 \usepackage{lipsum}
-\usepackage[brazilian]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[pdftex]{graphicx}
-\usepackage{color}
+\usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, calc, positioning, decorations.markings}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.markings, graphs, graphdrawing}
+\usegdlibrary{layered, force, trees}
 \usepackage{verbatim}
 \usepackage[hyphens]{url}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage[section]{placeins}
 \usepackage{listings}
-\usepackage{anyfontsize}
-\usepackage{lmodern}
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
 \usepackage{fancyhdr}
 
 \newif\ifapendiceteorico

@@ -8,7 +8,7 @@ MAKEFLAGS += --no-print-directory -s
 # ----------------------------------------------------------------
 
 LATEXMK  = latexmk
-PDFLATEX = pdflatex
+LUALATEX = lualatex
 BIBTEX   = bibtex
 
 SOURCES != find . -maxdepth 1 -name "*.tex" -exec basename {} \; 2> "/dev/null" | sort || true
@@ -44,12 +44,12 @@ all:
 		pdf="$${base}.pdf"; \
 		printf "%s" "-> Compilando minibooks/$${pdf}... "; \
 		if command -v $(LATEXMK) > "/dev/null" 2>&1; then \
-			TEXINPUTS="..:" BIBINPUTS="..:" $(LATEXMK) -pdf -silent -interaction=nonstopmode -outdir=build "$${src}" > "/dev/null" 2>&1 || true; \
+			TEXINPUTS="..:" BIBINPUTS="..:" $(LATEXMK) -lualatex -silent -interaction=nonstopmode -outdir=build "$${src}" > "/dev/null" 2>&1 || true; \
 		else \
-			TEXINPUTS="..:" BIBINPUTS="..:" $(PDFLATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
+			TEXINPUTS="..:" BIBINPUTS="..:" $(LUALATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
 			TEXINPUTS="..:" BIBINPUTS="..:" $(BIBTEX) "build/$${base}.aux" > "/dev/null" 2>&1 || true; \
-			TEXINPUTS="..:" BIBINPUTS="..:" $(PDFLATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
-			TEXINPUTS="..:" BIBINPUTS="..:" $(PDFLATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
+			TEXINPUTS="..:" BIBINPUTS="..:" $(LUALATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
+			TEXINPUTS="..:" BIBINPUTS="..:" $(LUALATEX) -interaction=batchmode -output-directory=build "$${src}" > "/dev/null" 2>&1 || true; \
 		fi; \
 		if [ ! -f "build/$${pdf}" ]; then \
 			printf "%s\n" "[FAIL]"; \

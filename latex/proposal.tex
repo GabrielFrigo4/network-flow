@@ -1,9 +1,20 @@
+\directlua{
+  pdf.setmajorversion(2)
+  pdf.setminorversion(0)
+  pdf.setcompresslevel(9)
+  pdf.setobjcompresslevel(3)
+}
 % =========================================================================
 % PROJETO DE PESQUISA (PIBIC / CNPQ)
 % =========================================================================
 \documentclass{amsart}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Latin Modern Roman}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -11,10 +22,8 @@
 \usepackage{enumitem}
 \usepackage{mathtools}
 \usepackage{lipsum}
-\usepackage[brazilian]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[pdftex]{graphicx}
-\usepackage{color}
+\usepackage{graphicx}
+\usepackage{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows, calc, external}
 \newtheorem{prop}{Proposição}

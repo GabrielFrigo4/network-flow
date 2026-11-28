@@ -59,6 +59,7 @@ jobs:
               run: |
                   sudo DEBIAN_FRONTEND=noninteractive apt-get update
                   sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+                      texlive-luatex \
                       texlive-latex-recommended \
                       texlive-latex-extra \
                       texlive-fonts-recommended \
@@ -70,7 +71,10 @@ jobs:
                       texlive-pictures \
                       texlive-publishers \
                       texlive-science \
-                      cm-super \
+                      fonts-texgyre \
+                      fonts-roboto \
+                      fonts-dejavu-core \
+                      fonts-liberation \
                       latexmk \
                       lmodern
 

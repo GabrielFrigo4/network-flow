@@ -8,7 +8,7 @@ MAKEFLAGS += --no-print-directory -s
 # ----------------------------------------------------------------
 
 LATEXMK    = latexmk
-PDFLATEX   = pdflatex
+LUALATEX   = lualatex
 BIBTEX     = bibtex
 PYTHON     = python3
 
@@ -131,12 +131,12 @@ monolith.tex: report.tex report/cover.tex common/header.tex $(SECTIONS) $(APPEND
 	mkdir -p build
 	printf "%s" "-> Compilando $@... "
 	if command -v $(LATEXMK) > "/dev/null" 2>&1; then \
-		$(LATEXMK) -pdf -silent -interaction=nonstopmode -outdir=build $< > "/dev/null" 2>&1 || true; \
+		$(LATEXMK) -lualatex -silent -interaction=nonstopmode -outdir=build $< > "/dev/null" 2>&1 || true; \
 	else \
-		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
+		$(LUALATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 		$(BIBTEX) build/$*.aux > "/dev/null" 2>&1 || true; \
-		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
-		$(PDFLATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
+		$(LUALATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
+		$(LUALATEX) -interaction=batchmode -output-directory=build $< > "/dev/null" 2>&1 || true; \
 	fi
 	if [ ! -f "build/$@" ]; then \
 		printf "%s\n" "[FAIL]"; \

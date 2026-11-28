@@ -7,7 +7,7 @@ always_on: true
 # Diretrizes de LaTeX & Documentação Acadêmica
 
 1. **Congelamento dos Artefatos da IC (Regra Soberana):** Os documentos institucionais entregues na Iniciação Científica (`latex/proposal.tex`, `latex/report.tex`, `latex/ic.tex`, `latex/monolith.tex`, `latex/poster.tex`, `latex/sections/`, `latex/tables/` e `latex/figures/`) estão **finalizados e congelados**. É **proibido** editar manualmente seu texto, resultados, tabelas, figuras ou layout sem ordem explícita e nominal do usuário; a única mutação permitida é a regeneração automática via `make sync-code` em caso de bugfix nos 9 motores originais da IC (apêndices de código `10..16`, `30..36` e `monolith.tex`). Toda evolução contínua concentra-se exclusivamente em `latex/book.tex` e `latex/book/`.
-2. **Compilação Idempotente:** Compilação gerenciada via `latexmk` através do `make latex` ou `make book`.
+2. **Compilação Idempotente (LuaLaTeX / PDF 2.0):** Compilação gerenciada via `latexmk -lualatex` através do `make latex` ou `make book`.
 3. **Sincronização C++ ↔ Apêndices:** Nunca edite apêndices de código manualmente. Sempre altere os arquivos em `implementations/` e execute `make sync-code`.
 4. **Estrutura Modular:** Capítulos isolados em `book/chapters/`, seções congeladas da IC em `sections/` e bibliografia BibTeX unificada em `common/references.bib`.
 5. **Clean Code & Tipografia:** Evitar pacotes conflitantes e seguir os padrões tipográficos canônicos da UFABC e da classe `book`.

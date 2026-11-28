@@ -79,9 +79,9 @@ def generate_monolith(check_only: bool = False) -> bool:
     clean_monolith = format_monolith_content(monolith_content)
 
     if clean_monolith.startswith("% ========================================================================="):
-        final_content = clean_monolith + "\n"
+        final_content = "% !TEX program = lualatex\n" + clean_monolith + "\n"
     else:
-        final_content = header_banner + clean_monolith + "\n"
+        final_content = "% !TEX program = lualatex\n" + header_banner + clean_monolith + "\n"
 
     if check_only:
         if not output_path.exists():
